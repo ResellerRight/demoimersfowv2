@@ -419,6 +419,11 @@
                                         <label class="text-sm font-bold text-slate-700">Teks Tombol CTA</label>
                                         <input type="text" id="cfg-btn-text" value="Kirim Sekarang" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium" oninput="updateConfig()">
                                     </div>
+                                    <div class="space-y-2 col-span-1 md:col-span-2">
+                                        <label class="text-sm font-bold text-slate-700">Harga Dasar Produk (Rp) - <span class="text-slate-400 font-normal">Opsional</span></label>
+                                        <input type="number" id="cfg-base-price" value="0" placeholder="Contoh: 150000" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
+                                        <p class="text-[11px] text-slate-500 mt-1">Isi jika form ini menjual produk. Biarkan 0 jika form gratis. Harga ini akan tertimpa otomatis jika kustomer memilih opsi bertanda <b>= Angka</b> di form varian.</p>
+                                    </div>
                                 </div>
 
                                 <div class="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl shadow-sm">
@@ -526,6 +531,12 @@
                                         </div>
                                         <div id="canvas-fields" class="p-6 space-y-4 min-h-[250px] bg-white"></div>
                                         <div class="p-6 pt-0 bg-white">
+                                            <!-- Total Tagihan Preview (Live di Canvas) -->
+                                            <div id="canvas-total-box" class="p-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-between mb-4 transition-all" style="display: none;">
+                                                <span class="text-sm font-bold text-slate-500">Total Tagihan:</span>
+                                                <span class="text-lg font-extrabold text-slate-800" id="canvas-total-value">Rp 0</span>
+                                            </div>
+                                            
                                             <div id="canvas-trust" class="p-4 rounded-xl border flex items-start gap-3 mb-4 transition-all">
                                                 <i id="canvas-trust-icon" class="ph-fill ph-shield-check text-xl mt-0.5 transition-colors"></i>
                                                 <div><h4 id="canvas-trust-title" class="text-sm font-bold transition-colors">Aman</h4><p id="canvas-trust-desc" class="text-[11px] text-slate-500 mt-1">Desc</p></div>
@@ -692,7 +703,7 @@
         // Form Config & Fields default (Blank)
         let defaultFormConfig = {
             title: 'Form Baru', waNumber: '6281234567890', waIntro: 'Halo Admin, ini data saya:', waFooter: 'Terima kasih.',
-            btnText: 'Kirim Data', headerBg: '#1e3a8a', ctaBg: '#2563eb',
+            btnText: 'Kirim Data', headerBg: '#1e3a8a', ctaBg: '#2563eb', basePrice: 0,
             logoUrl: '', displayMode: 'embed', trustBadge: true, trustTitle: 'Data aman & terpercaya', trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.'
         };
         let defaultFormFields = [
@@ -883,6 +894,7 @@
             document.getElementById('cfg-wa-intro').value = formConfig.waIntro;
             document.getElementById('cfg-wa-footer').value = formConfig.waFooter;
             document.getElementById('cfg-btn-text').value = formConfig.btnText;
+            document.getElementById('cfg-base-price').value = formConfig.basePrice || 0;
             document.getElementById('cfg-logo').value = formConfig.logoUrl;
             document.querySelector(`input[name="displayMode"][value="${formConfig.displayMode}"]`).checked = true;
             document.getElementById('cfg-trust-toggle').checked = formConfig.trustBadge;
@@ -1061,6 +1073,9 @@
                 container.innerHTML = `<div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl"><input type="color" id="${target}-c1" value="${target==='header'?'#0ea5e9':'#60a5fa'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer"><i class="ph-bold ph-arrow-right text-slate-400"></i><input type="color" id="${target}-c2" value="${target==='header'?'#1e3a8a':'#2563eb'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer"></div>`;
             }
             buildColors(target); 
+            
+            // Re-render canvas trust badge & total box kalau ada perubahan warna di Step 1
+            if(currentStep === 1) renderCanvas();
         }
 
         function buildColors(target) {
@@ -1070,20 +1085,21 @@
             else { finalColor = `linear-gradient(135deg, ${document.getElementById(`${target}-c1`).value}, ${document.getElementById(`${target}-c2`).value})`; }
             if(target === 'header') formConfig.headerBg = finalColor;
             if(target === 'cta') formConfig.ctaBg = finalColor;
-            
-            // Re-render canvas trust badge kalau ada perubahan CTA Color di Step 1
-            if(target === 'cta' && currentStep === 1) updateConfig();
         }
 
         function updateConfig() {
             formConfig.title = document.getElementById('cfg-title').value; formConfig.waNumber = document.getElementById('cfg-wa').value;
             formConfig.waIntro = document.getElementById('cfg-wa-intro').value; formConfig.waFooter = document.getElementById('cfg-wa-footer').value;
-            formConfig.btnText = document.getElementById('cfg-btn-text').value; formConfig.logoUrl = document.getElementById('cfg-logo').value;
+            formConfig.btnText = document.getElementById('cfg-btn-text').value; 
+            formConfig.basePrice = document.getElementById('cfg-base-price').value || 0;
+            formConfig.logoUrl = document.getElementById('cfg-logo').value;
             formConfig.displayMode = document.querySelector('input[name="displayMode"]:checked').value;
             formConfig.trustBadge = document.getElementById('cfg-trust-toggle').checked;
             formConfig.trustTitle = document.getElementById('cfg-trust-title').value; formConfig.trustDesc = document.getElementById('cfg-trust-desc').value;
             const trustInputs = document.getElementById('trust-inputs');
             if(formConfig.trustBadge) { trustInputs.style.opacity = '1'; trustInputs.style.pointerEvents = 'auto'; } else { trustInputs.style.opacity = '0.5'; trustInputs.style.pointerEvents = 'none'; }
+            
+            if(currentStep === 1) renderCanvas();
         }
 
         function generateId() { return 'f_' + Math.random().toString(36).substr(2, 6); }
@@ -1104,23 +1120,40 @@
             document.getElementById('canvas-btn').innerText = formConfig.btnText; document.getElementById('canvas-title').innerText = formConfig.title;
             const logoEl = document.getElementById('canvas-logo'); if(formConfig.logoUrl) { logoEl.src = formConfig.logoUrl; logoEl.style.display = 'block'; } else { logoEl.style.display = 'none'; }
             
-            // Dynamic Trust Badge Color logic
+            // Dynamic Theme Color logic
+            const themeHex = getThemeColor();
+            const themeRgb = hexToRgb(themeHex);
+            
+            // Trust Badge UI
             const trustEl = document.getElementById('canvas-trust'); 
             if(formConfig.trustBadge) { 
                 trustEl.style.display = 'flex'; 
-                
-                const themeHex = getThemeColor();
-                const themeRgb = hexToRgb(themeHex);
-                
                 trustEl.style.backgroundColor = `rgba(${themeRgb}, 0.08)`;
                 trustEl.style.borderColor = `rgba(${themeRgb}, 0.2)`;
                 document.getElementById('canvas-trust-title').style.color = themeHex;
                 document.getElementById('canvas-trust-icon').style.color = themeHex;
-                
                 document.getElementById('canvas-trust-title').innerText = formConfig.trustTitle; 
                 document.getElementById('canvas-trust-desc').innerText = formConfig.trustDesc; 
             } else { 
                 trustEl.style.display = 'none'; 
+            }
+            
+            // Auto-detect & Render Total Box Preview
+            const totalBoxEl = document.getElementById('canvas-total-box');
+            let isTotalVisible = parseInt(formConfig.basePrice) > 0;
+            formFields.forEach(f => {
+                if(['select', 'radio', 'checkbox'].includes(f.type) && /=\s*(\d+)/.test(f.options)) {
+                    isTotalVisible = true;
+                }
+            });
+            
+            if(isTotalVisible) {
+                totalBoxEl.style.display = 'flex';
+                document.getElementById('canvas-total-value').style.color = themeHex;
+                let previewVal = parseInt(formConfig.basePrice) > 0 ? formConfig.basePrice : 0;
+                document.getElementById('canvas-total-value').innerText = 'Rp ' + parseInt(previewVal).toLocaleString('id-ID');
+            } else {
+                totalBoxEl.style.display = 'none';
             }
             
             const container = document.getElementById('canvas-fields'); container.innerHTML = '';
@@ -1143,7 +1176,7 @@
             const themeHex = getThemeColor();
             const themeRgb = hexToRgb(themeHex);
             
-            return `<style>.im-wrapper { font-family: 'Inter', sans-serif; background: #fff; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; max-width: 450px; margin: 0 auto; border: 1px solid #e2e8f0; width: 100%; box-sizing: border-box; } .im-header { padding: 24px; text-align: center; color: white; transition: background 0.3s ease; } .im-logo { max-height: 48px; margin: 0 auto 12px auto; display: block; object-fit: contain; } .im-title { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; } .im-body { padding: 24px; } .im-group { margin-bottom: 16px; } .im-label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 6px; } .im-input { width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; transition: all 0.2s; color: #0f172a; } .im-input:focus { outline: none; border-color: ${themeHex}; box-shadow: 0 0 0 3px rgba(${themeRgb},0.1); background: #fff; } .im-radio-group, .im-checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; } .im-radio-label, .im-checkbox-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #334155; cursor: pointer; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; transition: background 0.2s; } .im-radio-label:hover, .im-checkbox-label:hover { background: #f1f5f9; } .im-radio-label input, .im-checkbox-label input { accent-color: ${themeHex}; width: 16px; height: 16px; cursor: pointer; } .im-footer { margin-top: 24px; } .im-trust { display: flex; gap: 12px; padding: 12px 16px; background: rgba(${themeRgb}, 0.08); border: 1px solid rgba(${themeRgb}, 0.2); border-radius: 12px; margin-bottom: 16px; align-items: flex-start; } .im-trust-title { font-size: 13px; font-weight: 700; color: ${themeHex}; line-height: 1.2; } .im-trust-desc { font-size: 11px; color: #64748b; margin-top: 4px; line-height: 1.4; } .im-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); } .im-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }</style>`;
+            return `<style>.im-wrapper { font-family: 'Inter', sans-serif; background: #fff; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; max-width: 450px; margin: 0 auto; border: 1px solid #e2e8f0; width: 100%; box-sizing: border-box; } .im-header { padding: 24px; text-align: center; color: white; transition: background 0.3s ease; } .im-logo { max-height: 48px; margin: 0 auto 12px auto; display: block; object-fit: contain; } .im-title { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; } .im-body { padding: 24px; } .im-group { margin-bottom: 16px; } .im-label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 6px; } .im-input { width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; transition: all 0.2s; color: #0f172a; } .im-input:focus { outline: none; border-color: ${themeHex}; box-shadow: 0 0 0 3px rgba(${themeRgb},0.1); background: #fff; } .im-radio-group, .im-checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; } .im-radio-label, .im-checkbox-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #334155; cursor: pointer; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; transition: background 0.2s; } .im-radio-label:hover, .im-checkbox-label:hover { background: #f1f5f9; } .im-radio-label input, .im-checkbox-label input { accent-color: ${themeHex}; width: 16px; height: 16px; cursor: pointer; } .im-footer { margin-top: 24px; } .im-total-box { display: none; justify-content: space-between; align-items: center; padding: 16px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; margin-bottom: 16px; } .im-total-label { font-size: 13px; font-weight: 700; color: #475569; } .im-total-value { font-size: 18px; font-weight: 800; color: ${themeHex}; } .im-trust { display: flex; gap: 12px; padding: 12px 16px; background: rgba(${themeRgb}, 0.08); border: 1px solid rgba(${themeRgb}, 0.2); border-radius: 12px; margin-bottom: 16px; align-items: flex-start; } .im-trust-title { font-size: 13px; font-weight: 700; color: ${themeHex}; line-height: 1.2; } .im-trust-desc { font-size: 11px; color: #64748b; margin-top: 4px; line-height: 1.4; } .im-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); } .im-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }</style>`;
         }
 
         function generateFormUI(isPreview = false) {
@@ -1159,10 +1192,11 @@
                 fieldsHtml += `</div>`;
             });
             const themeHex = getThemeColor();
+            const totalHtml = `<div id="im-total-box" class="im-total-box"><span class="im-total-label">Total Tagihan:</span><span id="im-total-value" class="im-total-value">Rp 0</span></div>`;
             const trustHtml = formConfig.trustBadge ? `<div class="im-trust"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" style="color:${themeHex}; flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg><div><div class="im-trust-title">${formConfig.trustTitle}</div><div class="im-trust-desc">${formConfig.trustDesc}</div></div></div>` : '';
             const logoHtml = formConfig.logoUrl ? `<img src="${formConfig.logoUrl}" class="im-logo" alt="Logo">` : '';
             const submitAction = isPreview ? 'type="button" onclick="showToast(\'Ini Simulasi. Form asli akan memproses data ke Web App.\')"' : 'type="submit"';
-            return `<div class="im-wrapper"><div class="im-header" style="background: ${formConfig.headerBg}">${logoHtml}<h2 class="im-title">${formConfig.title}</h2></div><form id="im-form" class="im-body" onsubmit="return false;">${fieldsHtml}<div class="im-footer">${trustHtml}<button id="im-submit-btn" ${submitAction} class="im-btn" style="background: ${formConfig.ctaBg}">${formConfig.btnText}</button></div></form></div>`;
+            return `<div class="im-wrapper"><div class="im-header" style="background: ${formConfig.headerBg}">${logoHtml}<h2 class="im-title">${formConfig.title}</h2></div><form id="im-form" class="im-body" onsubmit="return false;">${fieldsHtml}<div class="im-footer">${totalHtml}${trustHtml}<button id="im-submit-btn" ${submitAction} class="im-btn" style="background: ${formConfig.ctaBg}">${formConfig.btnText}</button></div></form></div>`;
         }
 
         function renderPreview() {
@@ -1172,7 +1206,18 @@
             
             document.getElementById('wa-preview-name').innerText = "Admin " + formConfig.title.substring(0,10) + "...";
             let waText = `${formConfig.waIntro}\n\n*Form:* ${formConfig.title}\n`;
-            formFields.forEach(f => { let dummy = '(Jawaban Kustomer)'; if(['radio', 'select'].includes(f.type)) dummy = (f.options.split(',')[0] || '').trim(); if(f.type === 'checkbox') dummy = (f.options.split(',')[0] || '').trim() + ', ...'; if(f.type === 'number') dummy = '1'; waText += `*${f.label}:* ${dummy}\n`; });
+            
+            let isCalculationActive = formConfig.basePrice > 0;
+            formFields.forEach(f => { 
+                let dummy = '(Jawaban Kustomer)'; 
+                if(['radio', 'select'].includes(f.type)) { dummy = (f.options.split(',')[0] || '').trim(); if(/=\s*(\d+)/.test(f.options)) isCalculationActive = true; } 
+                if(f.type === 'checkbox') { dummy = (f.options.split(',')[0] || '').trim() + ', ...'; if(/=\s*(\d+)/.test(f.options)) isCalculationActive = true; } 
+                if(f.type === 'number') dummy = '1'; 
+                waText += `*${f.label}:* ${dummy}\n`; 
+            });
+            
+            if(isCalculationActive) waText += `\n*Total Tagihan:* Rp XXX.XXX\n`;
+            
             waText += `\n${formConfig.waFooter}`; document.getElementById('wa-preview-text').innerText = waText;
         }
 
@@ -1198,7 +1243,46 @@
             }
 
             let safeIntro = formConfig.waIntro.replace(/\n/g, '\\n').replace(/'/g, "\\'"); let safeFooter = formConfig.waFooter.replace(/\n/g, '\\n').replace(/'/g, "\\'");
-            const scriptString = `<script>\ndocument.getElementById('im-form').addEventListener('submit', function(e) { e.preventDefault(); const btn = document.getElementById('im-submit-btn'); btn.innerText = 'Memproses...'; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; const formData = new FormData(this); let formObj = {}; for (let [key, value] of formData.entries()) { if (formObj[key]) formObj[key] += ', ' + value; else formObj[key] = value; } let waText = '${safeIntro}\\n\\n*Form:* ${formConfig.title}\\n'; let jsonData = { Waktu_Order: new Date().toLocaleString(), Nama_Form: '${formConfig.title}', wa_target: '${formConfig.waNumber}' }; for (let key in formObj) { waText += '*' + key + ':* ' + formObj[key] + '\\n'; jsonData[key] = formObj[key]; } waText += '\\n${safeFooter}'; jsonData.wa_text = waText; const waUrl = 'https://wa.me/${formConfig.waNumber}?text=' + encodeURIComponent(waText); const sheetUrl = '${globalSettings.sheetUrl}'; if(sheetUrl && sheetUrl.startsWith('http')) { fetch(sheetUrl, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(jsonData) }).then(() => { ${waLogicScript} }).catch(() => { ${waLogicScript} }); setTimeout(() => { if(btn.innerText === 'Memproses...') { ${waLogicScript} } }, 3500); } else { ${waLogicScript} } });\n<\/script>`;
+            
+            // Smart Hybrid Calculator Logic
+            let calcLogic = `
+            function calculateTotal() {
+                let basePrice = parseInt('${formConfig.basePrice}') || 0;
+                let currentPrice = basePrice;
+                let qty = 1;
+                
+                const fd = new FormData(document.getElementById('im-form'));
+                for (let [key, value] of fd.entries()) {
+                    if(typeof value === 'string') {
+                        const match = value.match(/=\\s*(\\d+)/);
+                        if (match) currentPrice = parseInt(match[1]);
+                    }
+                }
+                
+                const numInputs = document.getElementById('im-form').querySelectorAll('input[type="number"]');
+                if (numInputs.length > 0) {
+                    let parsedQty = parseInt(numInputs[0].value);
+                    qty = (!isNaN(parsedQty) && parsedQty > 0) ? parsedQty : 0;
+                }
+                
+                let total = currentPrice * qty;
+                const totalBox = document.getElementById('im-total-box');
+                const totalVal = document.getElementById('im-total-value');
+                
+                if (currentPrice > 0) {
+                    totalBox.style.display = 'flex';
+                    totalVal.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+                } else {
+                    totalBox.style.display = 'none';
+                }
+                return total;
+            }
+            document.getElementById('im-form').addEventListener('input', calculateTotal);
+            document.getElementById('im-form').addEventListener('change', calculateTotal);
+            calculateTotal();
+            `;
+
+            const scriptString = `<script>\n${calcLogic}\ndocument.getElementById('im-form').addEventListener('submit', function(e) { e.preventDefault(); const btn = document.getElementById('im-submit-btn'); btn.innerText = 'Memproses...'; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; const formData = new FormData(this); let formObj = {}; for (let [key, value] of formData.entries()) { if (formObj[key]) formObj[key] += ', ' + value; else formObj[key] = value; } let waText = '${safeIntro}\\n\\n*Form:* ${formConfig.title}\\n'; let jsonData = { Waktu_Order: new Date().toLocaleString(), Nama_Form: '${formConfig.title}', wa_target: '${formConfig.waNumber}' }; for (let key in formObj) { waText += '*' + key + ':* ' + formObj[key] + '\\n'; jsonData[key] = formObj[key]; } let finalTotal = calculateTotal(); if(finalTotal > 0) { waText += '\\n*Total Tagihan:* Rp ' + new Intl.NumberFormat('id-ID').format(finalTotal) + '\\n'; jsonData['Total_Tagihan'] = finalTotal; } waText += '\\n${safeFooter}'; jsonData.wa_text = waText; const waUrl = 'https://wa.me/${formConfig.waNumber}?text=' + encodeURIComponent(waText); const sheetUrl = '${globalSettings.sheetUrl}'; if(sheetUrl && sheetUrl.startsWith('http')) { fetch(sheetUrl, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(jsonData) }).then(() => { ${waLogicScript} }).catch(() => { ${waLogicScript} }); setTimeout(() => { if(btn.innerText === 'Memproses...') { ${waLogicScript} } }, 3500); } else { ${waLogicScript} } });\n<\/script>`;
 
             document.getElementById('output-code').value = `<!-- iMersFOW Start -->\n${cssCode}\n${popupWrapperStart}${rawFormHtml}${popupWrapperEnd}\n${scriptString}\n<!-- iMersFOW End -->`;
         }

@@ -299,7 +299,7 @@
                     </div>
                 </div>
 
-                <!-- VIEW: SEQUENCE WA (INTERAKTIF 100%) -->
+                <!-- VIEW: SEQUENCE WA (INTERAKTIF DENGAN SKENARIO B DINAMIS) -->
                 <div id="view-sequence" class="hidden animate-fade-in max-w-6xl mx-auto pb-10 flex flex-col min-h-full">
                     <div class="mb-6 border-b border-slate-200 pb-4">
                         <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
@@ -1042,53 +1042,11 @@
         }
 
         // =========================================================================
-        // STATE APLIKASI BUILDER UTAMA
+        // STATE APLIKASI BUILDER UTAMA (Dideklarasikan di atas agar bisa diakses Menu Sequence)
         // =========================================================================
-        let currentStep = 1; // Ditambahkan kembali agar fungsi goToStep dan updateConfig tidak error
+        let currentStep = 1; 
         let savedForms = JSON.parse(localStorage.getItem('imersfow_forms')) || [];
         let currentCategoryFilter = 'Semua';
-        
-        let globalSettings = JSON.parse(localStorage.getItem('imersfow_global')) || {
-            sheetUrl: '', 
-            waGateway: 'wa_me', 
-            apiProvider: 'fonnte', 
-            apiToken: '', 
-            apiSender: ''
-        };
-        
-        let defaultFormConfig = {
-            title: 'Form Baru', 
-            waNumber: '6281234567890', 
-            waIntro: 'Halo Admin, ini data saya:', 
-            waFooter: 'Terima kasih.',
-            btnText: 'Kirim Data', 
-            headerBg: '#1e3a8a', 
-            ctaBg: '#2563eb',
-            titleColorType: 'solid',
-            titleColor1: '#ffffff',
-            titleColor2: '#fef08a',
-            ctaTextColorType: 'solid',
-            ctaTextColor1: '#ffffff',
-            ctaTextColor2: '#fef08a',
-            logoUrl: '', 
-            displayMode: 'embed', 
-            trustBadge: true, 
-            trustTitle: 'Aman & Terpercaya', 
-            trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.',
-            enablePixel: false,
-            fbPixel: '',
-            tiktokPixel: '',
-            googlePixel: ''
-        };
-        
-        let defaultFormFields = [
-            { id: 'f1', type: 'text', label: 'Nama Lengkap', required: true, placeholder: 'Sesuai KTP' },
-            { id: 'f2', type: 'tel', label: 'Nomor WhatsApp', required: true, placeholder: '08xx' }
-        ];
-
-        let formConfig = JSON.parse(JSON.stringify(defaultFormConfig)); 
-        let formFields = [];
-        let availableTemplates = {};
 
         // =========================================================================
         // STATE & LOGIC UNTUK MENU SEQUENCE WA (SKENARIO B - DINAMIS)
@@ -1098,7 +1056,7 @@
                 id: Date.now(), 
                 timeVal: 10, 
                 timeUnit: 'Menit', 
-                msg: 'Halo [Nama Lengkap],\nTerima kasih sudah order.\n\nSilakan balas pesan ini jika sudah transfer ya! 😊' 
+                msg: 'Halo [Nama Lengkap],\nTerima kasih sudah order produk kami.\n\nTotal tagihan Anda adalah: *[Total_Tagihan]*\n\nSilakan balas pesan ini jika sudah transfer ya! 😊' 
             }
         ];
         let activeSeqId = sequencesData[0].id;
@@ -1280,6 +1238,47 @@
             document.getElementById('seq-preview-bubble').innerHTML = text;
         }
 
+        let globalSettings = JSON.parse(localStorage.getItem('imersfow_global')) || {
+            sheetUrl: '', 
+            waGateway: 'wa_me', 
+            apiProvider: 'fonnte', 
+            apiToken: '', 
+            apiSender: ''
+        };
+        
+        let defaultFormConfig = {
+            title: 'Form Baru', 
+            waNumber: '6281234567890', 
+            waIntro: 'Halo Admin, ini data saya:', 
+            waFooter: 'Terima kasih.',
+            btnText: 'Kirim Data', 
+            headerBg: '#1e3a8a', 
+            ctaBg: '#2563eb',
+            titleColorType: 'solid',
+            titleColor1: '#ffffff',
+            titleColor2: '#fef08a',
+            ctaTextColorType: 'solid',
+            ctaTextColor1: '#ffffff',
+            ctaTextColor2: '#fef08a',
+            logoUrl: '', 
+            displayMode: 'embed', 
+            trustBadge: true, 
+            trustTitle: 'Aman & Terpercaya', 
+            trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.',
+            enablePixel: false,
+            fbPixel: '',
+            tiktokPixel: '',
+            googlePixel: ''
+        };
+        
+        let defaultFormFields = [
+            { id: 'f1', type: 'text', label: 'Nama Lengkap', required: true, placeholder: 'Sesuai KTP' },
+            { id: 'f2', type: 'tel', label: 'Nomor WhatsApp', required: true, placeholder: '08xx' }
+        ];
+
+        let formConfig = JSON.parse(JSON.stringify(defaultFormConfig)); 
+        let formFields = [];
+        let availableTemplates = {};
 
         // COLOR HELPERS
         function getThemeColor() {

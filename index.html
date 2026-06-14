@@ -8,8 +8,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- PANGGIL DATABASE TEMPLATE DARI FILE EKSTERNAL -->
-    <script src="templates.js"></script>
+    <!-- Script templates.js tidak lagi dipanggil di sini. Kita pakai Dynamic Loader anti-cache di bawah! -->
     
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
@@ -629,16 +628,7 @@
                 <!-- Grid Area -->
                 <div class="flex-1 bg-white p-6 overflow-y-auto custom-scrollbar">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="template-grid">
-                        <!-- Card 1: Blank -->
-                        <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
-                            <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
-                                <i class="ph-bold ph-plus text-3xl"></i>
-                            </div>
-                            <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
-                            <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
-                        </div>
-
-                        <!-- Template Cards di-generate oleh JS -->
+                        <!-- Card 1: Blank (Default, akan diisi di script) -->
                     </div>
                 </div>
             </div>
@@ -657,6 +647,82 @@
             if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; 
             if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; 
         };
+
+        // GLOBAL TEMPLATE VAR
+        let availableTemplates = {};
+
+        // DYNAMIC SCRIPT LOADER (Anti-Cache & Anti-CORS Fail)
+        function initTemplateEngine() {
+            const script = document.createElement('script');
+            // Tambahkan timestamp agar Vercel & Browser selalu menarik versi TERBARU, bukan versi error yang nyantol
+            script.src = './templates.js?v=' + new Date().getTime(); 
+            
+            script.onload = function() {
+                if(typeof dbTemplates !== 'undefined') {
+                    availableTemplates = dbTemplates;
+                    renderTemplateCards();
+                } else {
+                    showTemplateError("File templates.js berhasil diload, tapi Variabel dbTemplates tidak ditemukan. Cek ejaan di file JS Anda.");
+                }
+            };
+            
+            script.onerror = function() {
+                showTemplateError("File templates.js tidak ditemukan di URL ini. Pastikan nama file benar dan sudah ter-upload.");
+            };
+            
+            document.body.appendChild(script);
+        }
+
+        function showTemplateError(message) {
+            const grid = document.getElementById('template-grid');
+            grid.innerHTML = `
+                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                </div>
+                <div class="col-span-1 md:col-span-2 p-6 text-center text-rose-600 font-medium bg-rose-50 rounded-2xl border border-rose-200 flex flex-col items-center justify-center">
+                    <i class="ph-fill ph-warning-circle text-4xl mb-3"></i>
+                    <p class="font-bold">Gagal Membaca Template Eksternal!</p>
+                    <p class="text-sm mt-1 text-rose-500 text-left max-w-sm"><b>Diagnosa Error:</b><br>${message}<br><br>Jika Anda baru saja meng-update file di GitHub/Vercel, harap tunggu 1-2 menit hingga proses build selesai.</p>
+                </div>
+            `;
+        }
+
+        // --- FUNGSI MODAL TEMPLATE ---
+        function renderTemplateCards() {
+            const grid = document.getElementById('template-grid');
+            let html = `
+                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                </div>
+            `; 
+            
+            for (const key in availableTemplates) {
+                const tpl = availableTemplates[key];
+                html += `
+                <div onclick="useTemplate('${key}')" class="border border-slate-200 rounded-2xl p-6 flex flex-col cursor-pointer hover:border-${tpl.color.split('-')[1]}-500 hover:shadow-lg transition bg-white group min-h-[220px] relative overflow-hidden">
+                    <div class="w-14 h-14 rounded-xl ${tpl.bg} ${tpl.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="ph-fill ${tpl.icon} text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3>
+                    <p class="text-xs text-slate-500 mb-4 line-clamp-2">Template siap pakai dengan field yang sudah disesuaikan.</p>
+                    
+                    <div class="mt-auto flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span>
+                        <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition">
+                            <i class="ph-bold ph-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            grid.innerHTML = html;
+        }
 
         // LOGIN SYSTEM
         function checkLoginState() {
@@ -714,59 +780,6 @@
 
         let formConfig = {}; let formFields = [];
 
-        // PENANGANAN TEMPLATE EKSTERNAL (BERSIH DARI HARDCODE)
-        let availableTemplates = {};
-        if (typeof dbTemplates !== 'undefined') {
-            availableTemplates = dbTemplates;
-        } 
-
-        // --- FUNGSI MODAL TEMPLATE ---
-        function renderTemplateCards() {
-            const grid = document.getElementById('template-grid');
-            
-            // Kita reset isinya dulu, lalu tambahkan card Blank secara manual di sini
-            let html = `
-                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
-                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
-                        <i class="ph-bold ph-plus text-3xl"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
-                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
-                </div>
-            `; 
-            
-            // Kalau misal templates.js bener-bener kosong/error karena sandbox
-            if(Object.keys(availableTemplates).length === 0) {
-                 html += `<div class="col-span-1 md:col-span-2 lg:col-span-3 p-6 text-center text-rose-500 font-medium bg-rose-50 rounded-2xl border border-rose-200">
-                     <i class="ph-fill ph-warning-circle text-3xl mb-2"></i><br>
-                     Data template tidak dapat dimuat di mode Preview ini (Terblokir CORS).<br>Saat file ini diupload ke GitHub/Server Anda, 100+ template Anda akan otomatis muncul di sini!
-                 </div>`;
-                 grid.innerHTML = html;
-                 return;
-            }
-
-            // Looping dan nambahkan card dari availableTemplates (yang asalnya dari dbTemplates)
-            for (const key in availableTemplates) {
-                const tpl = availableTemplates[key];
-                html += `
-                <div onclick="useTemplate('${key}')" class="border border-slate-200 rounded-2xl p-6 flex flex-col cursor-pointer hover:border-${tpl.color.split('-')[1]}-500 hover:shadow-lg transition bg-white group min-h-[220px] relative overflow-hidden">
-                    <div class="w-14 h-14 rounded-xl ${tpl.bg} ${tpl.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="ph-fill ${tpl.icon} text-3xl"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3>
-                    <p class="text-xs text-slate-500 mb-4 line-clamp-2">Template siap pakai dengan field yang sudah disesuaikan.</p>
-                    
-                    <div class="mt-auto flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span>
-                        <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition">
-                            <i class="ph-bold ph-arrow-right"></i>
-                        </div>
-                    </div>
-                </div>`;
-            }
-            grid.innerHTML = html;
-        }
-
         function openTemplateModal() {
             document.getElementById('template-modal').classList.add('show');
         }
@@ -781,14 +794,12 @@
             if(key === 'blank') {
                 formConfig = JSON.parse(JSON.stringify(defaultFormConfig));
                 formFields = JSON.parse(JSON.stringify(defaultFormFields));
-                // Set radio to solid for blank
                 document.querySelector('input[name="header_type"][value="solid"]').checked = true;
                 document.querySelector('input[name="cta_type"][value="solid"]').checked = true;
             } else {
                 const tpl = availableTemplates[key];
                 formConfig = JSON.parse(JSON.stringify(tpl.config));
                 formFields = JSON.parse(JSON.stringify(tpl.fields));
-                // Set radio to gradient for templates
                 document.querySelector('input[name="header_type"][value="gradient"]').checked = true;
                 document.querySelector('input[name="cta_type"][value="gradient"]').checked = true;
             }
@@ -1095,10 +1106,11 @@
 
         function copyEmbedCode() { document.getElementById('output-code').select(); document.execCommand('copy'); showToast('Kode HTML disalin ke clipboard!'); }
 
+        // MULAILAH SEMUANYA DI SINI
         window.onload = function() { 
             checkLoginState(); 
             loadGlobalSettings(); 
-            renderTemplateCards();
+            initTemplateEngine(); // Panggil fungsi Dynamic Loader anti-cache
         };
     </script>
 </body>

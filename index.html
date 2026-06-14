@@ -617,13 +617,8 @@
             <!-- Modal Body (Sidebar + Grid) -->
             <div class="flex flex-1 overflow-hidden">
                 <!-- Sidebar Kategori -->
-                <div class="w-56 bg-slate-50 border-r border-slate-200 p-4 flex flex-col gap-2 overflow-y-auto flex-shrink-0">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Kategori</p>
-                    <button onclick="filterTemplates('Semua')" id="btn-cat-Semua" class="cat-btn text-left px-4 py-2.5 rounded-xl bg-blue-100 text-blue-700 font-bold text-sm transition w-full">Semua Template</button>
-                    <button onclick="filterTemplates('E-Commerce')" id="btn-cat-E-Commerce" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">E-Commerce</button>
-                    <button onclick="filterTemplates('Event')" id="btn-cat-Event" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Event & Webinar</button>
-                    <button onclick="filterTemplates('Layanan')" id="btn-cat-Layanan" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Layanan / Booking</button>
-                    <button onclick="filterTemplates('Survei')" id="btn-cat-Survei" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Survei & Feedback</button>
+                <div id="category-sidebar" class="w-56 bg-slate-50 border-r border-slate-200 p-4 flex flex-col gap-2 overflow-y-auto flex-shrink-0">
+                    <!-- Tombol kategori akan di-render otomatis oleh JS di sini -->
                 </div>
                 
                 <!-- Grid Area -->
@@ -716,6 +711,8 @@
             script.onload = function() {
                 if(typeof dbTemplates !== 'undefined') {
                     availableTemplates = dbTemplates;
+                    // Render kategori secara dinamis dari data templates.js
+                    renderCategorySidebar();
                     // Render default 'Semua' category on load
                     filterTemplates('Semua');
                 } else {
@@ -728,6 +725,32 @@
             };
             
             document.body.appendChild(script);
+        }
+
+        // --- FUNGSI SIDEBAR KATEGORI DINAMIS ---
+        function renderCategorySidebar() {
+            const sidebar = document.getElementById('category-sidebar');
+            let uniqueCategories = new Set();
+            
+            // Kumpulkan semua nama kategori unik dari file templates.js
+            for (const key in availableTemplates) {
+                if (availableTemplates[key].category) {
+                    uniqueCategories.add(availableTemplates[key].category);
+                }
+            }
+            
+            // Buat HTML strukturnya mulai dari tombol 'Semua Template'
+            let html = `<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Kategori</p>`;
+            html += `<button onclick="filterTemplates('Semua')" id="btn-cat-Semua" class="cat-btn text-left px-4 py-2.5 rounded-xl bg-blue-100 text-blue-700 font-bold text-sm transition w-full">Semua Template</button>`;
+            
+            // Generate sisa tombol kategori otomatis dari data
+            uniqueCategories.forEach(cat => {
+                // Buat ID aman (hilangkan spasi atau karakter aneh)
+                const safeId = cat.replace(/[^a-zA-Z0-9]/g, '-');
+                html += `<button onclick="filterTemplates('${cat}')" id="btn-cat-${safeId}" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">${cat}</button>`;
+            });
+            
+            sidebar.innerHTML = html;
         }
 
         function showTemplateError(message) {
@@ -775,7 +798,7 @@
                             <i class="ph-fill ${tpl.icon} text-3xl"></i>
                         </div>
                         <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3>
-                        <p class="text-xs text-slate-500 mb-4 line-clamp-2">Kategori: <b>${tpl.category}</b>. Template siap pakai dengan field yang sudah disesuaikan.</p>
+                        <p class="text-xs text-slate-500 mb-4 line-clamp-2">Kategori: <b>${tpl.category || 'Lainnya'}</b>. Template siap pakai dengan field yang sudah disesuaikan.</p>
                         
                         <div class="mt-auto flex items-center justify-between">
                             <span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span>
@@ -798,9 +821,9 @@
                 btn.classList.add('text-slate-600', 'hover:bg-slate-200', 'font-medium');
             });
             
-            // 2. Cari tombol yang diklik (menggunakan ID khusus yang baru kita buat)
-            // Khusus untuk Event & Webinar kita pakai 'Event' di JS tapi labelnya 'Event & Webinar'
-            const activeBtnId = 'btn-cat-' + category;
+            // 2. Cari tombol yang diklik (menggunakan ID khusus yang aman)
+            const safeId = category.replace(/[^a-zA-Z0-9]/g, '-');
+            const activeBtnId = 'btn-cat-' + safeId;
             const activeBtn = document.getElementById(activeBtnId);
             
             // 3. Terapkan styling aktif (biru) ke tombol yang dipilih

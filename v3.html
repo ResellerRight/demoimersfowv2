@@ -56,7 +56,7 @@
 
         .wa-bg {
             background-color: #efeae2;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d0c9c0' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d0c9c0' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         
         /* Modal Template Styles */
@@ -134,9 +134,10 @@
         </div>
     </div>
 
+    <!-- APP LAYOUT (SIDEBAR + MAIN CONTENT) -->
     <div id="app-layout" class="hidden flex-1 flex overflow-hidden bg-slate-50 relative w-full h-full">
         
-        <!-- Mobile Header -->
+        <!-- Mobile Header (Visible only on small screens) -->
         <div class="md:hidden absolute top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-40">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-md">
@@ -149,11 +150,13 @@
             </button>
         </div>
 
+        <!-- Sidebar Overlay (Mobile) -->
         <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden opacity-0 backdrop-blur-sm"></div>
 
         <!-- SIDEBAR -->
         <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl md:shadow-none">
             
+            <!-- Branding -->
             <div class="h-20 flex items-center px-6 border-b border-slate-800">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg">
@@ -164,10 +167,14 @@
                         <p class="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Pro Edition</p>
                     </div>
                 </div>
+                <!-- Close btn mobile -->
                 <button onclick="toggleSidebar()" class="md:hidden ml-auto text-slate-400 hover:text-white"><i class="ph-bold ph-x text-xl"></i></button>
             </div>
 
+            <!-- Navigation Links -->
             <div class="flex-1 overflow-y-auto custom-scrollbar py-6 px-4 space-y-8">
+                
+                <!-- Group 1: Core -->
                 <div>
                     <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Core Tools</p>
                     <div class="space-y-1">
@@ -181,6 +188,7 @@
                     </div>
                 </div>
 
+                <!-- Group 2: Automation -->
                 <div>
                     <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Automation</p>
                     <div class="space-y-1">
@@ -196,6 +204,7 @@
                     </div>
                 </div>
 
+                <!-- Group 3: Help -->
                 <div>
                     <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Bantuan</p>
                     <div class="space-y-1">
@@ -206,6 +215,7 @@
                 </div>
             </div>
 
+            <!-- User Info & Logout -->
             <div class="p-4 border-t border-slate-800">
                 <div class="flex items-center gap-3 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
                     <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 font-bold uppercase text-xs" id="sidebar-avatar">M</div>
@@ -220,6 +230,7 @@
             </div>
         </aside>
 
+        <!-- MAIN CONTENT AREA -->
         <main id="main-container" class="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0 relative custom-scrollbar bg-slate-50/50">
             <div class="w-full h-full p-4 sm:p-6 lg:p-8">
                 
@@ -287,6 +298,9 @@
                     </div>
                 </div>
 
+                <!-- ========================================== -->
+                <!-- VIEW: SEQUENCE WA (INTERAKTIF 100%)        -->
+                <!-- ========================================== -->
                 <div id="view-sequence" class="hidden animate-fade-in max-w-6xl mx-auto pb-10 flex flex-col">
                     <div class="mb-6 border-b border-slate-200 pb-4 flex justify-between items-end">
                         <div>
@@ -298,27 +312,17 @@
                     </div>
 
                     <div class="flex flex-col lg:flex-row gap-6 flex-1 min-h-[600px]">
-                        <!-- Left: Editor & Settings -->
+                        
+                        <!-- Panel Kiri: Pengaturan & Editor -->
                         <div class="flex-1 flex flex-col gap-4">
                             <!-- Select Form -->
-                            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Form Target</label>
-                                <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 font-medium text-sm">
-                                    <option>-- Pilih Form --</option>
+                                <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-emerald-500">
+                                    <option>-- Pilih Form yang Ingin Diatur --</option>
                                     <option>Order Kaos Premium</option>
-                                    <option>Daftar Webinar Bisnis</option>
+                                    <option>Pendaftaran Webinar Bisnis</option>
                                 </select>
-                                
-                                <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
-                                    <div>
-                                        <p class="text-sm font-bold text-slate-800">Berhentikan jika pesanan "LUNAS"</p>
-                                        <p class="text-xs text-slate-500">Sequence akan otomatis batal jika pelanggan sudah bayar.</p>
-                                    </div>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" class="sr-only peer" checked>
-                                        <div class="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:bg-emerald-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
-                                    </label>
-                                </div>
                             </div>
 
                             <!-- List Timeline (Interactive) -->
@@ -332,9 +336,10 @@
                                 </div>
                             </div>
 
-                            <!-- Editor Area -->
-                            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col flex-1">
-                                <!-- Delay Configuration (Interactive) -->
+                            <!-- Editor Area (Interactive) -->
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col flex-1 overflow-hidden">
+                                
+                                <!-- Delay Configuration -->
                                 <div class="p-4 border-b border-slate-100 bg-emerald-50/30 flex flex-col sm:flex-row gap-4 items-start sm:items-end justify-between">
                                     <div class="flex-1 w-full">
                                         <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Waktu Pengiriman (Delay)</label>
@@ -354,7 +359,7 @@
                                     </button>
                                 </div>
 
-                                <!-- Formatting Tools -->
+                                <!-- Format & Variable Tools -->
                                 <div class="p-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between flex-wrap gap-2">
                                     <div class="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-lg shadow-sm">
                                         <button onclick="insertFormat('*')" class="w-8 h-8 rounded hover:bg-slate-100 font-bold flex items-center justify-center text-slate-700 tooltip" title="Tebal (Bold)">B</button>
@@ -368,21 +373,26 @@
                                         <button onclick="insertVar('[Pilihan_Varian]')" class="text-xs bg-amber-50 text-amber-600 hover:bg-amber-100 font-bold px-2.5 py-1.5 rounded-lg border border-amber-100 transition">[Produk]</button>
                                     </div>
                                 </div>
-
-                                <div class="flex-1 relative">
-                                    <textarea id="seq-editor" class="w-full h-full p-5 resize-none outline-none text-sm text-slate-700 leading-relaxed custom-scrollbar placeholder-slate-300 min-h-[150px]" placeholder="Ketik pesan follow-up di sini..." oninput="updateSequenceData()"></textarea>
-                                </div>
-                                <div class="p-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-                                    <button class="text-slate-400 hover:text-emerald-500 transition">
+                                
+                                <textarea id="seq-editor" oninput="updateSequenceData()" class="w-full flex-1 p-5 outline-none resize-none custom-scrollbar text-sm leading-relaxed" placeholder="Ketik pesan follow-up di sini... Gunakan variabel untuk menyapa nama kustomer secara otomatis."></textarea>
+                                
+                                <div class="p-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                                    <button class="w-9 h-9 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-500 transition">
                                         <i class="ph-fill ph-smiley text-2xl"></i>
                                     </button>
-                                    <button class="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-lg shadow-md hover:bg-emerald-700 transition">Simpan Pesan</button>
+                                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition">
+                                        <input type="checkbox" class="accent-rose-500 w-4 h-4">
+                                        <span class="text-xs font-bold text-slate-600">Berhenti otomatis jika Lunas</span>
+                                    </label>
                                 </div>
+                                <button class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition flex items-center justify-center gap-2">
+                                    <i class="ph-bold ph-floppy-disk text-lg"></i> Simpan Pesan Ini
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Right: Live Preview Bubble -->
-                        <div class="w-full lg:w-[380px] bg-slate-100 border border-slate-200 rounded-2xl shadow-inner p-6 flex flex-col items-center relative overflow-hidden">
+                        <!-- Panel Kanan: Live Preview WA -->
+                        <div class="w-full lg:w-[380px] bg-slate-100 rounded-2xl border border-slate-200 flex flex-col items-center p-6 lg:p-8 shadow-inner overflow-hidden relative">
                             <div class="flex items-center justify-center gap-2 mb-6 w-full">
                                 <span class="h-px flex-1 bg-slate-300"></span>
                                 <h3 class="font-bold text-emerald-600 tracking-widest text-xs uppercase flex items-center gap-1">
@@ -390,15 +400,13 @@
                                 </h3>
                                 <span class="h-px flex-1 bg-slate-300"></span>
                             </div>
-                            
+
                             <!-- Phone Frame -->
-                            <div class="w-full max-w-[320px] bg-white rounded-[40px] shadow-2xl border-[8px] border-slate-800 overflow-hidden flex flex-col h-[550px] relative">
+                            <div class="w-full max-w-[320px] bg-white rounded-[32px] shadow-2xl border-[8px] border-slate-800 overflow-hidden flex flex-col h-[550px] relative">
                                 <div class="absolute top-0 inset-x-0 h-5 bg-slate-800 rounded-b-xl w-32 mx-auto z-20"></div>
                                 <div class="bg-[#075e54] text-white p-3 pt-7 flex items-center gap-3 relative z-10 shadow-md">
                                     <i class="ph-bold ph-arrow-left text-xl"></i>
-                                    <div class="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden">
-                                        <i class="ph-fill ph-user text-xl mt-1.5"></i>
-                                    </div>
+                                    <div class="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden"><i class="ph-fill ph-user text-xl mt-1.5"></i></div>
                                     <div class="leading-tight flex-1">
                                         <div class="text-sm font-bold truncate">Kustomer Anda</div>
                                         <div class="text-[10px] opacity-80">online</div>
@@ -413,6 +421,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -621,6 +630,7 @@
                                         <label class="text-sm font-bold text-slate-700">Teks Tombol CTA</label>
                                         <input type="text" id="cfg-btn-text" value="Kirim Sekarang" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium" oninput="updateConfig()">
                                     </div>
+                                    <!-- FIELD BARU: HARGA DASAR -->
                                     <div class="space-y-2 col-span-1 md:col-span-2">
                                         <label class="text-sm font-bold text-slate-700">Harga Dasar Produk (Rp) - <span class="text-slate-400 font-normal">Opsional</span></label>
                                         <input type="number" id="cfg-base-price" value="0" placeholder="Contoh: 150000" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
@@ -981,7 +991,7 @@
         }
 
         // =========================================================================
-        // STATE & LOGIC UNTUK MENU SEQUENCE WA (INTERAKTIF)
+        // STATE & LOGIC UNTUK MENU SEQUENCE WA (INTERAKTIF 100%)
         // =========================================================================
         let sequencesData = [
             { 
@@ -1003,7 +1013,6 @@
                 const numBgClass = isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500';
                 const titleClass = isActive ? 'text-emerald-800' : 'text-slate-700';
 
-                // Tampilkan isi pesan dengan membuang line break agar rapi di sidebar
                 let previewText = seq.msg.replace(/\n/g, ' ');
                 if(!previewText.trim()) previewText = 'Pesan kosong...';
 
@@ -1011,7 +1020,7 @@
                     <div onclick="selectSequence(${seq.id})" class="flex items-center gap-3 p-3 rounded-xl border ${borderClass} cursor-pointer transition animate-fade-in relative group">
                         <div class="w-8 h-8 rounded-full ${numBgClass} flex items-center justify-center font-bold text-xs flex-shrink-0">${index + 1}</div>
                         <div class="flex-1 overflow-hidden">
-                            <p class="text-sm font-bold ${titleClass}">Kirim: ${seq.timeVal} ${seq.timeUnit}</p>
+                            <p class="text-sm font-bold ${titleClass}">Kirim: ${seq.timeVal} ${seq.timeUnit} Setelah Order</p>
                             <p class="text-xs text-slate-500 truncate">${previewText}</p>
                         </div>
                     </div>
@@ -1023,13 +1032,12 @@
             activeSeqId = id;
             const seq = sequencesData.find(s => s.id === id);
             if(seq) {
-                // Update nilai di form editor
                 document.getElementById('seq-time-val').value = seq.timeVal;
                 document.getElementById('seq-time-unit').value = seq.timeUnit;
                 document.getElementById('seq-editor').value = seq.msg;
                 
-                updateSeqPreview(); // Update preview gelembung kanan
-                renderTimeline(); // Update warna aktif di sidebar kiri
+                updateSeqPreview();
+                renderTimeline(); 
             }
         }
 
@@ -1052,8 +1060,8 @@
                 seq.timeUnit = document.getElementById('seq-time-unit').value;
                 seq.msg = document.getElementById('seq-editor').value;
                 
-                renderTimeline(); // Re-render sidebar kiri biar teksnya ikut berubah
-                updateSeqPreview(); // Re-render preview gelembung kanan
+                renderTimeline(); 
+                updateSeqPreview(); 
             }
         }
 
@@ -1064,14 +1072,11 @@
             }
             if(confirm('Hapus jadwal pesan ini?')) {
                 sequencesData = sequencesData.filter(s => s.id !== activeSeqId);
-                selectSequence(sequencesData[0].id); // Otomatis pindah ke jadwal paling atas
+                selectSequence(sequencesData[0].id); 
                 showToast('Jadwal berhasil dihapus!');
             }
         }
 
-        // =========================================================================
-        // WA EDITOR FORMATTING TOOLS
-        // =========================================================================
         function insertFormat(char) {
             const textarea = document.getElementById('seq-editor');
             const start = textarea.selectionStart; 
@@ -1089,7 +1094,7 @@
             }
             
             textarea.focus(); 
-            updateSequenceData(); // Save and preview
+            updateSequenceData();
         }
 
         function insertVar(varString) {
@@ -1100,7 +1105,7 @@
             textarea.value = text.substring(0, start) + varString + text.substring(start);
             textarea.selectionStart = textarea.selectionEnd = start + varString.length;
             textarea.focus();
-            updateSequenceData(); // Save and preview
+            updateSequenceData(); 
         }
 
         function updateSeqPreview() {
@@ -1111,21 +1116,19 @@
                 return;
             }
 
-            // Ganti line breaks
             text = text.replace(/\n/g, '<br>');
-
             text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             text = text.replace(/\*([^\*]+)\*/g, "<b>$1</b>");
             text = text.replace(/_([^_]+)_/g, "<i>$1</i>");
             text = text.replace(/~([^~]+)~/g, "<s>$1</s>");
             
-            // Highlight Variabel biar cakep di preview
             text = text.replace(/\[Nama_Pembeli\]/g, '<span class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-bold">Kustomer Budi</span>');
             text = text.replace(/\[Total_Tagihan\]/g, '<span class="bg-emerald-100 text-emerald-800 px-1 rounded text-xs font-bold">Rp 150.000</span>');
             text = text.replace(/\[Pilihan_Varian\]/g, '<span class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-bold">Paket Ultimate</span>');
             
             document.getElementById('seq-preview-bubble').innerHTML = text;
         }
+
 
         // STATE APLIKASI BUILDER UTAMA
         let savedForms = JSON.parse(localStorage.getItem('imersfow_forms')) || [];
@@ -1368,8 +1371,8 @@
                 loadGlobalSettings();
             }
             if(viewId === 'sequence') {
-                // Initialize timeline rendering the first time tab is opened
-                renderTimeline(); 
+                renderTimeline(); // Initialize timeline when tab is opened
+                updateSeqPreview();
             }
         }
 

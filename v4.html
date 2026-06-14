@@ -1,0 +1,2435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iMersFOW Pro Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+            overflow: hidden; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { 
+            width: 6px; 
+            height: 6px; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track { 
+            background: transparent; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 4px; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+            background: #94a3b8; 
+        }
+        
+        .toast {
+            position: fixed; 
+            bottom: -100px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: #1e293b; 
+            color: white; 
+            padding: 12px 24px; 
+            border-radius: 9999px;
+            font-weight: 500; 
+            font-size: 14px; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            z-index: 99999;
+        }
+        
+        .toast.show { 
+            bottom: 30px; 
+        }
+
+        .wa-bg {
+            background-color: #efeae2;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d0c9c0' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        /* Modal Template Styles */
+        #template-modal { 
+            transition: opacity 0.3s ease, visibility 0.3s ease; 
+        }
+        
+        #template-modal .modal-content { 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            transform: scale(0.95); 
+        }
+        
+        #template-modal.show { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+        
+        #template-modal.show .modal-content { 
+            transform: scale(1); 
+        }
+
+        /* Sidebar Transition */
+        #sidebar-overlay { transition: opacity 0.3s ease; }
+        #sidebar { transition: transform 0.3s ease; }
+    </style>
+</head>
+<body class="antialiased h-screen flex flex-col">
+
+    <!-- VIEW: LOGIN PAGE -->
+    <div id="view-login" class="fixed inset-0 z-[9999] bg-slate-900 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50"></div>
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 relative z-10 border border-slate-700">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg mx-auto mb-4">
+                    <i class="ph-fill ph-paper-plane-tilt text-3xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-900">Masuk ke iMers<span class="text-rose-600">FOW</span></h1>
+                <p class="text-sm text-slate-500 mt-2">Sistem Builder Canggih untuk Master</p>
+            </div>
+            
+            <form id="login-form" onsubmit="processLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Nama Panggilan</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph-fill ph-user text-slate-400"></i>
+                        </div>
+                        <input type="text" id="login-name" required placeholder="Ketik nama Anda..." class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Email Akses</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph-fill ph-envelope text-slate-400"></i>
+                        </div>
+                        <input type="email" id="login-email" required placeholder="email@domain.com" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Kata Sandi Rahasia</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph-fill ph-lock-key text-slate-400"></i>
+                        </div>
+                        <input type="password" id="login-pass" required placeholder="••••••••" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-sm">
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition shadow-lg mt-2 flex items-center justify-center gap-2">
+                    Masuk Sekarang <i class="ph-bold ph-sign-in"></i>
+                </button>
+            </form>
+            <div class="mt-6 text-center text-xs text-slate-400 font-medium">
+                Sistem diproteksi oleh Enkripsi Frontend.
+            </div>
+        </div>
+    </div>
+
+    <!-- APP LAYOUT (SIDEBAR + MAIN CONTENT) -->
+    <div id="app-layout" class="hidden flex-1 flex overflow-hidden bg-slate-50 relative w-full h-full">
+        
+        <!-- Mobile Header (Visible only on small screens) -->
+        <div class="md:hidden absolute top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-40">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-md">
+                    <i class="ph-fill ph-paper-plane-tilt text-lg"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight text-slate-800">iMers<span class="text-rose-600">FOW</span></span>
+            </div>
+            <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                <i class="ph-bold ph-list text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar Overlay (Mobile) -->
+        <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden opacity-0 backdrop-blur-sm"></div>
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-64 flex-shrink-0 bg-slate-900 text-slate-300 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl md:shadow-none border-r border-slate-800">
+            
+            <!-- Branding -->
+            <div class="h-16 lg:h-20 flex items-center px-6 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg">
+                        <i class="ph-fill ph-paper-plane-tilt text-xl lg:text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-lg lg:text-xl tracking-tight text-white leading-tight">iMers<span class="text-rose-500">FOW</span></h2>
+                        <p class="text-[9px] lg:text-[10px] text-slate-500 font-bold tracking-widest uppercase">Pro Edition</p>
+                    </div>
+                </div>
+                <!-- Close btn mobile -->
+                <button onclick="toggleSidebar()" class="md:hidden ml-auto text-slate-400 hover:text-white"><i class="ph-bold ph-x text-xl"></i></button>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar py-6 px-4 space-y-8">
+                
+                <!-- Group 1: Core -->
+                <div>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Core Tools</p>
+                    <div class="space-y-1">
+                        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-slate-800 hover:text-white">
+                            <i class="ph-fill ph-squares-four text-lg"></i> Dashboard
+                        </button>
+                        <button onclick="openTemplateModal()" id="nav-builder" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-slate-800 hover:text-white">
+                            <div class="flex items-center gap-3"><i class="ph-fill ph-magic-wand text-lg"></i> Builder Form</div>
+                            <i class="ph-bold ph-plus text-slate-500"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group 2: Automation -->
+                <div>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Automation</p>
+                    <div class="space-y-1">
+                        <button onclick="switchTab('sequence')" id="nav-sequence" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-slate-800 hover:text-white relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <i class="ph-fill ph-paper-plane-right text-lg text-emerald-500"></i> 
+                            <span class="group-hover:text-emerald-400 transition-colors">Sequence WA</span>
+                            <span class="ml-auto bg-emerald-500/20 text-emerald-400 text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
+                        </button>
+                        <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-slate-800 hover:text-white">
+                            <i class="ph-fill ph-plugs-connected text-lg"></i> Integrasi API
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Group 3: Help -->
+                <div>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 px-2">Bantuan</p>
+                    <div class="space-y-1">
+                        <button onclick="switchTab('tutorial')" id="nav-tutorial" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-slate-800 hover:text-white">
+                            <i class="ph-fill ph-video-camera text-lg text-amber-500"></i> Panduan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Info & Logout -->
+            <div class="p-4 border-t border-slate-800">
+                <div class="flex items-center gap-3 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 font-bold uppercase text-xs" id="sidebar-avatar">M</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-white truncate" id="sidebar-name">Master</p>
+                        <p class="text-[10px] text-slate-400 truncate">Admin Workspace</p>
+                    </div>
+                    <button onclick="doLogout()" class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white flex items-center justify-center transition-colors" title="Keluar">
+                        <i class="ph-bold ph-sign-out"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main id="main-container" class="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0 relative custom-scrollbar bg-slate-50/50">
+            <div class="w-full min-h-full p-4 sm:p-6 lg:p-8">
+                
+                <!-- VIEW: DASHBOARD -->
+                <div id="view-dashboard" class="hidden animate-fade-in space-y-6 max-w-6xl mx-auto pb-10">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-900">Selamat Datang, <span id="welcome-name" class="text-rose-600">Master</span>!</h1>
+                            <p class="text-slate-500 text-sm mt-1">Ringkasan performa seluruh form Anda.</p>
+                        </div>
+                        <button onclick="openTemplateModal()" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-md flex items-center gap-2">
+                            <i class="ph-bold ph-plus"></i> Buat Form Baru
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+                            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                <i class="ph-fill ph-file-text text-3xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold mb-1">Total Form Aktif</p>
+                                <h3 id="stat-total-forms" class="text-3xl font-bold text-slate-800 leading-none">0</h3>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="ph-fill ph-users text-3xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold mb-1">Total Leads Masuk</p>
+                                <h3 id="stat-total-leads" class="text-3xl font-bold text-slate-800 leading-none">0</h3>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <i class="ph-fill ph-trend-up text-3xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold mb-1">Rata-rata Konversi</p>
+                                <h3 id="stat-conversion-rate" class="text-3xl font-bold text-slate-800 leading-none">0.0%</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                        <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                            <h2 class="text-lg font-bold text-slate-800">Daftar Form Terbaru</h2>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                                    <tr>
+                                        <th class="px-6 py-4">Nama Form</th>
+                                        <th class="px-6 py-4">Tanggal Buat</th>
+                                        <th class="px-6 py-4 text-center">Status</th>
+                                        <th class="px-6 py-4 text-center">Total Leads</th>
+                                        <th class="px-6 py-4 text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashboard-table-body" class="divide-y divide-slate-100 text-slate-700">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: SEQUENCE WA (INTERAKTIF 100%) -->
+                <div id="view-sequence" class="hidden animate-fade-in max-w-6xl mx-auto pb-10 flex flex-col min-h-full">
+                    <div class="mb-6 border-b border-slate-200 pb-4">
+                        <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="ph-fill ph-paper-plane-right text-emerald-500"></i> Auto Follow-Up (Sequence)
+                        </h1>
+                        <p class="text-slate-500 text-sm mt-1">Buat pesan berantai otomatis yang terkirim di latar belakang via API Fonnte/WAPlus.</p>
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row gap-6 flex-1 items-start">
+                        <!-- Panel Kiri: Pengaturan & Editor -->
+                        <div class="flex-1 w-full min-w-0 flex flex-col gap-5">
+                            
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Form Target</label>
+                                <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-emerald-500">
+                                    <option>-- Pilih Form yang Ingin Diatur --</option>
+                                    <option>Order Kaos Premium</option>
+                                    <option>Pendaftaran Webinar Bisnis</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-bold text-slate-800 text-sm">Timeline Pesan</h3>
+                                    <button onclick="addSequenceItem()" class="text-xs bg-slate-900 hover:bg-slate-800 text-white font-bold px-3 py-1.5 rounded-lg transition shadow-md">+ Tambah Jadwal</button>
+                                </div>
+                                <div class="space-y-3" id="sequence-timeline">
+                                    <!-- Di-render oleh Javascript -->
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                                <div class="p-4 border-b border-slate-100 bg-emerald-50/30 flex flex-col sm:flex-row gap-4 items-start sm:items-end justify-between">
+                                    <div class="flex-1 w-full">
+                                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">Waktu Pengiriman (Delay)</label>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-bold text-slate-700">Kirim</span>
+                                            <input type="number" id="seq-time-val" value="10" min="0" class="w-20 px-3 py-2 text-center bg-white border border-slate-300 rounded-lg focus:border-emerald-500 outline-none text-sm font-bold shadow-sm" oninput="updateSequenceData()">
+                                            <select id="seq-time-unit" class="px-3 py-2 bg-white border border-slate-300 rounded-lg focus:border-emerald-500 outline-none text-sm font-bold shadow-sm" onchange="updateSequenceData()">
+                                                <option value="Menit">Menit</option>
+                                                <option value="Jam">Jam</option>
+                                                <option value="Hari">Hari</option>
+                                            </select>
+                                            <span class="text-sm font-bold text-slate-700 hidden sm:inline-block">Setelah Order Masuk</span>
+                                        </div>
+                                    </div>
+                                    <button onclick="deleteActiveSequence()" class="px-3 py-2 bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                                        <i class="ph-bold ph-trash"></i> Hapus
+                                    </button>
+                                </div>
+
+                                <div class="p-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between flex-wrap gap-2">
+                                    <div class="flex items-center gap-1 bg-white border border-slate-200 p-1 rounded-lg shadow-sm">
+                                        <button onclick="insertFormat('*')" class="w-8 h-8 rounded hover:bg-slate-100 font-bold flex items-center justify-center text-slate-700 tooltip" title="Tebal (Bold)">B</button>
+                                        <button onclick="insertFormat('_')" class="w-8 h-8 rounded hover:bg-slate-100 italic font-serif flex items-center justify-center text-slate-700" title="Miring (Italic)">I</button>
+                                        <button onclick="insertFormat('~')" class="w-8 h-8 rounded hover:bg-slate-100 line-through flex items-center justify-center text-slate-700" title="Coret (Strikethrough)">S</button>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase">Variabel:</span>
+                                        <button onclick="insertVar('[Nama_Pembeli]')" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold px-2.5 py-1.5 rounded-lg border border-blue-100 transition">[Nama]</button>
+                                        <button onclick="insertVar('[Total_Tagihan]')" class="text-xs bg-emerald-50 text-emerald-600 hover:bg-emerald-100 font-bold px-2.5 py-1.5 rounded-lg border border-emerald-100 transition">[Tagihan]</button>
+                                        <button onclick="insertVar('[Pilihan_Varian]')" class="text-xs bg-amber-50 text-amber-600 hover:bg-amber-100 font-bold px-2.5 py-1.5 rounded-lg border border-amber-100 transition">[Produk]</button>
+                                    </div>
+                                </div>
+                                
+                                <textarea id="seq-editor" oninput="updateSequenceData()" class="w-full p-5 outline-none resize-none custom-scrollbar text-sm leading-relaxed min-h-[200px]" placeholder="Ketik pesan follow-up di sini... Gunakan variabel untuk menyapa nama kustomer secara otomatis."></textarea>
+                                
+                                <div class="p-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between flex-wrap gap-3">
+                                    <button class="w-9 h-9 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-500 transition">
+                                        <i class="ph-fill ph-smiley text-2xl"></i>
+                                    </button>
+                                    <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition">
+                                        <input type="checkbox" class="accent-emerald-500 w-4 h-4">
+                                        <span class="text-xs font-bold text-slate-600">Berhenti otomatis jika Lunas</span>
+                                    </label>
+                                </div>
+                                <button class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition flex items-center justify-center gap-2 text-base">
+                                    <i class="ph-bold ph-floppy-disk text-lg"></i> Simpan Pesan Ini
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Panel Kanan: Live Preview WA -->
+                        <div class="w-full lg:w-[380px] flex-shrink-0 bg-slate-100 rounded-3xl border border-slate-200 flex flex-col items-center p-6 lg:p-8 shadow-inner overflow-hidden relative sticky top-6">
+                            <div class="flex items-center justify-center gap-2 mb-6 w-full">
+                                <span class="h-px flex-1 bg-slate-300"></span>
+                                <h3 class="font-bold text-emerald-600 tracking-widest text-xs uppercase flex items-center gap-1">
+                                    <i class="ph-fill ph-whatsapp-logo text-lg"></i> Live Preview
+                                </h3>
+                                <span class="h-px flex-1 bg-slate-300"></span>
+                            </div>
+
+                            <!-- Phone Frame -->
+                            <div class="w-[320px] bg-white rounded-[32px] shadow-2xl border-[8px] border-slate-800 overflow-hidden flex flex-col h-[550px] relative">
+                                <div class="absolute top-0 inset-x-0 h-5 bg-slate-800 rounded-b-xl w-32 mx-auto z-20"></div>
+                                <div class="bg-[#075e54] text-white p-3 pt-7 flex items-center gap-3 relative z-10 shadow-md">
+                                    <i class="ph-bold ph-arrow-left text-xl"></i>
+                                    <div class="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden">
+                                        <i class="ph-fill ph-user text-xl mt-1.5"></i>
+                                    </div>
+                                    <div class="leading-tight flex-1">
+                                        <div class="text-sm font-bold truncate">Kustomer Anda</div>
+                                        <div class="text-[10px] opacity-80">online</div>
+                                    </div>
+                                </div>
+                                <div class="wa-bg flex-1 p-4 flex flex-col gap-3 overflow-y-auto custom-scrollbar relative z-10">
+                                    <div class="self-start max-w-[90%] bg-white p-2.5 rounded-xl rounded-tl-none shadow-sm relative text-[13px] text-slate-800 leading-relaxed break-words border border-slate-200">
+                                        <div id="seq-preview-bubble" class="font-sans">...</div>
+                                        <div class="text-[10px] text-slate-400 text-right mt-1.5 flex justify-end items-center gap-1">10:48</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- VIEW: SETTINGS -->
+                <div id="view-settings" class="hidden animate-fade-in max-w-6xl mx-auto pb-10">
+                    <div class="mb-8 border-b border-slate-200 pb-6">
+                        <h1 class="text-2xl font-bold text-slate-900">Pengaturan Workspace</h1>
+                        <p class="text-slate-500 text-sm mt-1">Konfigurasi database master dan metode pengiriman pesan WhatsApp.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        <!-- KIRI: Google Sheets -->
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 lg:p-8">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 shadow-inner border border-green-100">
+                                    <i class="ph-fill ph-google-logo text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-800">Master Database</h2>
+                                    <p class="text-sm text-slate-500">Google Sheets Smart Integration</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-5 mb-6 text-sm text-blue-900 leading-relaxed space-y-3">
+                                <p class="font-bold flex items-center gap-2"><i class="ph-fill ph-info text-blue-500"></i> Setup Mudah untuk Klien Anda:</p>
+                                <ol class="list-decimal pl-5 space-y-2">
+                                    <li>Minta klien klik <a href="https://docs.google.com/spreadsheets/d/1k5RCuw2dxhTaEgiZj-fEklFKgPteFFU75K4lDlr2KuU/copy" target="_blank" class="font-bold underline text-blue-600 hover:text-blue-800 bg-blue-100 px-1.5 py-0.5 rounded transition inline-flex items-center gap-1"><i class="ph-bold ph-copy"></i> Buat Salinan Sheet Cangkang</a> ini.</li>
+                                    <li>Buka menu <b>Ekstensi > Apps Script</b> di sheet milik klien tersebut.</li>
+                                    <li>Klik tombol biru <b>Terapkan (Deploy) > Deployment Baru</b>.</li>
+                                    <li>Atur akses menjadi: <b>"Siapa saja" (Anyone)</b>. Klik Terapkan.</li>
+                                    <li>Salin <b>URL Web App</b> klien tersebut dan paste di bawah ini. Selesai!</li>
+                                </ol>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1.5 uppercase tracking-wide text-xs">URL Web App Klien (Cangkang)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="ph-bold ph-link text-slate-400 text-lg"></i>
+                                        </div>
+                                        <input type="text" id="global-sheet-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-mono text-slate-700">
+                                    </div>
+                                </div>
+                                <button onclick="saveGlobalSettings()" class="w-full py-3.5 bg-white border-2 border-green-500 text-green-600 hover:bg-green-50 rounded-xl font-bold transition flex items-center justify-center gap-2">
+                                    <i class="ph-bold ph-check-circle text-lg"></i> Simpan URL Master
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- KANAN: WhatsApp Gateway -->
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 lg:p-8">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner border border-emerald-100">
+                                    <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-800">WhatsApp Gateway</h2>
+                                    <p class="text-sm text-slate-500">Pilih rute pengiriman pesan WA</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <label class="relative flex cursor-pointer rounded-xl border border-slate-200 bg-white p-5 shadow-sm focus:outline-none hover:border-slate-300 transition-all">
+                                    <input type="radio" name="wa_gateway" value="wa_me" class="peer sr-only" onchange="toggleWaSettings()" checked>
+                                    <div class="peer-checked:border-emerald-500 peer-checked:ring-2 peer-checked:bg-emerald-50/20 absolute inset-0 rounded-xl border-2 border-transparent transition"></div>
+                                    <div class="flex flex-1 gap-4 z-10">
+                                        <div class="mt-0.5">
+                                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center peer-checked:border-emerald-500">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 opacity-0 peer-checked:opacity-100 transition"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="block text-sm font-bold text-slate-900">WhatsApp Pribadi (wa.me)</span>
+                                            <span class="mt-1 block text-xs text-slate-500 leading-relaxed">Gratis. Kustomer akan diarahkan ke aplikasi WA mereka untuk menekan tombol kirim sendiri.</span>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="relative flex cursor-pointer rounded-xl border border-slate-200 bg-white p-5 shadow-sm focus:outline-none hover:border-slate-300 transition-all">
+                                    <input type="radio" name="wa_gateway" value="api" class="peer sr-only" onchange="toggleWaSettings()">
+                                    <div class="peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:bg-blue-50/20 absolute inset-0 rounded-xl border-2 border-transparent transition"></div>
+                                    <div class="flex flex-1 gap-4 z-10">
+                                        <div class="mt-0.5">
+                                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center peer-checked:border-blue-500">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-0 peer-checked:opacity-100 transition"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span class="block text-sm font-bold text-slate-900 flex items-center gap-2">WhatsApp Official API <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-bold tracking-wider">PRO</span></span>
+                                            <span class="mt-1 block text-xs text-slate-500 leading-relaxed">Pesan terkirim otomatis di belakang layar tanpa membuka aplikasi WA. Mendukung Fonnte & WAPlus.</span>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <div id="api-settings-box" class="hidden mt-2 p-5 border border-blue-100 rounded-xl bg-blue-50/50 space-y-4 relative z-10">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase">Pilih Provider API</label>
+                                        <select id="api-provider" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:border-blue-500 transition">
+                                            <option value="fonnte">Fonnte API (fonnte.com)</option>
+                                            <option value="waplus">WAPlus API (waplus.id)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase">API Token / Key</label>
+                                        <input type="text" id="api-token" placeholder="Paste Token API Anda di sini..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:border-blue-500 font-mono transition">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase">Nomor Pengirim (Device ID)</label>
+                                        <input type="text" id="api-sender" placeholder="Misal: 628123456... atau ID Device" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm outline-none focus:border-blue-500 font-mono transition">
+                                        <p class="text-[10px] text-slate-500 mt-1">Wajib diisi sesuai nomor/ID device pengirim di dashboard API Anda.</p>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="saveGlobalSettings()" class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition shadow-md mt-4 flex items-center justify-center gap-2">
+                                    <i class="ph-bold ph-floppy-disk text-lg"></i> Simpan Konfigurasi WA
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: TUTORIAL -->
+                <div id="view-tutorial" class="hidden animate-fade-in max-w-6xl mx-auto pb-10">
+                    <div class="mb-8 border-b border-slate-200 pb-6 flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-900">Tutorial & Dokumentasi</h1>
+                            <p class="text-slate-500 text-sm mt-1">Panduan lengkap menguasai iMersFOW Pro Builder.</p>
+                        </div>
+                        <div class="bg-amber-100 text-amber-700 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+                            <i class="ph-fill ph-book-open"></i> Versi 2.0 Docs
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                            <div class="bg-slate-800 w-full aspect-video flex items-center justify-center relative group cursor-pointer">
+                                <i class="ph-fill ph-youtube-logo text-white text-6xl opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">1. Cara Menghubungkan Google Sheet</h3>
+                                <p class="text-sm text-slate-600 mb-4">Panduan langkah demi langkah menyalin script cangkang dan mengaktifkan Web App di Google Sheet klien Anda.</p>
+                                <button class="text-blue-600 font-bold text-sm hover:underline flex items-center gap-1">Tonton Video <i class="ph-bold ph-arrow-right"></i></button>
+                            </div>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                            <div class="bg-slate-800 w-full aspect-video flex items-center justify-center relative group cursor-pointer">
+                                <i class="ph-fill ph-youtube-logo text-white text-6xl opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"></i>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">2. Setting Fonnte & WAPlus API</h3>
+                                <p class="text-sm text-slate-600 mb-4">Cara mendapatkan API Key, mendaftarkan nomor sender (Device ID), dan melakukan testing pengiriman WA Background.</p>
+                                <button class="text-blue-600 font-bold text-sm hover:underline flex items-center gap-1">Tonton Video <i class="ph-bold ph-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: BUILDER FORM (STEP 1 - 4) -->
+                <div id="view-builder" class="hidden animate-fade-in max-w-7xl mx-auto w-full flex flex-col relative h-[80vh]">
+                    <!-- Navigasi Steps -->
+                    <div class="mb-6 overflow-x-auto pb-2 flex-shrink-0">
+                        <nav class="flex items-center justify-between min-w-[600px] w-full relative max-w-4xl mx-auto">
+                            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 z-0 rounded-full"></div>
+                            <div id="progress-bar" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-rose-500 z-0 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            
+                            <button onclick="goToStep(1)" class="step-btn relative z-10 flex flex-col items-center gap-2 group" data-step="1">
+                                <div class="step-circle w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-all duration-300 bg-white border-slate-300 text-slate-400">1</div>
+                                <span class="text-xs font-bold text-slate-500">Desain Visual</span>
+                            </button>
+                            <button onclick="goToStep(2)" class="step-btn relative z-10 flex flex-col items-center gap-2 group" data-step="2">
+                                <div class="step-circle w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-all duration-300 bg-white border-slate-300 text-slate-400">2</div>
+                                <span class="text-xs font-bold text-slate-500">Susun Field</span>
+                            </button>
+                            <button onclick="goToStep(3)" class="step-btn relative z-10 flex flex-col items-center gap-2 group" data-step="3">
+                                <div class="step-circle w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-all duration-300 bg-white border-slate-300 text-slate-400">3</div>
+                                <span class="text-xs font-bold text-slate-500">Preview (Live)</span>
+                            </button>
+                            <button onclick="goToStep(4)" class="step-btn relative z-10 flex flex-col items-center gap-2 group" data-step="4">
+                                <div class="step-circle w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 transition-all duration-300 bg-white border-slate-300 text-slate-400">4</div>
+                                <span class="text-xs font-bold text-slate-500">Embed Code</span>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <div class="relative w-full flex-1 bg-white rounded-[24px] shadow-sm border border-slate-200 overflow-hidden">
+                        
+                        <!-- STEP 1: DESAIN -->
+                        <div id="step-1" class="step-content absolute inset-0 p-6 lg:p-10 transition-transform duration-300 transform translate-x-0 overflow-y-auto custom-scrollbar pb-40">
+                            <div class="max-w-3xl mx-auto space-y-8">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-slate-800">Desain & Identitas</h2>
+                                    <p class="text-sm text-slate-500 mt-1">Atur nama form, nomor tujuan, dan percantik tampilan.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="space-y-2 col-span-1 md:col-span-2">
+                                        <label class="text-sm font-bold text-slate-700">Nama Form (Untuk Header & Database)</label>
+                                        <input type="text" id="cfg-title" value="Form Order Baru" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium" oninput="updateConfig()">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-bold text-slate-700">Nomor WhatsApp Tujuan (CS)</label>
+                                        <input type="text" id="cfg-wa" value="6281234567890" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-bold text-slate-700">Teks Tombol CTA</label>
+                                        <input type="text" id="cfg-btn-text" value="Kirim Sekarang" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium" oninput="updateConfig()">
+                                    </div>
+                                    <div class="space-y-2 col-span-1 md:col-span-2">
+                                        <label class="text-sm font-bold text-slate-700">Harga Dasar Produk (Rp) - <span class="text-slate-400 font-normal">Opsional</span></label>
+                                        <input type="number" id="cfg-base-price" value="0" placeholder="Contoh: 150000" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
+                                        <p class="text-[11px] text-slate-500 mt-1">Isi jika form ini menjual produk. Biarkan 0 jika form gratis. Harga ini akan tertimpa otomatis jika kustomer memilih opsi bertanda <b>= Angka</b> di form varian.</p>
+                                    </div>
+                                </div>
+
+                                <div class="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl shadow-sm">
+                                    <h3 class="text-sm font-bold text-emerald-800 mb-4 flex items-center gap-2">
+                                        <i class="ph-fill ph-whatsapp-logo text-emerald-500 text-lg"></i> Format Pesan WhatsApp
+                                    </h3>
+                                    <div class="space-y-4">
+                                        <div class="space-y-1.5">
+                                            <label class="text-xs font-bold text-emerald-700">Teks Pembuka (Intro)</label>
+                                            <textarea id="cfg-wa-intro" class="w-full px-3 py-2 bg-white border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-none" rows="2" oninput="updateConfig()">Halo Admin, berikut data saya:</textarea>
+                                        </div>
+                                        <div class="space-y-1.5">
+                                            <label class="text-xs font-bold text-emerald-700">Teks Penutup (Footer)</label>
+                                            <textarea id="cfg-wa-footer" class="w-full px-3 py-2 bg-white border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-none" rows="2" oninput="updateConfig()">Terima kasih, mohon segera diproses.</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                                    <h3 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+                                        <i class="ph-fill ph-palette text-blue-500 text-xl"></i> Tema Warna Kustom
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                                        <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                                            <label class="block text-sm font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Warna Header</label>
+                                            <div class="flex items-center gap-4 mb-4">
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="header_type" value="solid" onchange="toggleColorMode('header')" class="w-4 h-4 text-blue-600"> Solid
+                                                </label>
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="header_type" value="gradient" checked onchange="toggleColorMode('header')" class="w-4 h-4 text-blue-600"> Gradient
+                                                </label>
+                                            </div>
+                                            <div id="header-color-inputs" class="flex items-center gap-3"></div>
+                                        </div>
+                                        <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                                            <label class="block text-sm font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Warna Tombol CTA</label>
+                                            <div class="flex items-center gap-4 mb-4">
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="cta_type" value="solid" onchange="toggleColorMode('cta')" class="w-4 h-4 text-blue-600"> Solid
+                                                </label>
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="cta_type" value="gradient" checked onchange="toggleColorMode('cta')" class="w-4 h-4 text-blue-600"> Gradient
+                                                </label>
+                                            </div>
+                                            <div id="cta-color-inputs" class="flex items-center gap-3"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- NEW: WARNA TEKS DINAMIS -->
+                                    <div class="border-t border-slate-200 pt-6 mt-6">
+                                        <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                            <i class="ph-fill ph-text-aa text-rose-500 text-lg"></i> Warna Teks Dinamis
+                                        </h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            <!-- Teks Judul Form -->
+                                            <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                                                <label class="block text-sm font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Teks Judul Form</label>
+                                                <div class="flex items-center gap-4 mb-4">
+                                                    <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                        <input type="radio" name="title_color_type" value="solid" onchange="toggleTextColorMode('title')" class="w-4 h-4 text-blue-600" checked> Solid
+                                                    </label>
+                                                    <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                        <input type="radio" name="title_color_type" value="gradient" onchange="toggleTextColorMode('title')" class="w-4 h-4 text-blue-600"> Gradient
+                                                    </label>
+                                                </div>
+                                                <div id="title-color-inputs" class="flex items-center gap-3"></div>
+                                            </div>
+                                            
+                                            <!-- Teks Tombol CTA -->
+                                            <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                                                <label class="block text-sm font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Teks Tombol CTA</label>
+                                                <div class="flex items-center gap-4 mb-4">
+                                                    <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                        <input type="radio" name="cta_text_type" value="solid" onchange="toggleTextColorMode('cta_text')" class="w-4 h-4 text-blue-600" checked> Solid
+                                                    </label>
+                                                    <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                        <input type="radio" name="cta_text_type" value="gradient" onchange="toggleTextColorMode('cta_text')" class="w-4 h-4 text-blue-600"> Gradient
+                                                    </label>
+                                                </div>
+                                                <div id="cta_text-color-inputs" class="flex items-center gap-3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2 mt-6 border-t border-slate-200 pt-6">
+                                        <label class="text-sm font-bold text-slate-700">URL Logo Brand (Opsional)</label>
+                                        <input type="text" id="cfg-logo" value="https://placehold.co/400x100/ffffff/1e3a8a?text=LOGO+BRAND" placeholder="https://domain.com/logo.png" class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500" oninput="updateConfig()">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="p-6 border border-slate-200 rounded-2xl shadow-sm bg-white">
+                                        <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"> Tampilan Website</h3>
+                                        <div class="space-y-3">
+                                            <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                                <input type="radio" name="displayMode" value="embed" class="w-4 h-4 text-blue-600" checked onchange="updateConfig()">
+                                                <span class="text-sm font-bold text-slate-700">Embed Langsung</span>
+                                            </label>
+                                            <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                                                <input type="radio" name="displayMode" value="popup" class="w-4 h-4 text-blue-600" onchange="updateConfig()">
+                                                <span class="text-sm font-bold text-slate-700">Pop-up Modal</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="p-6 border border-slate-200 rounded-2xl shadow-sm relative bg-white">
+                                        <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
+                                            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                                <i class="ph-fill ph-shield-check text-green-500 text-lg"></i> Trust Badge
+                                            </h3>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" id="cfg-trust-toggle" class="sr-only peer" checked onchange="updateConfig()">
+                                                <div class="w-9 h-5 bg-slate-200 rounded-full peer peer-checked:bg-green-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+                                            </label>
+                                        </div>
+                                        <div class="space-y-3" id="trust-inputs">
+                                            <input type="text" id="cfg-trust-title" value="Data aman & terpercaya" class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg outline-none" oninput="updateConfig()">
+                                            <textarea id="cfg-trust-desc" rows="2" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg outline-none resize-none" oninput="updateConfig()">Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-6 flex justify-end">
+                                    <button onclick="goToStep(2)" class="px-8 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition shadow-lg">Lanjut Susun Field <i class="ph-bold ph-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2: SUSUN FIELD -->
+                        <div id="step-2" class="step-content absolute inset-0 flex transition-transform duration-300 transform translate-x-full overflow-hidden bg-white">
+                            <div class="w-72 bg-slate-50 border-r border-slate-200 flex flex-col h-full flex-shrink-0">
+                                <div class="p-4 border-b border-slate-200 bg-white">
+                                    <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2"><i class="ph-fill ph-squares-four text-blue-500"></i> Tambah Field (10 Jenis)</h3>
+                                </div>
+                                <div class="p-4 overflow-y-auto custom-scrollbar flex-1 pb-24">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button onclick="addField('text')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-text-t text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Teks Pendek</span>
+                                        </button>
+                                        <button onclick="addField('tel')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-whatsapp-logo text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">No. WhatsApp</span>
+                                        </button>
+                                        <button onclick="addField('email')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-purple-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-envelope-simple text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Email</span>
+                                        </button>
+                                        <button onclick="addField('number')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-orange-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-hash text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Angka / Qty</span>
+                                        </button>
+                                        <button onclick="addField('textarea')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-400 shadow-sm transition gap-2 text-slate-600 col-span-2">
+                                            <i class="ph ph-text-align-left text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center">Paragraf / Alamat</span>
+                                        </button>
+                                        <button onclick="addField('select')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-amber-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-list-dashes text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Dropdown</span>
+                                        </button>
+                                        <button onclick="addField('date')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-teal-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-calendar-blank text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Tanggal</span>
+                                        </button>
+                                        <button onclick="addField('time')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-clock text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Waktu</span>
+                                        </button>
+                                        <button onclick="addField('radio')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-pink-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-radio-button text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Pilih Satu</span>
+                                        </button>
+                                        <button onclick="addField('checkbox')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-rose-400 shadow-sm transition gap-2 text-slate-600 col-span-2">
+                                            <i class="ph ph-check-square text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center">Multi Pilihan (Checklist)</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1 bg-slate-200 p-8 overflow-y-auto custom-scrollbar flex justify-center pb-32 relative shadow-inner">
+                                <div class="w-full max-w-md relative z-10">
+                                    <div class="bg-white rounded-[24px] shadow-2xl overflow-hidden border border-slate-200 transition-all duration-300">
+                                        <div id="canvas-header" class="p-6 text-center text-white transition-all duration-300">
+                                            <img id="canvas-logo" src="" alt="Logo" class="max-h-12 mx-auto mb-3 object-contain">
+                                            <h2 id="canvas-title" class="text-xl font-bold leading-tight">Form Title</h2>
+                                        </div>
+                                        <div id="canvas-fields" class="p-6 space-y-4 min-h-[250px] bg-white"></div>
+                                        <div class="p-6 pt-0 bg-white">
+                                            <div id="canvas-total-box" class="p-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-between mb-4 transition-all" style="display: none;">
+                                                <span class="text-sm font-bold text-slate-500">Total Tagihan:</span>
+                                                <span class="text-lg font-extrabold text-slate-800" id="canvas-total-value">Rp 0</span>
+                                            </div>
+
+                                            <div id="canvas-trust" class="bg-blue-50/70 p-4 rounded-xl border flex items-start gap-3 mb-4">
+                                                <i id="canvas-trust-icon" class="ph-fill ph-shield-check text-blue-500 text-xl mt-0.5"></i>
+                                                <div>
+                                                    <h4 id="canvas-trust-title" class="text-sm font-bold text-slate-800">Aman</h4>
+                                                    <p id="canvas-trust-desc" class="text-[11px] text-slate-500 mt-1">Desc</p>
+                                                </div>
+                                            </div>
+                                            <button id="canvas-btn" class="w-full py-4 text-white font-bold rounded-xl shadow-md cursor-not-allowed text-base transition-all duration-300">Button</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-6 right-6 z-20">
+                                    <button onclick="goToStep(3)" class="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-xl hover:scale-105 transition flex items-center gap-2">
+                                        Simulasi Preview <i class="ph-bold ph-play"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3: PREVIEW -->
+                        <div id="step-3" class="step-content absolute inset-0 flex flex-col md:flex-row transition-transform duration-300 transform translate-x-full overflow-y-auto overflow-x-hidden md:overflow-hidden bg-white">
+                            <div class="flex-1 p-6 lg:p-10 md:overflow-y-auto custom-scrollbar border-r border-slate-200 relative pb-40 md:pb-32 bg-slate-50/50">
+                                <div class="flex items-center justify-center gap-2 mb-8">
+                                    <span class="h-px w-12 bg-slate-300"></span>
+                                    <h3 class="font-bold text-slate-500 tracking-widest text-xs uppercase flex items-center gap-2"><i class="ph-bold ph-laptop text-lg"></i> Simulasi Halaman Web</h3>
+                                    <span class="h-px w-12 bg-slate-300"></span>
+                                </div>
+                                <div id="preview-wrapper" class="flex justify-center items-start w-full"></div>
+                            </div>
+                            <div class="w-full md:w-[420px] p-6 lg:p-8 md:overflow-y-auto custom-scrollbar bg-slate-100 flex flex-col items-center pb-40 md:pb-32 relative shadow-inner">
+                                <div class="flex items-center justify-center gap-2 mb-6">
+                                    <span class="h-px w-8 bg-slate-300"></span>
+                                    <h3 class="font-bold text-emerald-600 tracking-widest text-xs uppercase flex items-center gap-1"><i class="ph-fill ph-whatsapp-logo text-lg"></i> Hasil di WhatsApp</h3>
+                                    <span class="h-px w-8 bg-slate-300"></span>
+                                </div>
+                                <div class="w-full max-w-[340px] bg-white rounded-[40px] shadow-2xl border-[10px] border-slate-800 overflow-hidden relative flex flex-col min-h-[550px]">
+                                    <div class="absolute top-0 inset-x-0 h-6 bg-slate-800 rounded-b-2xl w-36 mx-auto z-20"></div>
+                                    <div class="bg-[#075e54] text-white p-3 pt-8 flex items-center gap-3 relative z-10 shadow-md">
+                                        <i class="ph-bold ph-arrow-left text-xl"></i>
+                                        <div class="w-9 h-9 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden">
+                                            <i class="ph-fill ph-user text-2xl mt-2"></i>
+                                        </div>
+                                        <div class="leading-tight flex-1">
+                                            <div class="text-base font-bold truncate" id="wa-preview-name">CS Toko</div>
+                                            <div class="text-xs opacity-80">online</div>
+                                        </div>
+                                    </div>
+                                    <div class="wa-bg flex-1 p-4 flex flex-col gap-3 overflow-y-auto custom-scrollbar relative z-10">
+                                        <div class="self-end max-w-[88%] bg-[#dcf8c6] p-3 rounded-xl rounded-tr-none shadow-sm relative text-[14px] text-slate-800 leading-relaxed break-words border border-[#c3e6a8]">
+                                            <div id="wa-preview-text" class="whitespace-pre-wrap font-sans"></div>
+                                            <div class="text-[10px] text-slate-500 text-right mt-1.5 flex justify-end items-center gap-1">
+                                                10:48 <i class="ph-bold ph-checks text-blue-500 text-sm"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 4: EMBED -->
+                        <div id="step-4" class="step-content absolute inset-0 p-6 lg:p-10 transition-transform duration-300 transform translate-x-full overflow-y-auto custom-scrollbar flex flex-col bg-white pb-40">
+                            <div class="max-w-4xl mx-auto w-full flex-1 flex flex-col min-h-full">
+                                <div class="text-center mb-8">
+                                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="ph-bold ph-check text-3xl"></i>
+                                    </div>
+                                    <h2 class="text-3xl font-bold text-slate-800">Form Siap Digunakan!</h2>
+                                    <p class="text-slate-500 mt-2 text-lg">Salin kode HTML di bawah ini atau simpan ke Dashboard Anda.</p>
+                                </div>
+                                <div class="flex-1 flex flex-col bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl mb-6 min-h-[350px]">
+                                    <div class="flex justify-between items-center px-5 py-3.5 border-b border-slate-700 bg-slate-800/80 backdrop-blur">
+                                        <div class="flex gap-2">
+                                            <div class="w-3.5 h-3.5 rounded-full bg-rose-500"></div>
+                                            <div class="w-3.5 h-3.5 rounded-full bg-amber-500"></div>
+                                            <div class="w-3.5 h-3.5 rounded-full bg-green-500"></div>
+                                        </div>
+                                        <span class="text-slate-400 font-mono text-xs">index.html (HTML + CSS + Script)</span>
+                                    </div>
+                                    <textarea id="output-code" class="flex-1 w-full bg-transparent text-emerald-400 p-6 font-mono text-[13px] leading-relaxed focus:outline-none resize-none custom-scrollbar" readonly></textarea>
+                                </div>
+                                <div class="flex flex-col sm:flex-row gap-4 mt-auto">
+                                    <button onclick="saveFormToDashboard()" class="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-lg">
+                                        <i class="ph-bold ph-floppy-disk text-2xl"></i> Simpan & Publish Form
+                                    </button>
+                                    <button onclick="copyEmbedCode()" class="flex-1 py-4 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-lg">
+                                        <i class="ph-bold ph-copy text-2xl"></i> Salin Kode HTML
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL TEMPLATE GALLERY -->
+    <div id="template-modal" class="fixed inset-0 z-[10000] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 invisible">
+        <div class="modal-content bg-white w-full max-w-5xl h-[85vh] rounded-[24px] shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 flex-shrink-0">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Pilih Template Form</h2>
+                    <p class="text-xs text-slate-500 mt-1">Pilih desain siap pakai atau mulai dari nol.</p>
+                </div>
+                <button onclick="closeTemplateModal()" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200 transition flex items-center justify-center shadow-sm">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="flex flex-1 overflow-hidden">
+                <div id="category-sidebar" class="w-56 bg-slate-50 border-r border-slate-200 p-4 flex flex-col gap-2 overflow-y-auto flex-shrink-0">
+                    <!-- Dinamis Category -->
+                </div>
+                <div class="flex-1 bg-white p-6 overflow-y-auto custom-scrollbar">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="template-grid">
+                        <!-- Dinamis Template Cards -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast flex items-center gap-2">
+        <i class="ph-fill ph-info text-blue-400 text-lg"></i> 
+        <span id="toast-msg">Pesan</span>
+    </div>
+
+    <!-- SEMUA SCRIPT DAN LOGIKA -->
+    <script>
+        // ANTI-INSPECT SECURITY
+        document.addEventListener('contextmenu', event => event.preventDefault()); 
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false; 
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; 
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false; 
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; 
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; 
+        };
+
+        // LOGIN SYSTEM
+        function checkLoginState() {
+            if(sessionStorage.getItem('imersfow_logged') === 'true') {
+                const username = sessionStorage.getItem('imersfow_username') || 'Master';
+                document.getElementById('welcome-name').innerText = username;
+                document.getElementById('sidebar-name').innerText = username;
+                if(document.getElementById('sidebar-avatar')) {
+                    document.getElementById('sidebar-avatar').innerText = username.charAt(0).toUpperCase();
+                }
+                
+                document.getElementById('view-login').classList.add('hidden');
+                document.getElementById('app-layout').classList.remove('hidden');
+                switchTab('dashboard');
+            } else {
+                document.getElementById('view-login').classList.remove('hidden');
+                document.getElementById('app-layout').classList.add('hidden');
+            }
+        }
+
+        function processLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('login-name').value;
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            
+            if(name && email && pass) {
+                sessionStorage.setItem('imersfow_logged', 'true');
+                sessionStorage.setItem('imersfow_username', name);
+                showToast(`Berhasil masuk. Selamat datang, ${name}!`);
+                setTimeout(() => { checkLoginState(); }, 500);
+            }
+        }
+
+        function doLogout() {
+            sessionStorage.removeItem('imersfow_logged');
+            sessionStorage.removeItem('imersfow_username');
+            window.location.reload();
+        }
+
+        // SIDEBAR TOGGLE LOGIC (MOBILE)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        // =========================================================================
+        // STATE & LOGIC UNTUK MENU SEQUENCE WA (INTERAKTIF 100%)
+        // =========================================================================
+        let sequencesData = [
+            { 
+                id: Date.now(), 
+                timeVal: 10, 
+                timeUnit: 'Menit', 
+                msg: 'Halo [Nama_Pembeli],\nTerima kasih sudah order produk kami.\n\nTotal tagihan Anda adalah: *[Total_Tagihan]*\n\nSilakan balas pesan ini jika sudah transfer ya! 😊' 
+            }
+        ];
+        let activeSeqId = sequencesData[0].id;
+
+        function renderTimeline() {
+            const container = document.getElementById('sequence-timeline');
+            container.innerHTML = '';
+            
+            sequencesData.forEach((seq, index) => {
+                const isActive = seq.id === activeSeqId;
+                const borderClass = isActive ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-200 hover:bg-slate-50';
+                const numBgClass = isActive ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500';
+                const titleClass = isActive ? 'text-emerald-800' : 'text-slate-700';
+
+                let previewText = seq.msg.replace(/\n/g, ' ');
+                if(!previewText.trim()) previewText = 'Pesan kosong...';
+
+                container.innerHTML += `
+                    <div onclick="selectSequence(${seq.id})" class="flex items-center gap-3 p-3 rounded-xl border ${borderClass} cursor-pointer transition animate-fade-in relative group">
+                        <div class="w-8 h-8 rounded-full ${numBgClass} flex items-center justify-center font-bold text-xs flex-shrink-0">${index + 1}</div>
+                        <div class="flex-1 overflow-hidden">
+                            <p class="text-sm font-bold ${titleClass}">Kirim: ${seq.timeVal} ${seq.timeUnit} Setelah Order</p>
+                            <p class="text-xs text-slate-500 truncate">${previewText}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectSequence(id) {
+            activeSeqId = id;
+            const seq = sequencesData.find(s => s.id === id);
+            if(seq) {
+                document.getElementById('seq-time-val').value = seq.timeVal;
+                document.getElementById('seq-time-unit').value = seq.timeUnit;
+                document.getElementById('seq-editor').value = seq.msg;
+                
+                updateSeqPreview();
+                renderTimeline(); 
+            }
+        }
+
+        function addSequenceItem() {
+            const newSeq = {
+                id: Date.now(),
+                timeVal: 1,
+                timeUnit: 'Hari',
+                msg: 'Halo [Nama_Pembeli], ini pesan follow-up otomatis...'
+            };
+            sequencesData.push(newSeq);
+            selectSequence(newSeq.id);
+            showToast('Jadwal baru ditambahkan!');
+        }
+
+        function updateSequenceData() {
+            const seq = sequencesData.find(s => s.id === activeSeqId);
+            if(seq) {
+                seq.timeVal = document.getElementById('seq-time-val').value;
+                seq.timeUnit = document.getElementById('seq-time-unit').value;
+                seq.msg = document.getElementById('seq-editor').value;
+                
+                renderTimeline(); 
+                updateSeqPreview(); 
+            }
+        }
+
+        function deleteActiveSequence() {
+            if(sequencesData.length <= 1) {
+                showToast('Minimal harus ada 1 pesan sequence!');
+                return;
+            }
+            if(confirm('Hapus jadwal pesan ini?')) {
+                sequencesData = sequencesData.filter(s => s.id !== activeSeqId);
+                selectSequence(sequencesData[0].id); 
+                showToast('Jadwal berhasil dihapus!');
+            }
+        }
+
+        function insertFormat(char) {
+            const textarea = document.getElementById('seq-editor');
+            const start = textarea.selectionStart; 
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            
+            if (start !== end) {
+                const selected = text.substring(start, end);
+                textarea.value = text.substring(0, start) + char + selected + char + text.substring(end);
+                textarea.selectionStart = start;
+                textarea.selectionEnd = end + 2;
+            } else {
+                textarea.value = text.substring(0, start) + char + char + text.substring(end);
+                textarea.selectionStart = textarea.selectionEnd = start + 1;
+            }
+            
+            textarea.focus(); 
+            updateSequenceData();
+        }
+
+        function insertVar(varString) {
+            const textarea = document.getElementById('seq-editor');
+            const start = textarea.selectionStart;
+            const text = textarea.value;
+            
+            textarea.value = text.substring(0, start) + varString + text.substring(start);
+            textarea.selectionStart = textarea.selectionEnd = start + varString.length;
+            textarea.focus();
+            updateSequenceData(); 
+        }
+
+        function updateSeqPreview() {
+            let text = document.getElementById('seq-editor').value;
+            
+            if(!text.trim()) {
+                document.getElementById('seq-preview-bubble').innerHTML = "<span class='text-slate-400 italic'>Ketik pesan di editor untuk melihat *Preview* di sini...</span>";
+                return;
+            }
+
+            text = text.replace(/\n/g, '<br>');
+            text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            text = text.replace(/\*([^\*]+)\*/g, "<b>$1</b>");
+            text = text.replace(/_([^_]+)_/g, "<i>$1</i>");
+            text = text.replace(/~([^~]+)~/g, "<s>$1</s>");
+            
+            text = text.replace(/\[Nama_Pembeli\]/g, '<span class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-bold">Kustomer Budi</span>');
+            text = text.replace(/\[Total_Tagihan\]/g, '<span class="bg-emerald-100 text-emerald-800 px-1 rounded text-xs font-bold">Rp 150.000</span>');
+            text = text.replace(/\[Pilihan_Varian\]/g, '<span class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-bold">Paket Ultimate</span>');
+            
+            document.getElementById('seq-preview-bubble').innerHTML = text;
+        }
+
+        // =========================================================================
+        // STATE APLIKASI BUILDER UTAMA
+        // =========================================================================
+        let currentStep = 1; // Ditambahkan kembali agar fungsi goToStep dan updateConfig tidak error
+        let savedForms = JSON.parse(localStorage.getItem('imersfow_forms')) || [];
+        let currentCategoryFilter = 'Semua';
+        
+        let globalSettings = JSON.parse(localStorage.getItem('imersfow_global')) || {
+            sheetUrl: '', 
+            waGateway: 'wa_me', 
+            apiProvider: 'fonnte', 
+            apiToken: '', 
+            apiSender: ''
+        };
+        
+        let defaultFormConfig = {
+            title: 'Form Baru', 
+            waNumber: '6281234567890', 
+            waIntro: 'Halo Admin, ini data saya:', 
+            waFooter: 'Terima kasih.',
+            btnText: 'Kirim Data', 
+            basePrice: 0, 
+            headerBg: '#1e3a8a', 
+            ctaBg: '#2563eb',
+            titleColorType: 'solid',
+            titleColor1: '#ffffff',
+            titleColor2: '#fef08a',
+            ctaTextColorType: 'solid',
+            ctaTextColor1: '#ffffff',
+            ctaTextColor2: '#fef08a',
+            logoUrl: '', 
+            displayMode: 'embed', 
+            trustBadge: true, 
+            trustTitle: 'Aman & Terpercaya', 
+            trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.'
+        };
+        
+        let defaultFormFields = [
+            { id: 'f1', type: 'text', label: 'Nama Lengkap', required: true, placeholder: 'Sesuai KTP' },
+            { id: 'f2', type: 'tel', label: 'Nomor WhatsApp', required: true, placeholder: '08xx' }
+        ];
+
+        let formConfig = JSON.parse(JSON.stringify(defaultFormConfig)); 
+        let formFields = [];
+        let availableTemplates = {};
+
+        // COLOR HELPERS
+        function getThemeColor() {
+            const ctaBg = formConfig.ctaBg || '#3b82f6';
+            const match = ctaBg.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/i);
+            return match ? match[0] : '#3b82f6';
+        }
+
+        function hexToRgb(hex) {
+            let c = hex.substring(1).split('');
+            if(c.length === 3) c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            c = '0x' + c.join('');
+            return [(c>>16)&255, (c>>8)&255, c&255].join(', ');
+        }
+
+        // DYNAMIC SCRIPT LOADER (templates.js)
+        function initTemplateEngine() {
+            const script = document.createElement('script');
+            script.src = './templates.js?v=' + new Date().getTime(); 
+            
+            script.onload = function() {
+                if(typeof dbTemplates !== 'undefined') {
+                    availableTemplates = dbTemplates;
+                    renderCategorySidebar();
+                    filterTemplates('Semua');
+                } else {
+                    showTemplateError("File templates.js berhasil diload, tapi Variabel dbTemplates tidak ditemukan.");
+                }
+            };
+            script.onerror = function() {
+                showTemplateError("File templates.js tidak ditemukan di URL ini. Pastikan file sudah ter-upload.");
+            };
+            document.body.appendChild(script);
+        }
+
+        function renderCategorySidebar() {
+            const sidebar = document.getElementById('category-sidebar');
+            let uniqueCategories = new Set();
+            for (const key in availableTemplates) {
+                if (availableTemplates[key].category) {
+                    uniqueCategories.add(availableTemplates[key].category);
+                }
+            }
+            
+            let html = `<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Kategori</p>`;
+            html += `<button onclick="filterTemplates('Semua')" id="btn-cat-Semua" class="cat-btn text-left px-4 py-2.5 rounded-xl bg-blue-100 text-blue-700 font-bold text-sm transition w-full">Semua Template</button>`;
+            
+            uniqueCategories.forEach(cat => {
+                const safeId = cat.replace(/[^a-zA-Z0-9]/g, '-');
+                html += `<button onclick="filterTemplates('${cat}')" id="btn-cat-${safeId}" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">${cat}</button>`;
+            });
+            sidebar.innerHTML = html;
+        }
+
+        function showTemplateError(message) {
+            const grid = document.getElementById('template-grid');
+            grid.innerHTML = `
+                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition min-h-[220px]">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                </div>
+                <div class="col-span-1 md:col-span-2 p-6 text-center text-rose-600 font-medium bg-rose-50 rounded-2xl border border-rose-200">
+                    <i class="ph-fill ph-warning-circle text-4xl mb-3"></i>
+                    <p class="font-bold">Gagal Membaca Template!</p>
+                    <p class="text-sm mt-1 text-rose-500">Diagnosa: ${message}</p>
+                </div>
+            `;
+        }
+
+        function renderTemplateCards(categoryFilter) {
+            const grid = document.getElementById('template-grid');
+            let html = `
+                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                </div>
+            `; 
+            
+            for (const key in availableTemplates) {
+                const tpl = availableTemplates[key];
+                if (categoryFilter === 'Semua' || tpl.category === categoryFilter) {
+                    html += `
+                    <div onclick="useTemplate('${key}')" class="border border-slate-200 rounded-2xl p-6 flex flex-col cursor-pointer hover:border-${tpl.color.split('-')[1]}-500 hover:shadow-lg transition bg-white group min-h-[220px] relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-xl ${tpl.bg} ${tpl.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ${tpl.icon} text-3xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3>
+                        <p class="text-xs text-slate-500 mb-4 line-clamp-2">Kategori: <b>${tpl.category || 'Lainnya'}</b>.</p>
+                        <div class="mt-auto flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition">
+                                <i class="ph-bold ph-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            }
+            grid.innerHTML = html;
+        }
+
+        function filterTemplates(category) {
+            currentCategoryFilter = category;
+            
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'text-blue-700', 'font-bold');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-200', 'font-medium');
+            });
+            
+            const safeId = category.replace(/[^a-zA-Z0-9]/g, '-');
+            const activeBtn = document.getElementById('btn-cat-' + safeId);
+            
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-200', 'font-medium');
+                activeBtn.classList.add('bg-blue-100', 'text-blue-700', 'font-bold');
+            }
+            
+            renderTemplateCards(category);
+        }
+
+        function openTemplateModal() { 
+            document.getElementById('template-modal').classList.add('show'); 
+        }
+        
+        function closeTemplateModal() { 
+            document.getElementById('template-modal').classList.remove('show'); 
+        }
+
+        function useTemplate(key) {
+            closeTemplateModal();
+            
+            if(key === 'blank') {
+                formConfig = JSON.parse(JSON.stringify(defaultFormConfig));
+                formFields = JSON.parse(JSON.stringify(defaultFormFields));
+                document.querySelector('input[name="header_type"][value="solid"]').checked = true;
+                document.querySelector('input[name="cta_type"][value="solid"]').checked = true;
+            } else {
+                const tpl = availableTemplates[key];
+                formConfig = JSON.parse(JSON.stringify(tpl.config));
+                formFields = JSON.parse(JSON.stringify(tpl.fields));
+                document.querySelector('input[name="header_type"][value="gradient"]').checked = true;
+                document.querySelector('input[name="cta_type"][value="gradient"]').checked = true;
+            }
+
+            // Defaults untuk warna teks jika tidak ada di template
+            formConfig.titleColorType = formConfig.titleColorType || 'solid';
+            formConfig.titleColor1 = formConfig.titleColor1 || '#ffffff';
+            formConfig.titleColor2 = formConfig.titleColor2 || '#fef08a';
+            formConfig.ctaTextColorType = formConfig.ctaTextColorType || 'solid';
+            formConfig.ctaTextColor1 = formConfig.ctaTextColor1 || '#ffffff';
+            formConfig.ctaTextColor2 = formConfig.ctaTextColor2 || '#fef08a';
+
+            document.getElementById('cfg-title').value = formConfig.title; 
+            document.getElementById('cfg-wa').value = formConfig.waNumber;
+            document.getElementById('cfg-wa-intro').value = formConfig.waIntro; 
+            document.getElementById('cfg-wa-footer').value = formConfig.waFooter;
+            document.getElementById('cfg-btn-text').value = formConfig.btnText; 
+            document.getElementById('cfg-base-price').value = formConfig.basePrice || 0;
+            document.getElementById('cfg-logo').value = formConfig.logoUrl;
+            
+            document.querySelector(`input[name="displayMode"][value="${formConfig.displayMode}"]`).checked = true;
+            
+            document.getElementById('cfg-trust-toggle').checked = formConfig.trustBadge; 
+            document.getElementById('cfg-trust-title').value = formConfig.trustTitle; 
+            document.getElementById('cfg-trust-desc').value = formConfig.trustDesc;
+            
+            document.querySelector(`input[name="title_color_type"][value="${formConfig.titleColorType}"]`).checked = true;
+            document.querySelector(`input[name="cta_text_type"][value="${formConfig.ctaTextColorType}"]`).checked = true;
+
+            toggleColorMode('header'); 
+            toggleColorMode('cta'); 
+            toggleTextColorMode('title');
+            toggleTextColorMode('cta_text');
+
+            updateConfig();
+            
+            switchTab('builder'); 
+            goToStep(1);
+        }
+
+        function switchTab(viewId) {
+            const views = ['dashboard', 'builder', 'sequence', 'settings', 'tutorial'];
+            
+            views.forEach(v => {
+                document.getElementById('view-' + v).classList.add('hidden');
+                const navBtn = document.getElementById('nav-' + v);
+                if(navBtn) {
+                    navBtn.classList.remove('bg-slate-800', 'text-white');
+                    navBtn.classList.add('text-slate-300');
+                }
+            });
+            
+            document.getElementById('view-' + viewId).classList.remove('hidden');
+            const activeBtn = document.getElementById('nav-' + viewId);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-300');
+                activeBtn.classList.add('bg-slate-800', 'text-white');
+            }
+
+            // Auto-close mobile sidebar if it's open
+            if(window.innerWidth < 768) {
+                const sidebar = document.getElementById('sidebar');
+                if(sidebar && !sidebar.classList.contains('-translate-x-full')) {
+                    toggleSidebar();
+                }
+            }
+            
+            if(viewId === 'dashboard') {
+                renderDashboard();
+            }
+            if(viewId === 'settings') {
+                loadGlobalSettings();
+            }
+            if(viewId === 'sequence') {
+                renderTimeline();
+                updateSeqPreview();
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast'); 
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.add('show'); 
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function renderDashboard() {
+            document.getElementById('stat-total-forms').innerText = savedForms.length;
+            
+            let totalLeads = 0; 
+            savedForms.forEach(f => { 
+                totalLeads += (f.leads || 0); 
+            });
+            document.getElementById('stat-total-leads').innerText = totalLeads.toLocaleString();
+            
+            let conversionRateStr = "0.0%";
+            if(savedForms.length > 0) {
+                let finalConv = 8.5 + (savedForms.length * 0.4) + ((totalLeads % 10) * 0.2);
+                if(finalConv > 35) finalConv = 35.1; 
+                conversionRateStr = finalConv.toFixed(1) + "%";
+            }
+            document.getElementById('stat-conversion-rate').innerText = conversionRateStr;
+            
+            const tbody = document.getElementById('dashboard-table-body'); 
+            tbody.innerHTML = '';
+            
+            if(savedForms.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-slate-500 font-medium">Belum ada form yang tersimpan. Ayo buat form pertama Anda!</td></tr>`; 
+                return;
+            }
+            
+            savedForms.forEach(form => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
+                        <td class="px-6 py-4 font-bold text-slate-900">${form.title}</td>
+                        <td class="px-6 py-4 text-slate-500 text-sm">${form.date}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-bold inline-block">Aktif</span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold text-sm border border-blue-100">
+                                <i class="ph-fill ph-users"></i> ${form.leads || 0}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="deleteForm('${form.id}')" class="text-rose-600 hover:text-white font-bold bg-rose-50 hover:bg-rose-500 px-3 py-1.5 rounded-lg transition text-xs">Hapus</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function saveFormToDashboard() {
+            const newForm = { 
+                id: 'frm_' + Date.now(), 
+                title: formConfig.title, 
+                date: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }), 
+                leads: Math.floor(Math.random() * 25) + 5 
+            };
+            
+            savedForms.unshift(newForm); 
+            localStorage.setItem('imersfow_forms', JSON.stringify(savedForms));
+            showToast('Form berhasil disimpan & dipublish!');
+            
+            setTimeout(() => { 
+                switchTab('dashboard'); 
+            }, 1500);
+        }
+
+        function deleteForm(id) {
+            if(confirm('Yakin ingin menghapus form ini?')) { 
+                savedForms = savedForms.filter(f => f.id !== id); 
+                localStorage.setItem('imersfow_forms', JSON.stringify(savedForms)); 
+                renderDashboard(); 
+                showToast('Form berhasil dihapus!'); 
+            }
+        }
+
+        function loadGlobalSettings() {
+            document.getElementById('global-sheet-url').value = globalSettings.sheetUrl || '';
+            
+            const waRadios = document.getElementsByName('wa_gateway');
+            for(let i = 0; i < waRadios.length; i++) { 
+                if(waRadios[i].value === globalSettings.waGateway) {
+                    waRadios[i].checked = true; 
+                }
+            }
+            
+            document.getElementById('api-provider').value = globalSettings.apiProvider || 'fonnte';
+            document.getElementById('api-token').value = globalSettings.apiToken || '';
+            document.getElementById('api-sender').value = globalSettings.apiSender || '';
+            
+            toggleWaSettings(); 
+        }
+
+        function toggleWaSettings() {
+            const isApi = document.querySelector('input[name="wa_gateway"]:checked').value === 'api';
+            const apiBox = document.getElementById('api-settings-box');
+            
+            if(isApi) {
+                apiBox.classList.remove('hidden'); 
+            } else {
+                apiBox.classList.add('hidden');
+            }
+        }
+
+        function saveGlobalSettings() {
+            globalSettings.sheetUrl = document.getElementById('global-sheet-url').value; 
+            globalSettings.waGateway = document.querySelector('input[name="wa_gateway"]:checked').value;
+            globalSettings.apiProvider = document.getElementById('api-provider').value; 
+            globalSettings.apiToken = document.getElementById('api-token').value; 
+            globalSettings.apiSender = document.getElementById('api-sender').value;
+            
+            localStorage.setItem('imersfow_global', JSON.stringify(globalSettings));
+            
+            if(globalSettings.sheetUrl && globalSettings.sheetUrl.startsWith('http')) {
+                showToast('Menyinkronkan pengaturan ke Google Sheets...');
+                
+                fetch(globalSettings.sheetUrl, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ 
+                        action: "save_config", 
+                        waGateway: globalSettings.waGateway, 
+                        apiProvider: globalSettings.apiProvider, 
+                        apiToken: globalSettings.apiToken, 
+                        apiSender: globalSettings.apiSender 
+                    }) 
+                }).then(() => { 
+                    setTimeout(() => {
+                        showToast('Konfigurasi WA berhasil disinkronkan ke Database!');
+                    }, 1000); 
+                });
+            } else { 
+                showToast('Pengaturan lokal disimpan. Wajib isi URL Web App agar aktif!'); 
+            }
+        }
+
+        function goToStep(step) {
+            currentStep = step; 
+            document.getElementById('progress-bar').style.width = ((step - 1) / 3) * 100 + '%';
+            
+            document.querySelectorAll('.step-btn').forEach(btn => {
+                const s = parseInt(btn.getAttribute('data-step')); 
+                const circle = btn.querySelector('.step-circle');
+                
+                if (s <= step) { 
+                    circle.classList.add('bg-rose-500', 'text-white', 'border-rose-500'); 
+                    circle.classList.remove('bg-white', 'text-slate-400', 'border-slate-300'); 
+                } else { 
+                    circle.classList.remove('bg-rose-500', 'text-white', 'border-rose-500'); 
+                    circle.classList.add('bg-white', 'text-slate-400', 'border-slate-300'); 
+                }
+            });
+            
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById('step-' + i);
+                if (i === step) { 
+                    el.style.transform = 'translateX(0)'; 
+                    el.style.opacity = '1'; 
+                    el.style.pointerEvents = 'auto'; 
+                    el.style.zIndex = '10'; 
+                } else if (i < step) { 
+                    el.style.transform = 'translateX(-100%)'; 
+                    el.style.opacity = '0'; 
+                    el.style.pointerEvents = 'none'; 
+                    el.style.zIndex = '0'; 
+                } else { 
+                    el.style.transform = 'translateX(100%)'; 
+                    el.style.opacity = '0'; 
+                    el.style.pointerEvents = 'none'; 
+                    el.style.zIndex = '0'; 
+                }
+            }
+            
+            if(step === 2) renderCanvas(); 
+            if(step === 3) renderPreview(); 
+            if(step === 4) generateCode();
+        }
+
+        function toggleColorMode(target) {
+            const type = document.querySelector(`input[name="${target}_type"]:checked`).value; 
+            const container = document.getElementById(`${target}-color-inputs`);
+            
+            if (type === 'solid') { 
+                container.innerHTML = `
+                    <div class="flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <input type="color" id="${target}-c1" value="${target==='header'?'#1e3a8a':'#2563eb'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer">
+                        <span class="text-xs font-bold text-slate-500">Pilih Warna</span>
+                    </div>`; 
+            } else { 
+                container.innerHTML = `
+                    <div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <input type="color" id="${target}-c1" value="${target==='header'?'#0ea5e9':'#60a5fa'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer">
+                        <i class="ph-bold ph-arrow-right text-slate-400"></i>
+                        <input type="color" id="${target}-c2" value="${target==='header'?'#1e3a8a':'#2563eb'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer">
+                    </div>`; 
+            }
+            buildColors(target); 
+            if(currentStep === 1) renderCanvas();
+        }
+
+        function toggleTextColorMode(target) {
+            const radioName = target === 'title' ? 'title_color_type' : 'cta_text_type';
+            const checkedRadio = document.querySelector(`input[name="${radioName}"]:checked`);
+            const type = checkedRadio ? checkedRadio.value : 'solid';
+            const container = document.getElementById(`${target}-color-inputs`);
+            
+            let c1Val = target === 'title' ? (formConfig.titleColor1 || '#ffffff') : (formConfig.ctaTextColor1 || '#ffffff');
+            let c2Val = target === 'title' ? (formConfig.titleColor2 || '#fef08a') : (formConfig.ctaTextColor2 || '#fef08a');
+
+            if (type === 'solid') { 
+                container.innerHTML = `
+                    <div class="flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <input type="color" id="${target}-c1" value="${c1Val}" oninput="updateConfig()" class="w-10 h-10 p-0 border-0 rounded cursor-pointer shadow-sm">
+                        <span class="text-xs font-bold text-slate-500">Pilih Warna</span>
+                    </div>`; 
+            } else { 
+                container.innerHTML = `
+                    <div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <input type="color" id="${target}-c1" value="${c1Val}" oninput="updateConfig()" class="w-10 h-10 p-0 border-0 rounded cursor-pointer shadow-sm">
+                        <i class="ph-bold ph-arrow-right text-slate-400"></i>
+                        <input type="color" id="${target}-c2" value="${c2Val}" oninput="updateConfig()" class="w-10 h-10 p-0 border-0 rounded cursor-pointer shadow-sm">
+                    </div>`; 
+            }
+            updateConfig(); 
+        }
+
+        function buildColors(target) {
+            const type = document.querySelector(`input[name="${target}_type"]:checked`).value; 
+            let finalColor = '';
+            
+            if (type === 'solid') { 
+                finalColor = document.getElementById(`${target}-c1`).value; 
+            } else { 
+                finalColor = `linear-gradient(135deg, ${document.getElementById(`${target}-c1`).value}, ${document.getElementById(`${target}-c2`).value})`; 
+            }
+            
+            if(target === 'header') formConfig.headerBg = finalColor; 
+            if(target === 'cta') formConfig.ctaBg = finalColor;
+        }
+
+        function updateConfig() {
+            formConfig.title = document.getElementById('cfg-title').value; 
+            formConfig.waNumber = document.getElementById('cfg-wa').value;
+            formConfig.waIntro = document.getElementById('cfg-wa-intro').value; 
+            formConfig.waFooter = document.getElementById('cfg-wa-footer').value;
+            formConfig.btnText = document.getElementById('cfg-btn-text').value; 
+            formConfig.basePrice = document.getElementById('cfg-base-price').value || 0;
+            formConfig.logoUrl = document.getElementById('cfg-logo').value;
+            formConfig.displayMode = document.querySelector('input[name="displayMode"]:checked').value;
+            formConfig.trustBadge = document.getElementById('cfg-trust-toggle').checked;
+            formConfig.trustTitle = document.getElementById('cfg-trust-title').value; 
+            formConfig.trustDesc = document.getElementById('cfg-trust-desc').value;
+            
+            // Text Colors Configuration
+            const titleColorRadio = document.querySelector('input[name="title_color_type"]:checked');
+            if (titleColorRadio) formConfig.titleColorType = titleColorRadio.value;
+            if (document.getElementById('title-c1')) formConfig.titleColor1 = document.getElementById('title-c1').value;
+            if (document.getElementById('title-c2')) formConfig.titleColor2 = document.getElementById('title-c2').value;
+
+            const ctaTextColorRadio = document.querySelector('input[name="cta_text_type"]:checked');
+            if (ctaTextColorRadio) formConfig.ctaTextColorType = ctaTextColorRadio.value;
+            if (document.getElementById('cta_text-c1')) formConfig.ctaTextColor1 = document.getElementById('cta_text-c1').value;
+            if (document.getElementById('cta_text-c2')) formConfig.ctaTextColor2 = document.getElementById('cta_text-c2').value;
+
+            const trustInputs = document.getElementById('trust-inputs');
+            if(formConfig.trustBadge) { 
+                trustInputs.style.opacity = '1'; 
+                trustInputs.style.pointerEvents = 'auto'; 
+            } else { 
+                trustInputs.style.opacity = '0.5'; 
+                trustInputs.style.pointerEvents = 'none'; 
+            }
+            
+            if(currentStep === 1) renderCanvas();
+        }
+
+        function generateId() { 
+            return 'f_' + Math.random().toString(36).substr(2, 6); 
+        }
+        
+        function getFieldLabelText(type) { 
+            const dict = { 
+                'text':'Teks Pendek', 'tel':'No. WhatsApp', 'email':'Alamat Email', 
+                'number':'Angka/Qty', 'textarea':'Alamat Lengkap', 'select':'Pilih Dropdown', 
+                'date':'Tanggal', 'time':'Waktu', 'radio':'Pilihan Tunggal', 'checkbox':'Pilihan Banyak' 
+            }; 
+            return dict[type] || 'Field Baru'; 
+        }
+
+        function addField(type) {
+            let field = { 
+                id: generateId(), 
+                type: type, 
+                label: getFieldLabelText(type), 
+                required: false, 
+                placeholder: '' 
+            };
+            
+            if(['select', 'radio', 'checkbox'].includes(type)) {
+                field.options = 'Opsi A, Opsi B, Opsi C';
+            }
+            
+            formFields.push(field); 
+            renderCanvas();
+            
+            setTimeout(() => { 
+                const wrap = document.getElementById('step-2').querySelector('.flex-1'); 
+                wrap.scrollTo({ top: wrap.scrollHeight, behavior: 'smooth' }); 
+            }, 100);
+        }
+
+        function removeField(id) { 
+            formFields = formFields.filter(f => f.id !== id); 
+            renderCanvas(); 
+        }
+        
+        function updateField(id, key, value) { 
+            const field = formFields.find(f => f.id === id); 
+            if(field) { 
+                if(key === 'required') {
+                    field[key] = value === 'true'; 
+                } else {
+                    field[key] = value; 
+                }
+            } 
+            if(key === 'options') {
+                renderCanvas(); 
+            }
+        }
+
+        function renderCanvas() {
+            document.getElementById('canvas-header').style.background = formConfig.headerBg; 
+            document.getElementById('canvas-btn').style.background = formConfig.ctaBg;
+            
+            // Render Judul Form dengan Efek Warna Dinamis
+            const titleEl = document.getElementById('canvas-title');
+            titleEl.innerText = formConfig.title;
+            if (formConfig.titleColorType === 'gradient') {
+                titleEl.style.background = `linear-gradient(135deg, ${formConfig.titleColor1}, ${formConfig.titleColor2})`;
+                titleEl.style.webkitBackgroundClip = 'text';
+                titleEl.style.webkitTextFillColor = 'transparent';
+                titleEl.style.color = 'transparent';
+            } else {
+                titleEl.style.background = 'none';
+                titleEl.style.webkitBackgroundClip = 'initial';
+                titleEl.style.webkitTextFillColor = 'initial';
+                titleEl.style.color = formConfig.titleColor1 || '#ffffff';
+            }
+
+            // Render Teks CTA dengan Efek Warna Dinamis (dibungkus span agar bg button tidak hilang)
+            const ctaEl = document.getElementById('canvas-btn');
+            if (formConfig.ctaTextColorType === 'gradient') {
+                ctaEl.innerHTML = `<span style="background: linear-gradient(135deg, ${formConfig.ctaTextColor1}, ${formConfig.ctaTextColor2}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">${formConfig.btnText}</span>`;
+            } else {
+                ctaEl.innerHTML = `<span style="color: ${formConfig.ctaTextColor1 || '#ffffff'};">${formConfig.btnText}</span>`;
+            }
+            
+            const logoEl = document.getElementById('canvas-logo'); 
+            if(formConfig.logoUrl) { 
+                logoEl.src = formConfig.logoUrl; 
+                logoEl.style.display = 'block'; 
+            } else { 
+                logoEl.style.display = 'none'; 
+            }
+            
+            const themeHex = getThemeColor(); 
+            const themeRgb = hexToRgb(themeHex);
+            
+            const trustEl = document.getElementById('canvas-trust'); 
+            if(formConfig.trustBadge) { 
+                trustEl.style.display = 'flex'; 
+                trustEl.style.backgroundColor = `rgba(${themeRgb}, 0.08)`; 
+                trustEl.style.borderColor = `rgba(${themeRgb}, 0.2)`; 
+                document.getElementById('canvas-trust-title').style.color = themeHex; 
+                document.getElementById('canvas-trust-icon').style.color = themeHex; 
+                document.getElementById('canvas-trust-title').innerText = formConfig.trustTitle; 
+                document.getElementById('canvas-trust-desc').innerText = formConfig.trustDesc; 
+            } else { 
+                trustEl.style.display = 'none'; 
+            }
+
+            const totalBoxEl = document.getElementById('canvas-total-box'); 
+            let isTotalVisible = parseInt(formConfig.basePrice) > 0;
+            
+            formFields.forEach(f => { 
+                if(['select', 'radio', 'checkbox'].includes(f.type) && /=\s*(\d+)/.test(f.options)) {
+                    isTotalVisible = true; 
+                }
+            });
+            
+            if(isTotalVisible) { 
+                totalBoxEl.style.display = 'flex'; 
+                document.getElementById('canvas-total-value').style.color = themeHex; 
+                let previewVal = parseInt(formConfig.basePrice) > 0 ? formConfig.basePrice : 0; 
+                document.getElementById('canvas-total-value').innerText = 'Rp ' + parseInt(previewVal).toLocaleString('id-ID'); 
+            } else { 
+                totalBoxEl.style.display = 'none'; 
+            }
+            
+            const container = document.getElementById('canvas-fields'); 
+            container.innerHTML = '';
+            
+            formFields.forEach((f) => {
+                const div = document.createElement('div'); 
+                div.className = 'group relative p-4 -mx-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200';
+                
+                let inputHtml = '';
+                
+                if(['text', 'tel', 'email', 'number', 'date', 'time'].includes(f.type)) { 
+                    inputHtml = `<input type="${f.type}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none" placeholder="${f.placeholder}">`; 
+                } else if (f.type === 'textarea') { 
+                    inputHtml = `<textarea class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none resize-none" rows="2" placeholder="${f.placeholder}"></textarea>`; 
+                } else if (f.type === 'select') { 
+                    inputHtml = `<select class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none"><option>Pilih...</option></select>`; 
+                } else if (f.type === 'radio') { 
+                    inputHtml = `<div class="mt-2 space-y-2 pointer-events-none">`; 
+                    (f.options || '').split(',').forEach(o => { 
+                        inputHtml += `<label class="flex items-center gap-2 text-sm text-slate-600"><input type="radio" class="accent-blue-500"> ${o.trim()}</label>`; 
+                    }); 
+                    inputHtml += `</div>`; 
+                } else if (f.type === 'checkbox') { 
+                    inputHtml = `<div class="mt-2 space-y-2 pointer-events-none">`; 
+                    (f.options || '').split(',').forEach(o => { 
+                        inputHtml += `<label class="flex items-center gap-2 text-sm text-slate-600"><input type="checkbox" class="accent-blue-500 rounded"> ${o.trim()}</label>`; 
+                    }); 
+                    inputHtml += `</div>`; 
+                }
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <input type="text" value="${f.label}" class="font-bold text-sm text-slate-800 bg-transparent outline-none border-b border-transparent focus:border-blue-500 w-2/3" onchange="updateField('${f.id}', 'label', this.value)">
+                        <div class="opacity-0 group-hover:opacity-100 transition flex gap-2">
+                            <select class="text-xs border border-slate-300 rounded px-1.5 py-1 text-slate-600 bg-white" onchange="updateField('${f.id}', 'required', this.value)">
+                                <option value="false" ${!f.required ? 'selected' : ''}>Opsional</option>
+                                <option value="true" ${f.required ? 'selected' : ''}>Wajib *</option>
+                            </select>
+                            <button onclick="removeField('${f.id}')" class="w-7 h-7 rounded bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition flex items-center justify-center">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    ${['select', 'radio', 'checkbox'].includes(f.type) ? `
+                        <input type="text" value="${f.options}" class="w-full text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1.5 rounded outline-none border border-blue-100 mt-1 mb-2" onchange="updateField('${f.id}', 'options', this.value)" placeholder="Opsi A, Opsi B, Opsi C (Pisahkan dgn koma)">
+                    ` : ''}
+                    ${!['select', 'radio', 'checkbox'].includes(f.type) ? `
+                        <input type="text" value="${f.placeholder}" class="w-full text-xs text-slate-400 bg-transparent outline-none mt-1 mb-1 italic" onchange="updateField('${f.id}', 'placeholder', this.value)" placeholder="Ketik placeholder instruksi...">
+                    ` : ''}
+                    ${inputHtml}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function generateCSS() {
+            const themeHex = getThemeColor(); 
+            const themeRgb = hexToRgb(themeHex); 
+            
+            return `
+<style>
+.im-wrapper { 
+    font-family: 'Inter', sans-serif; 
+    background: #fff; 
+    border-radius: 24px; 
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); 
+    overflow: hidden; 
+    max-width: 450px; 
+    margin: 0 auto; 
+    border: 1px solid #e2e8f0; 
+    width: 100%; 
+    box-sizing: border-box; 
+} 
+.im-header { 
+    padding: 24px; 
+    text-align: center; 
+    color: white; 
+    transition: background 0.3s ease; 
+} 
+.im-logo { 
+    max-height: 48px; 
+    margin: 0 auto 12px auto; 
+    display: block; 
+    object-fit: contain; 
+} 
+.im-title { 
+    margin: 0; 
+    font-size: 20px; 
+    font-weight: 700; 
+    line-height: 1.3; 
+} 
+.im-body { 
+    padding: 24px; 
+} 
+.im-group { 
+    margin-bottom: 16px; 
+} 
+.im-label { 
+    display: block; 
+    font-size: 13px; 
+    font-weight: 700; 
+    color: #475569; 
+    margin-bottom: 6px; 
+} 
+.im-input { 
+    width: 100%; 
+    padding: 12px 16px; 
+    background: #f8fafc; 
+    border: 1px solid #cbd5e1; 
+    border-radius: 12px; 
+    font-size: 14px; 
+    box-sizing: border-box; 
+    transition: all 0.2s; 
+    color: #0f172a; 
+} 
+.im-input:focus { 
+    outline: none; 
+    border-color: ${themeHex}; 
+    box-shadow: 0 0 0 3px rgba(${themeRgb},0.1); 
+    background: #fff; 
+} 
+.im-radio-group, .im-checkbox-group { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    margin-top: 8px; 
+} 
+.im-radio-label, .im-checkbox-label { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-size: 14px; 
+    color: #334155; 
+    cursor: pointer; 
+    padding: 8px 12px; 
+    background: #f8fafc; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 10px; 
+    transition: background 0.2s; 
+} 
+.im-radio-label:hover, .im-checkbox-label:hover { 
+    background: #f1f5f9; 
+} 
+.im-radio-label input, .im-checkbox-label input { 
+    accent-color: ${themeHex}; 
+    width: 16px; 
+    height: 16px; 
+    cursor: pointer; 
+} 
+.im-footer { 
+    margin-top: 24px; 
+} 
+.im-total-box { 
+    display: none; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 16px; 
+    background: #f8fafc; 
+    border: 2px dashed #cbd5e1; 
+    border-radius: 12px; 
+    margin-bottom: 16px; 
+} 
+.im-total-label { 
+    font-size: 13px; 
+    font-weight: 700; 
+    color: #475569; 
+} 
+.im-total-value { 
+    font-size: 18px; 
+    font-weight: 800; 
+    color: ${themeHex}; 
+} 
+.im-trust { 
+    display: flex; 
+    gap: 12px; 
+    padding: 12px 16px; 
+    background: rgba(${themeRgb}, 0.08); 
+    border: 1px solid rgba(${themeRgb}, 0.2); 
+    border-radius: 12px; 
+    margin-bottom: 16px; 
+    align-items: flex-start; 
+} 
+.im-trust-title { 
+    font-size: 13px; 
+    font-weight: 700; 
+    color: ${themeHex}; 
+    line-height: 1.2; 
+} 
+.im-trust-desc { 
+    font-size: 11px; 
+    color: #64748b; 
+    margin-top: 4px; 
+    line-height: 1.4; 
+} 
+.im-btn { 
+    width: 100%; 
+    padding: 14px; 
+    border: none; 
+    border-radius: 12px; 
+    color: white; 
+    font-weight: 700; 
+    font-size: 15px; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+} 
+.im-btn:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+}
+</style>`; 
+        }
+
+        function generateFormUI(isPreview = false) {
+            let fieldsHtml = ''; 
+            
+            formFields.forEach(f => {
+                let reqStar = f.required ? '<span style="color:#e11d48">*</span>' : ''; 
+                let reqAttr = f.required ? 'required' : ''; 
+                
+                fieldsHtml += `<div class="im-group">\n`;
+                fieldsHtml += `    <label class="im-label">${f.label} ${reqStar}</label>\n`;
+                
+                if(['text', 'tel', 'email', 'number', 'date', 'time'].includes(f.type)) { 
+                    fieldsHtml += `    <input type="${f.type}" name="${f.label}" class="im-input" placeholder="${f.placeholder}" ${reqAttr}>\n`; 
+                } 
+                else if(f.type === 'textarea') { 
+                    fieldsHtml += `    <textarea name="${f.label}" class="im-input" placeholder="${f.placeholder}" rows="3" ${reqAttr}></textarea>\n`; 
+                } 
+                else if(f.type === 'select') { 
+                    fieldsHtml += `    <select name="${f.label}" class="im-input" ${reqAttr}>\n`;
+                    fieldsHtml += `        <option value="">Pilih...</option>\n`;
+                    (f.options || '').split(',').forEach(opt => { 
+                        fieldsHtml += `        <option value="${opt.trim()}">${opt.trim()}</option>\n`; 
+                    }); 
+                    fieldsHtml += `    </select>\n`; 
+                } 
+                else if(f.type === 'radio') { 
+                    fieldsHtml += `    <div class="im-radio-group">\n`; 
+                    (f.options || '').split(',').forEach(opt => { 
+                        let val = opt.trim(); 
+                        fieldsHtml += `        <label class="im-radio-label"><input type="radio" name="${f.label}" value="${val}" ${reqAttr}> ${val}</label>\n`; 
+                    }); 
+                    fieldsHtml += `    </div>\n`; 
+                } 
+                else if(f.type === 'checkbox') { 
+                    fieldsHtml += `    <div class="im-checkbox-group">\n`; 
+                    (f.options || '').split(',').forEach(opt => { 
+                        let val = opt.trim(); 
+                        fieldsHtml += `        <label class="im-checkbox-label"><input type="checkbox" name="${f.label}" value="${val}"> ${val}</label>\n`; 
+                    }); 
+                    fieldsHtml += `    </div>\n`; 
+                }
+                
+                fieldsHtml += `</div>\n`;
+            });
+            
+            const themeHex = getThemeColor(); 
+            const totalHtml = `
+                <div id="im-total-box" class="im-total-box">
+                    <span class="im-total-label">Total Tagihan:</span>
+                    <span id="im-total-value" class="im-total-value">Rp 0</span>
+                </div>
+            `;
+            
+            const trustHtml = formConfig.trustBadge ? `
+                <div class="im-trust">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" style="color:${themeHex}; flex-shrink:0">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                    <div>
+                        <div class="im-trust-title">${formConfig.trustTitle}</div>
+                        <div class="im-trust-desc">${formConfig.trustDesc}</div>
+                    </div>
+                </div>
+            ` : '';
+            
+            const logoHtml = formConfig.logoUrl ? `<img src="${formConfig.logoUrl}" class="im-logo" alt="Logo">\n` : ''; 
+            const submitAction = isPreview ? 'type="button" onclick="showToast(\'Ini Simulasi. Form asli akan memproses data ke Web App.\')"' : 'type="submit"';
+            
+            // Format HTML Teks Judul
+            let titleTextHtml = '';
+            if (formConfig.titleColorType === 'gradient') {
+                titleTextHtml = `<h2 class="im-title" style="background: linear-gradient(135deg, ${formConfig.titleColor1}, ${formConfig.titleColor2}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">${formConfig.title}</h2>\n`;
+            } else {
+                titleTextHtml = `<h2 class="im-title" style="color: ${formConfig.titleColor1 || '#ffffff'};">${formConfig.title}</h2>\n`;
+            }
+
+            // Format HTML Teks CTA
+            let btnTextHtml = '';
+            if (formConfig.ctaTextColorType === 'gradient') {
+                btnTextHtml = `<span style="background: linear-gradient(135deg, ${formConfig.ctaTextColor1}, ${formConfig.ctaTextColor2}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">${formConfig.btnText}</span>`;
+            } else {
+                btnTextHtml = `<span style="color: ${formConfig.ctaTextColor1 || '#ffffff'};">${formConfig.btnText}</span>`;
+            }
+
+            return `
+<div class="im-wrapper">
+    <div class="im-header" style="background: ${formConfig.headerBg}">
+        ${logoHtml}
+        ${titleTextHtml}
+    </div>
+    <form id="im-form" class="im-body" onsubmit="return false;">
+        ${fieldsHtml}
+        <div class="im-footer">
+            ${totalHtml}
+            ${trustHtml}
+            <button id="im-submit-btn" ${submitAction} class="im-btn" style="background: ${formConfig.ctaBg}">${btnTextHtml}</button>
+        </div>
+    </form>
+</div>
+`;
+        }
+
+        function renderPreview() {
+            const wrapper = document.getElementById('preview-wrapper'); 
+            const formHtml = generateCSS() + generateFormUI(true);
+            
+            if(formConfig.displayMode === 'embed') { 
+                wrapper.innerHTML = `<div class="w-full max-w-md my-auto py-10">${formHtml}</div>`; 
+            } else { 
+                wrapper.innerHTML = `
+                    <div class="w-full h-full flex flex-col items-center justify-center relative">
+                        <p class="text-slate-400 text-sm font-medium mb-6">Tampilan Tombol Modal di Web Anda</p>
+                        <button class="px-8 py-4 text-white font-bold rounded-xl shadow-lg transform hover:scale-105 transition" style="background: ${formConfig.ctaBg}">
+                            ${formConfig.btnText}
+                        </button>
+                        <div class="absolute inset-0 bg-slate-900/60 rounded-2xl flex items-center justify-center p-4 z-50">
+                            <div class="w-full max-w-sm scale-95 relative">
+                                <button class="absolute -top-3 -right-3 bg-white w-8 h-8 rounded-full font-bold shadow-md z-50">✕</button>
+                                ${formHtml}
+                            </div>
+                        </div>
+                    </div>
+                `; 
+            }
+            
+            document.getElementById('wa-preview-name').innerText = "Admin " + formConfig.title.substring(0,10) + "..."; 
+            let waText = `${formConfig.waIntro}\n\n*Form:* ${formConfig.title}\n`;
+            
+            let isCalculationActive = formConfig.basePrice > 0;
+            
+            formFields.forEach(f => { 
+                let dummy = '(Jawaban Kustomer)'; 
+                if(['radio', 'select'].includes(f.type)) { 
+                    dummy = (f.options.split(',')[0] || '').trim(); 
+                    if(/=\s*(\d+)/.test(f.options)) isCalculationActive = true; 
+                } 
+                if(f.type === 'checkbox') { 
+                    dummy = (f.options.split(',')[0] || '').trim() + ', ...'; 
+                    if(/=\s*(\d+)/.test(f.options)) isCalculationActive = true; 
+                } 
+                if(f.type === 'number') dummy = '1'; 
+                
+                waText += `*${f.label}:* ${dummy}\n`; 
+            });
+            
+            if(isCalculationActive) waText += `\n*Total Tagihan:* Rp XXX.XXX\n`; 
+            waText += `\n${formConfig.waFooter}`; 
+            
+            document.getElementById('wa-preview-text').innerText = waText;
+        }
+
+        function generateCode() {
+            const rawFormHtml = generateFormUI(false); 
+            const isPopup = formConfig.displayMode === 'popup'; 
+            let popupWrapperStart = '';
+            let popupWrapperEnd = '';
+            let popupStyles = '';
+            
+            if(isPopup) { 
+                popupStyles = `
+.im-trigger-btn { 
+    padding: 16px 32px; 
+    border-radius: 12px; 
+    font-weight: bold; 
+    color: white; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 16px; 
+    background: ${formConfig.ctaBg}; 
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+}
+.im-overlay { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(15,23,42,0.6); 
+    backdrop-filter: blur(4px); 
+    z-index: 99999; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.3s ease; 
+    padding: 16px; 
+}
+.im-overlay.im-show { 
+    opacity: 1; 
+    pointer-events: auto; 
+}
+.im-modal { 
+    transform: translateY(20px); 
+    transition: transform 0.3s ease; 
+    width: 100%; 
+    max-width: 450px; 
+    position: relative; 
+}
+.im-overlay.im-show .im-modal { 
+    transform: translateY(0); 
+}
+.im-close { 
+    position: absolute; 
+    top: -12px; 
+    right: -12px; 
+    background: white; 
+    color: #0f172a; 
+    width: 32px; 
+    height: 32px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: bold; 
+    cursor: pointer; 
+    border: none; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    z-index: 10; 
+    font-family: Arial; 
+    font-size: 16px; 
+}
+`; 
+                let btnTextPopup = formConfig.btnText;
+                if (formConfig.ctaTextColorType === 'gradient') {
+                    btnTextPopup = `<span style="background: linear-gradient(135deg, ${formConfig.ctaTextColor1}, ${formConfig.ctaTextColor2}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">${formConfig.btnText}</span>`;
+                } else {
+                    btnTextPopup = `<span style="color: ${formConfig.ctaTextColor1 || '#ffffff'};">${formConfig.btnText}</span>`;
+                }
+
+                popupWrapperStart = `
+<!-- Trigger Popup -->
+<button class="im-trigger-btn" onclick="document.getElementById('im-overlay').classList.add('im-show')">${btnTextPopup}</button>
+<!-- Overlay -->
+<div id="im-overlay" class="im-overlay">
+    <div class="im-modal">
+        <button class="im-close" onclick="document.getElementById('im-overlay').classList.remove('im-show')">✕</button>
+`; 
+                popupWrapperEnd = `    </div>\n</div>\n`; 
+            }
+            
+            const cssCode = generateCSS().replace('</style>', `${popupStyles}\n</style>`); 
+            const isApi = globalSettings.waGateway === 'api'; 
+            let waLogicScript = '';
+            
+            if(isApi) { 
+                waLogicScript = `btn.innerText = 'Terkirim ✓'; btn.style.background = '#10b981'; btn.style.color = '#fff';`; 
+            } else { 
+                waLogicScript = `window.location.href = waUrl;`; 
+            }
+            
+            let safeIntro = formConfig.waIntro.replace(/\n/g, '\\n').replace(/'/g, "\\'"); 
+            let safeFooter = formConfig.waFooter.replace(/\n/g, '\\n').replace(/'/g, "\\'");
+            
+            let calcLogic = `
+function calculateTotal() { 
+    let basePrice = parseInt('${formConfig.basePrice}') || 0; 
+    let currentPrice = basePrice; 
+    let qty = 1; 
+    
+    const formEl = document.getElementById('im-form');
+    if (!formEl) return 0;
+    
+    const fd = new FormData(formEl); 
+    
+    for (let [key, value] of fd.entries()) { 
+        if(typeof value === 'string') { 
+            const match = value.match(/=\\s*(\\d+)/); 
+            if (match) {
+                currentPrice = parseInt(match[1]); 
+            }
+        } 
+    } 
+    
+    const numInputs = formEl.querySelectorAll('input[type="number"]'); 
+    
+    if (numInputs.length > 0) { 
+        let parsedQty = parseInt(numInputs[0].value); 
+        qty = (!isNaN(parsedQty) && parsedQty > 0) ? parsedQty : 0; 
+    } 
+    
+    let total = currentPrice * qty; 
+    
+    const totalBox = document.getElementById('im-total-box'); 
+    const totalVal = document.getElementById('im-total-value'); 
+    
+    if (totalBox && totalVal) {
+        if (currentPrice > 0 || basePrice > 0) { 
+            totalBox.style.display = 'flex'; 
+            totalVal.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total); 
+        } else { 
+            totalBox.style.display = 'none'; 
+        } 
+    }
+    
+    return total; 
+} 
+
+document.getElementById('im-form').addEventListener('input', calculateTotal); 
+document.getElementById('im-form').addEventListener('change', calculateTotal); 
+calculateTotal();
+            `;
+            
+            const scriptString = `
+<script>
+${calcLogic}
+
+document.getElementById('im-form').addEventListener('submit', function(e) { 
+    e.preventDefault(); 
+    
+    const btn = document.getElementById('im-submit-btn'); 
+    btn.innerText = 'Memproses...'; 
+    btn.style.opacity = '0.7'; 
+    btn.style.pointerEvents = 'none'; 
+    
+    const formData = new FormData(this); 
+    let formObj = {}; 
+    
+    for (let [key, value] of formData.entries()) { 
+        if (formObj[key]) {
+            formObj[key] += ', ' + value; 
+        } else {
+            formObj[key] = value; 
+        }
+    } 
+    
+    let waText = '${safeIntro}\\n\\n*Form:* ${formConfig.title}\\n'; 
+    
+    let jsonData = { 
+        Waktu_Order: new Date().toLocaleString(), 
+        Nama_Form: '${formConfig.title}', 
+        wa_target: '${formConfig.waNumber}' 
+    }; 
+    
+    for (let key in formObj) { 
+        waText += '*' + key + ':* ' + formObj[key] + '\\n'; 
+        jsonData[key] = formObj[key]; 
+    } 
+    
+    let finalTotal = calculateTotal(); 
+    if(finalTotal > 0) { 
+        waText += '\\n*Total Tagihan:* Rp ' + new Intl.NumberFormat('id-ID').format(finalTotal) + '\\n'; 
+        jsonData['Total_Tagihan'] = finalTotal; 
+    } 
+    
+    waText += '\\n${safeFooter}'; 
+    jsonData.wa_text = waText; 
+    
+    const waUrl = 'https://wa.me/${formConfig.waNumber}?text=' + encodeURIComponent(waText); 
+    const sheetUrl = '${globalSettings.sheetUrl}'; 
+    
+    if(sheetUrl && sheetUrl.startsWith('http')) { 
+        fetch(sheetUrl, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(jsonData) 
+        }).then(() => { 
+            ${waLogicScript} 
+        }).catch(() => { 
+            ${waLogicScript} 
+        }); 
+        
+        setTimeout(() => { 
+            if(btn.innerText === 'Memproses...') { 
+                ${waLogicScript} 
+            } 
+        }, 3500); 
+    } else { 
+        ${waLogicScript} 
+    } 
+});
+<\/script>
+`;
+            
+            document.getElementById('output-code').value = `<!-- iMersFOW Start -->\n${cssCode}\n${popupWrapperStart}${rawFormHtml}${popupWrapperEnd}\n${scriptString}\n<!-- iMersFOW End -->`;
+        }
+
+        function copyEmbedCode() { 
+            document.getElementById('output-code').select(); 
+            document.execCommand('copy'); 
+            showToast('Kode HTML disalin ke clipboard!'); 
+        }
+
+        window.onload = function() { 
+            checkLoginState(); 
+            loadGlobalSettings(); 
+            initTemplateEngine(); 
+            toggleTextColorMode('title');
+            toggleTextColorMode('cta_text');
+        };
+    </script>
+</body>
+</html>

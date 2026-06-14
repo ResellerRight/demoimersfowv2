@@ -619,16 +619,17 @@
                 <!-- Sidebar Kategori -->
                 <div class="w-56 bg-slate-50 border-r border-slate-200 p-4 flex flex-col gap-2 overflow-y-auto flex-shrink-0">
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Kategori</p>
-                    <button class="text-left px-4 py-2.5 rounded-xl bg-blue-100 text-blue-700 font-bold text-sm transition w-full">Semua Template</button>
-                    <button class="text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">E-Commerce</button>
-                    <button class="text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Event & Webinar</button>
-                    <button class="text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Layanan / Booking</button>
+                    <button onclick="filterTemplates('Semua')" id="btn-cat-Semua" class="cat-btn text-left px-4 py-2.5 rounded-xl bg-blue-100 text-blue-700 font-bold text-sm transition w-full">Semua Template</button>
+                    <button onclick="filterTemplates('E-Commerce')" id="btn-cat-E-Commerce" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">E-Commerce</button>
+                    <button onclick="filterTemplates('Event')" id="btn-cat-Event" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Event & Webinar</button>
+                    <button onclick="filterTemplates('Layanan')" id="btn-cat-Layanan" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Layanan / Booking</button>
+                    <button onclick="filterTemplates('Survei')" id="btn-cat-Survei" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">Survei & Feedback</button>
                 </div>
                 
                 <!-- Grid Area -->
                 <div class="flex-1 bg-white p-6 overflow-y-auto custom-scrollbar">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="template-grid">
-                        <!-- Card 1: Blank (Default, akan diisi di script) -->
+                        <!-- Card 1: Blank (akan selalu di-render pertama oleh JS) -->
                     </div>
                 </div>
             </div>
@@ -647,82 +648,6 @@
             if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; 
             if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; 
         };
-
-        // GLOBAL TEMPLATE VAR
-        let availableTemplates = {};
-
-        // DYNAMIC SCRIPT LOADER (Anti-Cache & Anti-CORS Fail)
-        function initTemplateEngine() {
-            const script = document.createElement('script');
-            // Tambahkan timestamp agar Vercel & Browser selalu menarik versi TERBARU, bukan versi error yang nyantol
-            script.src = './templates.js?v=' + new Date().getTime(); 
-            
-            script.onload = function() {
-                if(typeof dbTemplates !== 'undefined') {
-                    availableTemplates = dbTemplates;
-                    renderTemplateCards();
-                } else {
-                    showTemplateError("File templates.js berhasil diload, tapi Variabel dbTemplates tidak ditemukan. Cek ejaan di file JS Anda.");
-                }
-            };
-            
-            script.onerror = function() {
-                showTemplateError("File templates.js tidak ditemukan di URL ini. Pastikan nama file benar dan sudah ter-upload.");
-            };
-            
-            document.body.appendChild(script);
-        }
-
-        function showTemplateError(message) {
-            const grid = document.getElementById('template-grid');
-            grid.innerHTML = `
-                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
-                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
-                        <i class="ph-bold ph-plus text-3xl"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
-                </div>
-                <div class="col-span-1 md:col-span-2 p-6 text-center text-rose-600 font-medium bg-rose-50 rounded-2xl border border-rose-200 flex flex-col items-center justify-center">
-                    <i class="ph-fill ph-warning-circle text-4xl mb-3"></i>
-                    <p class="font-bold">Gagal Membaca Template Eksternal!</p>
-                    <p class="text-sm mt-1 text-rose-500 text-left max-w-sm"><b>Diagnosa Error:</b><br>${message}<br><br>Jika Anda baru saja meng-update file di GitHub/Vercel, harap tunggu 1-2 menit hingga proses build selesai.</p>
-                </div>
-            `;
-        }
-
-        // --- FUNGSI MODAL TEMPLATE ---
-        function renderTemplateCards() {
-            const grid = document.getElementById('template-grid');
-            let html = `
-                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
-                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
-                        <i class="ph-bold ph-plus text-3xl"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
-                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
-                </div>
-            `; 
-            
-            for (const key in availableTemplates) {
-                const tpl = availableTemplates[key];
-                html += `
-                <div onclick="useTemplate('${key}')" class="border border-slate-200 rounded-2xl p-6 flex flex-col cursor-pointer hover:border-${tpl.color.split('-')[1]}-500 hover:shadow-lg transition bg-white group min-h-[220px] relative overflow-hidden">
-                    <div class="w-14 h-14 rounded-xl ${tpl.bg} ${tpl.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="ph-fill ${tpl.icon} text-3xl"></i>
-                    </div>
-                    <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3>
-                    <p class="text-xs text-slate-500 mb-4 line-clamp-2">Template siap pakai dengan field yang sudah disesuaikan.</p>
-                    
-                    <div class="mt-auto flex items-center justify-between">
-                        <span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span>
-                        <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition">
-                            <i class="ph-bold ph-arrow-right"></i>
-                        </div>
-                    </div>
-                </div>`;
-            }
-            grid.innerHTML = html;
-        }
 
         // LOGIN SYSTEM
         function checkLoginState() {
@@ -762,6 +687,7 @@
         // INTI APLIKASI BUILDER
         let currentStep = 1;
         let savedForms = JSON.parse(localStorage.getItem('imersfow_forms')) || [];
+        let currentCategoryFilter = 'Semua';
         
         let globalSettings = JSON.parse(localStorage.getItem('imersfow_global')) || {
             sheetUrl: '', waGateway: 'wa_me', apiProvider: 'fonnte', apiToken: '', apiSender: ''
@@ -779,6 +705,113 @@
         ];
 
         let formConfig = {}; let formFields = [];
+        let availableTemplates = {};
+
+        // DYNAMIC SCRIPT LOADER (Anti-Cache & Anti-CORS Fail)
+        function initTemplateEngine() {
+            const script = document.createElement('script');
+            // Tambahkan timestamp agar Vercel & Browser selalu menarik versi TERBARU, bukan versi error yang nyantol
+            script.src = './templates.js?v=' + new Date().getTime(); 
+            
+            script.onload = function() {
+                if(typeof dbTemplates !== 'undefined') {
+                    availableTemplates = dbTemplates;
+                    // Render default 'Semua' category on load
+                    filterTemplates('Semua');
+                } else {
+                    showTemplateError("File templates.js berhasil diload, tapi Variabel dbTemplates tidak ditemukan. Cek ejaan di file JS Anda.");
+                }
+            };
+            
+            script.onerror = function() {
+                showTemplateError("File templates.js tidak ditemukan di URL ini. Pastikan nama file benar dan sudah ter-upload ke server/GitHub.");
+            };
+            
+            document.body.appendChild(script);
+        }
+
+        function showTemplateError(message) {
+            const grid = document.getElementById('template-grid');
+            grid.innerHTML = `
+                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                </div>
+                <div class="col-span-1 md:col-span-2 p-6 text-center text-rose-600 font-medium bg-rose-50 rounded-2xl border border-rose-200 flex flex-col items-center justify-center">
+                    <i class="ph-fill ph-warning-circle text-4xl mb-3"></i>
+                    <p class="font-bold">Gagal Membaca Template Eksternal!</p>
+                    <p class="text-sm mt-1 text-rose-500 text-left max-w-sm"><b>Diagnosa Error:</b><br>${message}</p>
+                </div>
+            `;
+        }
+
+        // --- FUNGSI MODAL TEMPLATE ---
+        function renderTemplateCards(categoryFilter) {
+            const grid = document.getElementById('template-grid');
+            
+            // Selalu render card "Mulai dari Nol" pertama
+            let html = `
+                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                </div>
+            `; 
+            
+            // Filter template berdasarkan kategori yang dipilih
+            for (const key in availableTemplates) {
+                const tpl = availableTemplates[key];
+                
+                // Jika sedang melihat "Semua" ATAU kategori template cocok dengan filter
+                if (categoryFilter === 'Semua' || tpl.category === categoryFilter) {
+                    html += `
+                    <div onclick="useTemplate('${key}')" class="border border-slate-200 rounded-2xl p-6 flex flex-col cursor-pointer hover:border-${tpl.color.split('-')[1]}-500 hover:shadow-lg transition bg-white group min-h-[220px] relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-xl ${tpl.bg} ${tpl.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ${tpl.icon} text-3xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3>
+                        <p class="text-xs text-slate-500 mb-4 line-clamp-2">Kategori: <b>${tpl.category}</b>. Template siap pakai dengan field yang sudah disesuaikan.</p>
+                        
+                        <div class="mt-auto flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition">
+                                <i class="ph-bold ph-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            }
+            grid.innerHTML = html;
+        }
+
+        function filterTemplates(category) {
+            currentCategoryFilter = category;
+            
+            // 1. Reset semua styling tombol di sidebar menjadi non-aktif (abu-abu)
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'text-blue-700', 'font-bold');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-200', 'font-medium');
+            });
+            
+            // 2. Cari tombol yang diklik (menggunakan ID khusus yang baru kita buat)
+            // Khusus untuk Event & Webinar kita pakai 'Event' di JS tapi labelnya 'Event & Webinar'
+            const activeBtnId = 'btn-cat-' + category;
+            const activeBtn = document.getElementById(activeBtnId);
+            
+            // 3. Terapkan styling aktif (biru) ke tombol yang dipilih
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-200', 'font-medium');
+                activeBtn.classList.add('bg-blue-100', 'text-blue-700', 'font-bold');
+            }
+            
+            // 4. Render ulang grid sesuai kategori
+            renderTemplateCards(category);
+        }
 
         function openTemplateModal() {
             document.getElementById('template-modal').classList.add('show');
@@ -794,12 +827,14 @@
             if(key === 'blank') {
                 formConfig = JSON.parse(JSON.stringify(defaultFormConfig));
                 formFields = JSON.parse(JSON.stringify(defaultFormFields));
+                // Set radio to solid for blank
                 document.querySelector('input[name="header_type"][value="solid"]').checked = true;
                 document.querySelector('input[name="cta_type"][value="solid"]').checked = true;
             } else {
                 const tpl = availableTemplates[key];
                 formConfig = JSON.parse(JSON.stringify(tpl.config));
                 formFields = JSON.parse(JSON.stringify(tpl.fields));
+                // Set radio to gradient for templates
                 document.querySelector('input[name="header_type"][value="gradient"]').checked = true;
                 document.querySelector('input[name="cta_type"][value="gradient"]').checked = true;
             }
@@ -1106,11 +1141,10 @@
 
         function copyEmbedCode() { document.getElementById('output-code').select(); document.execCommand('copy'); showToast('Kode HTML disalin ke clipboard!'); }
 
-        // MULAILAH SEMUANYA DI SINI
         window.onload = function() { 
             checkLoginState(); 
             loadGlobalSettings(); 
-            initTemplateEngine(); // Panggil fungsi Dynamic Loader anti-cache
+            initTemplateEngine(); 
         };
     </script>
 </body>

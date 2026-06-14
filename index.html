@@ -8,7 +8,8 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Script templates.js tidak lagi dipanggil di sini. Kita pakai Dynamic Loader anti-cache di bawah! -->
+    <!-- PANGGIL DATABASE TEMPLATE DARI FILE EKSTERNAL (JALAN MULUS DI GITHUB/HOSTING) -->
+    <script src="templates.js"></script>
     
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
@@ -525,9 +526,9 @@
                                         </div>
                                         <div id="canvas-fields" class="p-6 space-y-4 min-h-[250px] bg-white"></div>
                                         <div class="p-6 pt-0 bg-white">
-                                            <div id="canvas-trust" class="bg-blue-50/70 p-4 rounded-xl border border-blue-100 flex items-start gap-3 mb-4">
-                                                <i class="ph-fill ph-shield-check text-blue-500 text-xl mt-0.5"></i>
-                                                <div><h4 id="canvas-trust-title" class="text-sm font-bold text-slate-800">Aman</h4><p id="canvas-trust-desc" class="text-[11px] text-slate-500 mt-1">Desc</p></div>
+                                            <div id="canvas-trust" class="p-4 rounded-xl border flex items-start gap-3 mb-4 transition-all">
+                                                <i id="canvas-trust-icon" class="ph-fill ph-shield-check text-xl mt-0.5 transition-colors"></i>
+                                                <div><h4 id="canvas-trust-title" class="text-sm font-bold transition-colors">Aman</h4><p id="canvas-trust-desc" class="text-[11px] text-slate-500 mt-1">Desc</p></div>
                                             </div>
                                             <button id="canvas-btn" class="w-full py-4 text-white font-bold rounded-xl shadow-md cursor-not-allowed text-base transition-all duration-300">Button</button>
                                         </div>
@@ -701,6 +702,20 @@
 
         let formConfig = {}; let formFields = [];
         let availableTemplates = {};
+
+        // Helper Function: Ambil Warna Tema dari CTA untuk Trust Badge
+        function getThemeColor() {
+            const ctaBg = formConfig.ctaBg || '#3b82f6';
+            const match = ctaBg.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/i);
+            return match ? match[0] : '#3b82f6';
+        }
+
+        function hexToRgb(hex) {
+            let c = hex.substring(1).split('');
+            if(c.length === 3) c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            c = '0x' + c.join('');
+            return [(c>>16)&255, (c>>8)&255, c&255].join(', ');
+        }
 
         // DYNAMIC SCRIPT LOADER (Anti-Cache & Anti-CORS Fail)
         function initTemplateEngine() {
@@ -1055,6 +1070,9 @@
             else { finalColor = `linear-gradient(135deg, ${document.getElementById(`${target}-c1`).value}, ${document.getElementById(`${target}-c2`).value})`; }
             if(target === 'header') formConfig.headerBg = finalColor;
             if(target === 'cta') formConfig.ctaBg = finalColor;
+            
+            // Re-render canvas trust badge kalau ada perubahan CTA Color di Step 1
+            if(target === 'cta' && currentStep === 1) updateConfig();
         }
 
         function updateConfig() {
@@ -1085,7 +1103,26 @@
             document.getElementById('canvas-header').style.background = formConfig.headerBg; document.getElementById('canvas-btn').style.background = formConfig.ctaBg;
             document.getElementById('canvas-btn').innerText = formConfig.btnText; document.getElementById('canvas-title').innerText = formConfig.title;
             const logoEl = document.getElementById('canvas-logo'); if(formConfig.logoUrl) { logoEl.src = formConfig.logoUrl; logoEl.style.display = 'block'; } else { logoEl.style.display = 'none'; }
-            const trustEl = document.getElementById('canvas-trust'); if(formConfig.trustBadge) { trustEl.style.display = 'flex'; document.getElementById('canvas-trust-title').innerText = formConfig.trustTitle; document.getElementById('canvas-trust-desc').innerText = formConfig.trustDesc; } else { trustEl.style.display = 'none'; }
+            
+            // Dynamic Trust Badge Color logic
+            const trustEl = document.getElementById('canvas-trust'); 
+            if(formConfig.trustBadge) { 
+                trustEl.style.display = 'flex'; 
+                
+                const themeHex = getThemeColor();
+                const themeRgb = hexToRgb(themeHex);
+                
+                trustEl.style.backgroundColor = `rgba(${themeRgb}, 0.08)`;
+                trustEl.style.borderColor = `rgba(${themeRgb}, 0.2)`;
+                document.getElementById('canvas-trust-title').style.color = themeHex;
+                document.getElementById('canvas-trust-icon').style.color = themeHex;
+                
+                document.getElementById('canvas-trust-title').innerText = formConfig.trustTitle; 
+                document.getElementById('canvas-trust-desc').innerText = formConfig.trustDesc; 
+            } else { 
+                trustEl.style.display = 'none'; 
+            }
+            
             const container = document.getElementById('canvas-fields'); container.innerHTML = '';
             
             formFields.forEach((f) => {
@@ -1103,7 +1140,10 @@
         }
 
         function generateCSS() {
-            return `<style>.im-wrapper { font-family: 'Inter', sans-serif; background: #fff; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; max-width: 450px; margin: 0 auto; border: 1px solid #e2e8f0; width: 100%; box-sizing: border-box; } .im-header { padding: 24px; text-align: center; color: white; transition: background 0.3s ease; } .im-logo { max-height: 48px; margin: 0 auto 12px auto; display: block; object-fit: contain; } .im-title { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; } .im-body { padding: 24px; } .im-group { margin-bottom: 16px; } .im-label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 6px; } .im-input { width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; transition: all 0.2s; color: #0f172a; } .im-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); background: #fff; } .im-radio-group, .im-checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; } .im-radio-label, .im-checkbox-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #334155; cursor: pointer; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; transition: background 0.2s; } .im-radio-label:hover, .im-checkbox-label:hover { background: #f1f5f9; } .im-radio-label input, .im-checkbox-label input { accent-color: #3b82f6; width: 16px; height: 16px; cursor: pointer; } .im-footer { margin-top: 24px; } .im-trust { display: flex; gap: 12px; padding: 12px 16px; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 12px; margin-bottom: 16px; align-items: flex-start; } .im-trust-title { font-size: 13px; font-weight: 700; color: #1e3a8a; line-height: 1.2; } .im-trust-desc { font-size: 11px; color: #64748b; margin-top: 4px; line-height: 1.4; } .im-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); } .im-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }</style>`;
+            const themeHex = getThemeColor();
+            const themeRgb = hexToRgb(themeHex);
+            
+            return `<style>.im-wrapper { font-family: 'Inter', sans-serif; background: #fff; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; max-width: 450px; margin: 0 auto; border: 1px solid #e2e8f0; width: 100%; box-sizing: border-box; } .im-header { padding: 24px; text-align: center; color: white; transition: background 0.3s ease; } .im-logo { max-height: 48px; margin: 0 auto 12px auto; display: block; object-fit: contain; } .im-title { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; } .im-body { padding: 24px; } .im-group { margin-bottom: 16px; } .im-label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 6px; } .im-input { width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; transition: all 0.2s; color: #0f172a; } .im-input:focus { outline: none; border-color: ${themeHex}; box-shadow: 0 0 0 3px rgba(${themeRgb},0.1); background: #fff; } .im-radio-group, .im-checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; } .im-radio-label, .im-checkbox-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #334155; cursor: pointer; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; transition: background 0.2s; } .im-radio-label:hover, .im-checkbox-label:hover { background: #f1f5f9; } .im-radio-label input, .im-checkbox-label input { accent-color: ${themeHex}; width: 16px; height: 16px; cursor: pointer; } .im-footer { margin-top: 24px; } .im-trust { display: flex; gap: 12px; padding: 12px 16px; background: rgba(${themeRgb}, 0.08); border: 1px solid rgba(${themeRgb}, 0.2); border-radius: 12px; margin-bottom: 16px; align-items: flex-start; } .im-trust-title { font-size: 13px; font-weight: 700; color: ${themeHex}; line-height: 1.2; } .im-trust-desc { font-size: 11px; color: #64748b; margin-top: 4px; line-height: 1.4; } .im-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); } .im-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }</style>`;
         }
 
         function generateFormUI(isPreview = false) {
@@ -1118,7 +1158,8 @@
                 else if(f.type === 'checkbox') { fieldsHtml += `<div class="im-checkbox-group">`; (f.options || '').split(',').forEach(opt => { let val = opt.trim(); fieldsHtml += `<label class="im-checkbox-label"><input type="checkbox" name="${f.label}" value="${val}"> ${val}</label>`; }); fieldsHtml += `</div>`; }
                 fieldsHtml += `</div>`;
             });
-            const trustHtml = formConfig.trustBadge ? `<div class="im-trust"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" style="color:#3b82f6; flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg><div><div class="im-trust-title">${formConfig.trustTitle}</div><div class="im-trust-desc">${formConfig.trustDesc}</div></div></div>` : '';
+            const themeHex = getThemeColor();
+            const trustHtml = formConfig.trustBadge ? `<div class="im-trust"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" style="color:${themeHex}; flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg><div><div class="im-trust-title">${formConfig.trustTitle}</div><div class="im-trust-desc">${formConfig.trustDesc}</div></div></div>` : '';
             const logoHtml = formConfig.logoUrl ? `<img src="${formConfig.logoUrl}" class="im-logo" alt="Logo">` : '';
             const submitAction = isPreview ? 'type="button" onclick="showToast(\'Ini Simulasi. Form asli akan memproses data ke Web App.\')"' : 'type="submit"';
             return `<div class="im-wrapper"><div class="im-header" style="background: ${formConfig.headerBg}">${logoHtml}<h2 class="im-title">${formConfig.title}</h2></div><form id="im-form" class="im-body" onsubmit="return false;">${fieldsHtml}<div class="im-footer">${trustHtml}<button id="im-submit-btn" ${submitAction} class="im-btn" style="background: ${formConfig.ctaBg}">${formConfig.btnText}</button></div></form></div>`;

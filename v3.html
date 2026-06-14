@@ -9,19 +9,51 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; overflow: hidden; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+            overflow: hidden; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { 
+            width: 6px; 
+            height: 6px; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track { 
+            background: #f1f5f9; 
+            border-radius: 4px; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 4px; 
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+            background: #94a3b8; 
+        }
         
         .toast {
-            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: #1e293b; color: white; padding: 12px 24px; border-radius: 9999px;
-            font-weight: 500; font-size: 14px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 99999;
+            position: fixed; 
+            bottom: -100px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: #1e293b; 
+            color: white; 
+            padding: 12px 24px; 
+            border-radius: 9999px;
+            font-weight: 500; 
+            font-size: 14px; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            z-index: 99999;
         }
-        .toast.show { bottom: 30px; }
+        
+        .toast.show { 
+            bottom: 30px; 
+        }
 
         .wa-bg {
             background-color: #efeae2;
@@ -29,10 +61,23 @@
         }
         
         /* Modal Template Styles */
-        #template-modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
-        #template-modal .modal-content { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); transform: scale(0.95); }
-        #template-modal.show { opacity: 1; visibility: visible; }
-        #template-modal.show .modal-content { transform: scale(1); }
+        #template-modal { 
+            transition: opacity 0.3s ease, visibility 0.3s ease; 
+        }
+        
+        #template-modal .modal-content { 
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            transform: scale(0.95); 
+        }
+        
+        #template-modal.show { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+        
+        #template-modal.show .modal-content { 
+            transform: scale(1); 
+        }
     </style>
 </head>
 <body class="antialiased h-screen flex flex-col">
@@ -53,21 +98,27 @@
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-1.5">Nama Panggilan</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph-fill ph-user text-slate-400"></i></div>
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph-fill ph-user text-slate-400"></i>
+                        </div>
                         <input type="text" id="login-name" required placeholder="Ketik nama Anda..." class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-sm">
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-1.5">Email Akses</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph-fill ph-envelope text-slate-400"></i></div>
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph-fill ph-envelope text-slate-400"></i>
+                        </div>
                         <input type="email" id="login-email" required placeholder="email@domain.com" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-sm">
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-1.5">Kata Sandi Rahasia</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph-fill ph-lock-key text-slate-400"></i></div>
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph-fill ph-lock-key text-slate-400"></i>
+                        </div>
                         <input type="password" id="login-pass" required placeholder="••••••••" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-sm">
                     </div>
                 </div>
@@ -75,7 +126,9 @@
                     Masuk Sekarang <i class="ph-bold ph-sign-in"></i>
                 </button>
             </form>
-            <div class="mt-6 text-center text-xs text-slate-400 font-medium">Sistem diproteksi oleh Enkripsi Frontend.</div>
+            <div class="mt-6 text-center text-xs text-slate-400 font-medium">
+                Sistem diproteksi oleh Enkripsi Frontend.
+            </div>
         </div>
     </div>
 
@@ -152,16 +205,31 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
-                            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center"><i class="ph-fill ph-file-text text-3xl"></i></div>
-                            <div><p class="text-sm text-slate-500 font-semibold mb-1">Total Form Aktif</p><h3 id="stat-total-forms" class="text-3xl font-bold text-slate-800 leading-none">0</h3></div>
+                            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                <i class="ph-fill ph-file-text text-3xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold mb-1">Total Form Aktif</p>
+                                <h3 id="stat-total-forms" class="text-3xl font-bold text-slate-800 leading-none">0</h3>
+                            </div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
-                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="ph-fill ph-users text-3xl"></i></div>
-                            <div><p class="text-sm text-slate-500 font-semibold mb-1">Total Leads Masuk</p><h3 id="stat-total-leads" class="text-3xl font-bold text-slate-800 leading-none">0</h3></div>
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="ph-fill ph-users text-3xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold mb-1">Total Leads Masuk</p>
+                                <h3 id="stat-total-leads" class="text-3xl font-bold text-slate-800 leading-none">0</h3>
+                            </div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
-                            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="ph-fill ph-trend-up text-3xl"></i></div>
-                            <div><p class="text-sm text-slate-500 font-semibold mb-1">Rata-rata Konversi</p><h3 id="stat-conversion-rate" class="text-3xl font-bold text-slate-800 leading-none">0.0%</h3></div>
+                            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <i class="ph-fill ph-trend-up text-3xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-semibold mb-1">Rata-rata Konversi</p>
+                                <h3 id="stat-conversion-rate" class="text-3xl font-bold text-slate-800 leading-none">0.0%</h3>
+                            </div>
                         </div>
                     </div>
 
@@ -191,7 +259,9 @@
                 <div id="view-sequence" class="hidden animate-fade-in max-w-6xl mx-auto pb-10">
                     <div class="mb-8 border-b border-slate-200 pb-6 flex justify-between items-end">
                         <div>
-                            <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2"><i class="ph-fill ph-paper-plane-right text-emerald-500"></i> Auto Sequence WhatsApp</h1>
+                            <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                                <i class="ph-fill ph-paper-plane-right text-emerald-500"></i> Auto Sequence WhatsApp
+                            </h1>
                             <p class="text-slate-500 text-sm mt-1">Buat pesan berantai otomatis (Follow Up) layaknya WhatsApp Marketing Pro.</p>
                         </div>
                     </div>
@@ -243,7 +313,9 @@ Total tagihan Anda adalah: *{{Total_Tagihan}}*
 Silakan balas pesan ini jika sudah transfer ya! 😊</textarea>
                                 </div>
                                 <div class="p-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center">
-                                    <button class="text-slate-400 hover:text-emerald-500 transition"><i class="ph-fill ph-smiley text-2xl"></i></button>
+                                    <button class="text-slate-400 hover:text-emerald-500 transition">
+                                        <i class="ph-fill ph-smiley text-2xl"></i>
+                                    </button>
                                     <button class="px-4 py-2 bg-slate-900 text-white text-sm font-bold rounded-lg shadow-md hover:bg-slate-800 transition">Simpan Pesan</button>
                                 </div>
                             </div>
@@ -254,8 +326,13 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</textarea>
                             <div class="w-full max-w-[320px] bg-white rounded-[40px] shadow-2xl border-[8px] border-slate-800 overflow-hidden flex flex-col h-[550px] relative">
                                 <div class="bg-[#075e54] text-white p-3 pt-8 flex items-center gap-3 relative z-10 shadow-md">
                                     <i class="ph-bold ph-arrow-left text-xl"></i>
-                                    <div class="w-9 h-9 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden"><i class="ph-fill ph-user text-2xl mt-2"></i></div>
-                                    <div class="leading-tight flex-1"><div class="text-sm font-bold truncate">Simulasi Kustomer</div><div class="text-[10px] opacity-80">online</div></div>
+                                    <div class="w-9 h-9 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden">
+                                        <i class="ph-fill ph-user text-2xl mt-2"></i>
+                                    </div>
+                                    <div class="leading-tight flex-1">
+                                        <div class="text-sm font-bold truncate">Simulasi Kustomer</div>
+                                        <div class="text-[10px] opacity-80">online</div>
+                                    </div>
                                 </div>
                                 <div class="wa-bg flex-1 p-4 flex flex-col gap-3 overflow-y-auto custom-scrollbar relative z-10">
                                     <!-- Bubble Message -->
@@ -285,8 +362,13 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                         <!-- KIRI: Google Sheets -->
                         <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 lg:p-8">
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 shadow-inner border border-green-100"><i class="ph-fill ph-google-logo text-2xl"></i></div>
-                                <div><h2 class="text-lg font-bold text-slate-800">Master Database</h2><p class="text-sm text-slate-500">Google Sheets Smart Integration</p></div>
+                                <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center text-green-600 shadow-inner border border-green-100">
+                                    <i class="ph-fill ph-google-logo text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-800">Master Database</h2>
+                                    <p class="text-sm text-slate-500">Google Sheets Smart Integration</p>
+                                </div>
                             </div>
                             
                             <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-5 mb-6 text-sm text-blue-900 leading-relaxed space-y-3">
@@ -304,7 +386,9 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                 <div>
                                     <label class="block text-sm font-bold text-slate-700 mb-1.5 uppercase tracking-wide text-xs">URL Web App Klien (Cangkang)</label>
                                     <div class="relative">
-                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ph-bold ph-link text-slate-400 text-lg"></i></div>
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="ph-bold ph-link text-slate-400 text-lg"></i>
+                                        </div>
                                         <input type="text" id="global-sheet-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm font-mono text-slate-700">
                                     </div>
                                 </div>
@@ -317,8 +401,13 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                         <!-- KANAN: WhatsApp Gateway -->
                         <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 lg:p-8">
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner border border-emerald-100"><i class="ph-fill ph-whatsapp-logo text-2xl"></i></div>
-                                <div><h2 class="text-lg font-bold text-slate-800">WhatsApp Gateway</h2><p class="text-sm text-slate-500">Pilih rute pengiriman pesan WA</p></div>
+                                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shadow-inner border border-emerald-100">
+                                    <i class="ph-fill ph-whatsapp-logo text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-800">WhatsApp Gateway</h2>
+                                    <p class="text-sm text-slate-500">Pilih rute pengiriman pesan WA</p>
+                                </div>
                             </div>
 
                             <div class="space-y-4">
@@ -326,7 +415,11 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                     <input type="radio" name="wa_gateway" value="wa_me" class="peer sr-only" onchange="toggleWaSettings()" checked>
                                     <div class="peer-checked:border-emerald-500 peer-checked:ring-2 peer-checked:bg-emerald-50/20 absolute inset-0 rounded-xl border-2 border-transparent transition"></div>
                                     <div class="flex flex-1 gap-4 z-10">
-                                        <div class="mt-0.5"><div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center peer-checked:border-emerald-500"><div class="w-2.5 h-2.5 rounded-full bg-emerald-500 opacity-0 peer-checked:opacity-100 transition"></div></div></div>
+                                        <div class="mt-0.5">
+                                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center peer-checked:border-emerald-500">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 opacity-0 peer-checked:opacity-100 transition"></div>
+                                            </div>
+                                        </div>
                                         <div>
                                             <span class="block text-sm font-bold text-slate-900">WhatsApp Pribadi (wa.me)</span>
                                             <span class="mt-1 block text-xs text-slate-500 leading-relaxed">Gratis. Kustomer akan diarahkan ke aplikasi WA mereka untuk menekan tombol kirim sendiri.</span>
@@ -338,7 +431,11 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                     <input type="radio" name="wa_gateway" value="api" class="peer sr-only" onchange="toggleWaSettings()">
                                     <div class="peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:bg-blue-50/20 absolute inset-0 rounded-xl border-2 border-transparent transition"></div>
                                     <div class="flex flex-1 gap-4 z-10">
-                                        <div class="mt-0.5"><div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center peer-checked:border-blue-500"><div class="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-0 peer-checked:opacity-100 transition"></div></div></div>
+                                        <div class="mt-0.5">
+                                            <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center peer-checked:border-blue-500">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-0 peer-checked:opacity-100 transition"></div>
+                                            </div>
+                                        </div>
                                         <div>
                                             <span class="block text-sm font-bold text-slate-900 flex items-center gap-2">WhatsApp Official API <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-bold tracking-wider">PRO</span></span>
                                             <span class="mt-1 block text-xs text-slate-500 leading-relaxed">Pesan terkirim otomatis di belakang layar tanpa membuka aplikasi WA. Mendukung Fonnte & WAPlus.</span>
@@ -441,7 +538,10 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                         <!-- STEP 1: DESAIN -->
                         <div id="step-1" class="step-content absolute inset-0 p-6 lg:p-10 transition-transform duration-300 transform translate-x-0 overflow-y-auto custom-scrollbar pb-40">
                             <div class="max-w-3xl mx-auto space-y-8">
-                                <div><h2 class="text-2xl font-bold text-slate-800">Desain & Identitas</h2><p class="text-sm text-slate-500 mt-1">Atur nama form, nomor tujuan, dan percantik tampilan.</p></div>
+                                <div>
+                                    <h2 class="text-2xl font-bold text-slate-800">Desain & Identitas</h2>
+                                    <p class="text-sm text-slate-500 mt-1">Atur nama form, nomor tujuan, dan percantik tampilan.</p>
+                                </div>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="space-y-2 col-span-1 md:col-span-2">
@@ -459,7 +559,9 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                 </div>
 
                                 <div class="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl shadow-sm">
-                                    <h3 class="text-sm font-bold text-emerald-800 mb-4 flex items-center gap-2"><i class="ph-fill ph-whatsapp-logo text-emerald-500 text-lg"></i> Format Pesan WhatsApp</h3>
+                                    <h3 class="text-sm font-bold text-emerald-800 mb-4 flex items-center gap-2">
+                                        <i class="ph-fill ph-whatsapp-logo text-emerald-500 text-lg"></i> Format Pesan WhatsApp
+                                    </h3>
                                     <div class="space-y-4">
                                         <div class="space-y-1.5">
                                             <label class="text-xs font-bold text-emerald-700">Teks Pembuka (Intro)</label>
@@ -473,21 +575,31 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                 </div>
 
                                 <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
-                                    <h3 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2"><i class="ph-fill ph-palette text-blue-500 text-xl"></i> Tema Warna Kustom</h3>
+                                    <h3 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+                                        <i class="ph-fill ph-palette text-blue-500 text-xl"></i> Tema Warna Kustom
+                                    </h3>
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
                                         <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
                                             <label class="block text-sm font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Warna Header</label>
                                             <div class="flex items-center gap-4 mb-4">
-                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer"><input type="radio" name="header_type" value="solid" onchange="toggleColorMode('header')" class="w-4 h-4 text-blue-600"> Solid</label>
-                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer"><input type="radio" name="header_type" value="gradient" checked onchange="toggleColorMode('header')" class="w-4 h-4 text-blue-600"> Gradient</label>
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="header_type" value="solid" onchange="toggleColorMode('header')" class="w-4 h-4 text-blue-600"> Solid
+                                                </label>
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="header_type" value="gradient" checked onchange="toggleColorMode('header')" class="w-4 h-4 text-blue-600"> Gradient
+                                                </label>
                                             </div>
                                             <div id="header-color-inputs" class="flex items-center gap-3"></div>
                                         </div>
                                         <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
                                             <label class="block text-sm font-bold text-slate-700 mb-3 border-b border-slate-100 pb-2">Warna Tombol CTA</label>
                                             <div class="flex items-center gap-4 mb-4">
-                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer"><input type="radio" name="cta_type" value="solid" onchange="toggleColorMode('cta')" class="w-4 h-4 text-blue-600"> Solid</label>
-                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer"><input type="radio" name="cta_type" value="gradient" checked onchange="toggleColorMode('cta')" class="w-4 h-4 text-blue-600"> Gradient</label>
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="cta_type" value="solid" onchange="toggleColorMode('cta')" class="w-4 h-4 text-blue-600"> Solid
+                                                </label>
+                                                <label class="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                                                    <input type="radio" name="cta_type" value="gradient" checked onchange="toggleColorMode('cta')" class="w-4 h-4 text-blue-600"> Gradient
+                                                </label>
                                             </div>
                                             <div id="cta-color-inputs" class="flex items-center gap-3"></div>
                                         </div>
@@ -514,7 +626,9 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                     </div>
                                     <div class="p-6 border border-slate-200 rounded-2xl shadow-sm relative bg-white">
                                         <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
-                                            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2"><i class="ph-fill ph-shield-check text-green-500 text-lg"></i> Trust Badge</h3>
+                                            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                                <i class="ph-fill ph-shield-check text-green-500 text-lg"></i> Trust Badge
+                                            </h3>
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" id="cfg-trust-toggle" class="sr-only peer" checked onchange="updateConfig()">
                                                 <div class="w-9 h-5 bg-slate-200 rounded-full peer peer-checked:bg-green-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
@@ -541,16 +655,46 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                 </div>
                                 <div class="p-4 overflow-y-auto custom-scrollbar flex-1 pb-24">
                                     <div class="grid grid-cols-2 gap-2">
-                                        <button onclick="addField('text')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-text-t text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">Teks Pendek</span></button>
-                                        <button onclick="addField('tel')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-whatsapp-logo text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">No. WhatsApp</span></button>
-                                        <button onclick="addField('email')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-purple-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-envelope-simple text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">Email</span></button>
-                                        <button onclick="addField('number')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-orange-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-hash text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">Angka / Qty</span></button>
-                                        <button onclick="addField('textarea')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-400 shadow-sm transition gap-2 text-slate-600 col-span-2"><i class="ph ph-text-align-left text-2xl"></i><span class="text-[11px] font-bold text-center">Paragraf / Alamat</span></button>
-                                        <button onclick="addField('select')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-amber-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-list-dashes text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">Dropdown</span></button>
-                                        <button onclick="addField('date')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-teal-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-calendar-blank text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">Tanggal</span></button>
-                                        <button onclick="addField('time')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-clock text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">Waktu</span></button>
-                                        <button onclick="addField('radio')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-pink-400 shadow-sm transition gap-2 text-slate-600"><i class="ph ph-radio-button text-2xl"></i><span class="text-[11px] font-bold text-center leading-tight">Pilih Satu</span></button>
-                                        <button onclick="addField('checkbox')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-rose-400 shadow-sm transition gap-2 text-slate-600 col-span-2"><i class="ph ph-check-square text-2xl"></i><span class="text-[11px] font-bold text-center">Multi Pilihan (Checklist)</span></button>
+                                        <button onclick="addField('text')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-text-t text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Teks Pendek</span>
+                                        </button>
+                                        <button onclick="addField('tel')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-whatsapp-logo text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">No. WhatsApp</span>
+                                        </button>
+                                        <button onclick="addField('email')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-purple-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-envelope-simple text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Email</span>
+                                        </button>
+                                        <button onclick="addField('number')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-orange-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-hash text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Angka / Qty</span>
+                                        </button>
+                                        <button onclick="addField('textarea')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-400 shadow-sm transition gap-2 text-slate-600 col-span-2">
+                                            <i class="ph ph-text-align-left text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center">Paragraf / Alamat</span>
+                                        </button>
+                                        <button onclick="addField('select')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-amber-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-list-dashes text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Dropdown</span>
+                                        </button>
+                                        <button onclick="addField('date')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-teal-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-calendar-blank text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Tanggal</span>
+                                        </button>
+                                        <button onclick="addField('time')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-clock text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Waktu</span>
+                                        </button>
+                                        <button onclick="addField('radio')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-pink-400 shadow-sm transition gap-2 text-slate-600">
+                                            <i class="ph ph-radio-button text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center leading-tight">Pilih Satu</span>
+                                        </button>
+                                        <button onclick="addField('checkbox')" class="flex flex-col items-center justify-center p-3 bg-white border border-slate-200 rounded-xl hover:border-rose-400 shadow-sm transition gap-2 text-slate-600 col-span-2">
+                                            <i class="ph ph-check-square text-2xl"></i>
+                                            <span class="text-[11px] font-bold text-center">Multi Pilihan (Checklist)</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -565,14 +709,19 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                                         <div class="p-6 pt-0 bg-white">
                                             <div id="canvas-trust" class="bg-blue-50/70 p-4 rounded-xl border border-blue-100 flex items-start gap-3 mb-4">
                                                 <i class="ph-fill ph-shield-check text-blue-500 text-xl mt-0.5"></i>
-                                                <div><h4 id="canvas-trust-title" class="text-sm font-bold text-slate-800">Aman</h4><p id="canvas-trust-desc" class="text-[11px] text-slate-500 mt-1">Desc</p></div>
+                                                <div>
+                                                    <h4 id="canvas-trust-title" class="text-sm font-bold text-slate-800">Aman</h4>
+                                                    <p id="canvas-trust-desc" class="text-[11px] text-slate-500 mt-1">Desc</p>
+                                                </div>
                                             </div>
                                             <button id="canvas-btn" class="w-full py-4 text-white font-bold rounded-xl shadow-md cursor-not-allowed text-base transition-all duration-300">Button</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="absolute bottom-6 right-6 z-20">
-                                    <button onclick="goToStep(3)" class="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-xl hover:scale-105 transition flex items-center gap-2">Simulasi Preview <i class="ph-bold ph-play"></i></button>
+                                    <button onclick="goToStep(3)" class="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-xl hover:scale-105 transition flex items-center gap-2">
+                                        Simulasi Preview <i class="ph-bold ph-play"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -581,25 +730,36 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                         <div id="step-3" class="step-content absolute inset-0 flex flex-col md:flex-row transition-transform duration-300 transform translate-x-full overflow-y-auto overflow-x-hidden md:overflow-hidden bg-white">
                             <div class="flex-1 p-6 lg:p-10 md:overflow-y-auto custom-scrollbar border-r border-slate-200 relative pb-40 md:pb-32 bg-slate-50/50">
                                 <div class="flex items-center justify-center gap-2 mb-8">
-                                    <span class="h-px w-12 bg-slate-300"></span><h3 class="font-bold text-slate-500 tracking-widest text-xs uppercase flex items-center gap-2"><i class="ph-bold ph-laptop text-lg"></i> Simulasi Halaman Web</h3><span class="h-px w-12 bg-slate-300"></span>
+                                    <span class="h-px w-12 bg-slate-300"></span>
+                                    <h3 class="font-bold text-slate-500 tracking-widest text-xs uppercase flex items-center gap-2"><i class="ph-bold ph-laptop text-lg"></i> Simulasi Halaman Web</h3>
+                                    <span class="h-px w-12 bg-slate-300"></span>
                                 </div>
                                 <div id="preview-wrapper" class="flex justify-center items-start w-full"></div>
                             </div>
                             <div class="w-full md:w-[420px] p-6 lg:p-8 md:overflow-y-auto custom-scrollbar bg-slate-100 flex flex-col items-center pb-40 md:pb-32 relative shadow-inner">
                                 <div class="flex items-center justify-center gap-2 mb-6">
-                                    <span class="h-px w-8 bg-slate-300"></span><h3 class="font-bold text-emerald-600 tracking-widest text-xs uppercase flex items-center gap-1"><i class="ph-fill ph-whatsapp-logo text-lg"></i> Hasil di WhatsApp</h3><span class="h-px w-8 bg-slate-300"></span>
+                                    <span class="h-px w-8 bg-slate-300"></span>
+                                    <h3 class="font-bold text-emerald-600 tracking-widest text-xs uppercase flex items-center gap-1"><i class="ph-fill ph-whatsapp-logo text-lg"></i> Hasil di WhatsApp</h3>
+                                    <span class="h-px w-8 bg-slate-300"></span>
                                 </div>
                                 <div class="w-full max-w-[340px] bg-white rounded-[40px] shadow-2xl border-[10px] border-slate-800 overflow-hidden relative flex flex-col min-h-[550px]">
                                     <div class="absolute top-0 inset-x-0 h-6 bg-slate-800 rounded-b-2xl w-36 mx-auto z-20"></div>
                                     <div class="bg-[#075e54] text-white p-3 pt-8 flex items-center gap-3 relative z-10 shadow-md">
                                         <i class="ph-bold ph-arrow-left text-xl"></i>
-                                        <div class="w-9 h-9 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden"><i class="ph-fill ph-user text-2xl mt-2"></i></div>
-                                        <div class="leading-tight flex-1"><div class="text-base font-bold truncate" id="wa-preview-name">CS Toko</div><div class="text-xs opacity-80">online</div></div>
+                                        <div class="w-9 h-9 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden">
+                                            <i class="ph-fill ph-user text-2xl mt-2"></i>
+                                        </div>
+                                        <div class="leading-tight flex-1">
+                                            <div class="text-base font-bold truncate" id="wa-preview-name">CS Toko</div>
+                                            <div class="text-xs opacity-80">online</div>
+                                        </div>
                                     </div>
                                     <div class="wa-bg flex-1 p-4 flex flex-col gap-3 overflow-y-auto custom-scrollbar relative z-10">
                                         <div class="self-end max-w-[88%] bg-[#dcf8c6] p-3 rounded-xl rounded-tr-none shadow-sm relative text-[14px] text-slate-800 leading-relaxed break-words border border-[#c3e6a8]">
                                             <div id="wa-preview-text" class="whitespace-pre-wrap font-sans"></div>
-                                            <div class="text-[10px] text-slate-500 text-right mt-1.5 flex justify-end items-center gap-1">10:48 <i class="ph-bold ph-checks text-blue-500 text-sm"></i></div>
+                                            <div class="text-[10px] text-slate-500 text-right mt-1.5 flex justify-end items-center gap-1">
+                                                10:48 <i class="ph-bold ph-checks text-blue-500 text-sm"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -610,13 +770,19 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                         <div id="step-4" class="step-content absolute inset-0 p-6 lg:p-10 transition-transform duration-300 transform translate-x-full overflow-y-auto custom-scrollbar flex flex-col bg-white pb-40">
                             <div class="max-w-4xl mx-auto w-full flex-1 flex flex-col min-h-full">
                                 <div class="text-center mb-8">
-                                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4"><i class="ph-bold ph-check text-3xl"></i></div>
+                                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="ph-bold ph-check text-3xl"></i>
+                                    </div>
                                     <h2 class="text-3xl font-bold text-slate-800">Form Siap Digunakan!</h2>
                                     <p class="text-slate-500 mt-2 text-lg">Salin kode HTML di bawah ini atau simpan ke Dashboard Anda.</p>
                                 </div>
                                 <div class="flex-1 flex flex-col bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl mb-6 min-h-[350px]">
                                     <div class="flex justify-between items-center px-5 py-3.5 border-b border-slate-700 bg-slate-800/80 backdrop-blur">
-                                        <div class="flex gap-2"><div class="w-3.5 h-3.5 rounded-full bg-rose-500"></div><div class="w-3.5 h-3.5 rounded-full bg-amber-500"></div><div class="w-3.5 h-3.5 rounded-full bg-green-500"></div></div>
+                                        <div class="flex gap-2">
+                                            <div class="w-3.5 h-3.5 rounded-full bg-rose-500"></div>
+                                            <div class="w-3.5 h-3.5 rounded-full bg-amber-500"></div>
+                                            <div class="w-3.5 h-3.5 rounded-full bg-green-500"></div>
+                                        </div>
                                         <span class="text-slate-400 font-mono text-xs">index.html (HTML + CSS + Script)</span>
                                     </div>
                                     <textarea id="output-code" class="flex-1 w-full bg-transparent text-emerald-400 p-6 font-mono text-[13px] leading-relaxed focus:outline-none resize-none custom-scrollbar" readonly></textarea>
@@ -665,9 +831,13 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
         </div>
     </div>
 
-    <div id="toast" class="toast flex items-center gap-2"><i class="ph-fill ph-info text-blue-400 text-lg"></i> <span id="toast-msg">Pesan</span></div>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast flex items-center gap-2">
+        <i class="ph-fill ph-info text-blue-400 text-lg"></i> 
+        <span id="toast-msg">Pesan</span>
+    </div>
 
-    <!-- SEMUA SCRIPT DAN LOGIKA 100% LENGKAP -->
+    <!-- SEMUA SCRIPT DAN LOGIKA -->
     <script>
         // ANTI-INSPECT SECURITY
         document.addEventListener('contextmenu', event => event.preventDefault()); 
@@ -721,20 +891,36 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
         let currentCategoryFilter = 'Semua';
         
         let globalSettings = JSON.parse(localStorage.getItem('imersfow_global')) || {
-            sheetUrl: '', waGateway: 'wa_me', apiProvider: 'fonnte', apiToken: '', apiSender: ''
+            sheetUrl: '', 
+            waGateway: 'wa_me', 
+            apiProvider: 'fonnte', 
+            apiToken: '', 
+            apiSender: ''
         };
         
         let defaultFormConfig = {
-            title: 'Form Baru', waNumber: '6281234567890', waIntro: 'Halo Admin, ini data saya:', waFooter: 'Terima kasih.',
-            btnText: 'Kirim Data', basePrice: 0, headerBg: '#1e3a8a', ctaBg: '#2563eb',
-            logoUrl: '', displayMode: 'embed', trustBadge: true, trustTitle: 'Aman & Terpercaya', trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.'
+            title: 'Form Baru', 
+            waNumber: '6281234567890', 
+            waIntro: 'Halo Admin, ini data saya:', 
+            waFooter: 'Terima kasih.',
+            btnText: 'Kirim Data', 
+            basePrice: 0, 
+            headerBg: '#1e3a8a', 
+            ctaBg: '#2563eb',
+            logoUrl: '', 
+            displayMode: 'embed', 
+            trustBadge: true, 
+            trustTitle: 'Aman & Terpercaya', 
+            trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.'
         };
+        
         let defaultFormFields = [
             { id: 'f1', type: 'text', label: 'Nama Lengkap', required: true, placeholder: 'Sesuai KTP' },
             { id: 'f2', type: 'tel', label: 'Nomor WhatsApp', required: true, placeholder: '08xx' }
         ];
 
-        let formConfig = {}; let formFields = [];
+        let formConfig = {}; 
+        let formFields = [];
         let availableTemplates = {};
 
         // DYNAMIC SCRIPT LOADER (templates.js)
@@ -761,11 +947,14 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
             const sidebar = document.getElementById('category-sidebar');
             let uniqueCategories = new Set();
             for (const key in availableTemplates) {
-                if (availableTemplates[key].category) uniqueCategories.add(availableTemplates[key].category);
+                if (availableTemplates[key].category) {
+                    uniqueCategories.add(availableTemplates[key].category);
+                }
             }
             
             let html = `<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Kategori</p>`;
             html += `<button onclick="filterTemplates('Semua')" id="btn-cat-Semua" class="cat-btn text-left px-4 py-2.5 rounded-xl bg-blue-100 text-blue-700 font-bold text-sm transition w-full">Semua Template</button>`;
+            
             uniqueCategories.forEach(cat => {
                 const safeId = cat.replace(/[^a-zA-Z0-9]/g, '-');
                 html += `<button onclick="filterTemplates('${cat}')" id="btn-cat-${safeId}" class="cat-btn text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-200 font-medium text-sm transition w-full">${cat}</button>`;
@@ -777,11 +966,16 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
             const grid = document.getElementById('template-grid');
             grid.innerHTML = `
                 <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition min-h-[220px]">
-                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4"><i class="ph-bold ph-plus text-3xl"></i></div>
-                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3><p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
                 </div>
                 <div class="col-span-1 md:col-span-2 p-6 text-center text-rose-600 font-medium bg-rose-50 rounded-2xl border border-rose-200">
-                    <i class="ph-fill ph-warning-circle text-4xl mb-3"></i><p class="font-bold">Gagal Membaca Template!</p><p class="text-sm mt-1 text-rose-500">Diagnosa: ${message}</p>
+                    <i class="ph-fill ph-warning-circle text-4xl mb-3"></i>
+                    <p class="font-bold">Gagal Membaca Template!</p>
+                    <p class="text-sm mt-1 text-rose-500">Diagnosa: ${message}</p>
                 </div>
             `;
         }
@@ -790,18 +984,30 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
             const grid = document.getElementById('template-grid');
             let html = `
                 <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
-                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition"><i class="ph-bold ph-plus text-3xl"></i></div>
-                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3><p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
                 </div>
             `; 
+            
             for (const key in availableTemplates) {
                 const tpl = availableTemplates[key];
                 if (categoryFilter === 'Semua' || tpl.category === categoryFilter) {
                     html += `
                     <div onclick="useTemplate('${key}')" class="border border-slate-200 rounded-2xl p-6 flex flex-col cursor-pointer hover:border-${tpl.color.split('-')[1]}-500 hover:shadow-lg transition bg-white group min-h-[220px] relative overflow-hidden">
-                        <div class="w-14 h-14 rounded-xl ${tpl.bg} ${tpl.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i class="ph-fill ${tpl.icon} text-3xl"></i></div>
-                        <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3><p class="text-xs text-slate-500 mb-4 line-clamp-2">Kategori: <b>${tpl.category || 'Lainnya'}</b>.</p>
-                        <div class="mt-auto flex items-center justify-between"><span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span><div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition"><i class="ph-bold ph-arrow-right"></i></div></div>
+                        <div class="w-14 h-14 rounded-xl ${tpl.bg} ${tpl.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ${tpl.icon} text-3xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-1">${tpl.name}</h3>
+                        <p class="text-xs text-slate-500 mb-4 line-clamp-2">Kategori: <b>${tpl.category || 'Lainnya'}</b>.</p>
+                        <div class="mt-auto flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-400">${tpl.fields.length} Field Data</span>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition">
+                                <i class="ph-bold ph-arrow-right"></i>
+                            </div>
+                        </div>
                     </div>`;
                 }
             }
@@ -810,24 +1016,34 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
 
         function filterTemplates(category) {
             currentCategoryFilter = category;
+            
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.classList.remove('bg-blue-100', 'text-blue-700', 'font-bold');
                 btn.classList.add('text-slate-600', 'hover:bg-slate-200', 'font-medium');
             });
+            
             const safeId = category.replace(/[^a-zA-Z0-9]/g, '-');
             const activeBtn = document.getElementById('btn-cat-' + safeId);
+            
             if (activeBtn) {
                 activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-200', 'font-medium');
                 activeBtn.classList.add('bg-blue-100', 'text-blue-700', 'font-bold');
             }
+            
             renderTemplateCards(category);
         }
 
-        function openTemplateModal() { document.getElementById('template-modal').classList.add('show'); }
-        function closeTemplateModal() { document.getElementById('template-modal').classList.remove('show'); }
+        function openTemplateModal() { 
+            document.getElementById('template-modal').classList.add('show'); 
+        }
+        
+        function closeTemplateModal() { 
+            document.getElementById('template-modal').classList.remove('show'); 
+        }
 
         function useTemplate(key) {
             closeTemplateModal();
+            
             if(key === 'blank') {
                 formConfig = JSON.parse(JSON.stringify(defaultFormConfig));
                 formFields = JSON.parse(JSON.stringify(defaultFormFields));
@@ -841,39 +1057,67 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                 document.querySelector('input[name="cta_type"][value="gradient"]').checked = true;
             }
 
-            document.getElementById('cfg-title').value = formConfig.title; document.getElementById('cfg-wa').value = formConfig.waNumber;
-            document.getElementById('cfg-wa-intro').value = formConfig.waIntro; document.getElementById('cfg-wa-footer').value = formConfig.waFooter;
-            document.getElementById('cfg-btn-text').value = formConfig.btnText; document.getElementById('cfg-logo').value = formConfig.logoUrl;
-            document.querySelector(`input[name="displayMode"][value="${formConfig.displayMode}"]`).checked = true;
-            document.getElementById('cfg-trust-toggle').checked = formConfig.trustBadge; document.getElementById('cfg-trust-title').value = formConfig.trustTitle; document.getElementById('cfg-trust-desc').value = formConfig.trustDesc;
+            document.getElementById('cfg-title').value = formConfig.title; 
+            document.getElementById('cfg-wa').value = formConfig.waNumber;
+            document.getElementById('cfg-wa-intro').value = formConfig.waIntro; 
+            document.getElementById('cfg-wa-footer').value = formConfig.waFooter;
+            document.getElementById('cfg-btn-text').value = formConfig.btnText; 
+            document.getElementById('cfg-logo').value = formConfig.logoUrl;
             
-            toggleColorMode('header'); toggleColorMode('cta'); updateConfig();
-            switchTab('builder'); goToStep(1);
+            document.querySelector(`input[name="displayMode"][value="${formConfig.displayMode}"]`).checked = true;
+            
+            document.getElementById('cfg-trust-toggle').checked = formConfig.trustBadge; 
+            document.getElementById('cfg-trust-title').value = formConfig.trustTitle; 
+            document.getElementById('cfg-trust-desc').value = formConfig.trustDesc;
+            
+            toggleColorMode('header'); 
+            toggleColorMode('cta'); 
+            updateConfig();
+            
+            switchTab('builder'); 
+            goToStep(1);
         }
 
         function switchTab(viewId) {
-            ['dashboard', 'builder', 'sequence', 'settings', 'tutorial'].forEach(v => {
+            const views = ['dashboard', 'builder', 'sequence', 'settings', 'tutorial'];
+            
+            views.forEach(v => {
                 document.getElementById('view-' + v).classList.add('hidden');
                 document.getElementById('nav-' + v).classList.remove('bg-slate-800', 'text-white');
                 document.getElementById('nav-' + v).classList.add('text-slate-300');
             });
+            
             document.getElementById('view-' + viewId).classList.remove('hidden');
             document.getElementById('nav-' + viewId).classList.add('bg-slate-800', 'text-white');
             document.getElementById('nav-' + viewId).classList.remove('text-slate-300');
             
-            if(viewId === 'dashboard') renderDashboard();
-            if(viewId === 'settings') loadGlobalSettings();
+            if(viewId === 'dashboard') {
+                renderDashboard();
+            }
+            if(viewId === 'settings') {
+                loadGlobalSettings();
+            }
         }
 
         function showToast(msg) {
-            const toast = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg;
-            toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000);
+            const toast = document.getElementById('toast'); 
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.add('show'); 
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
         function renderDashboard() {
             document.getElementById('stat-total-forms').innerText = savedForms.length;
-            let totalLeads = 0; savedForms.forEach(f => { totalLeads += (f.leads || 0); });
+            
+            let totalLeads = 0; 
+            savedForms.forEach(f => { 
+                totalLeads += (f.leads || 0); 
+            });
             document.getElementById('stat-total-leads').innerText = totalLeads.toLocaleString();
+            
             let conversionRateStr = "0.0%";
             if(savedForms.length > 0) {
                 let finalConv = 8.5 + (savedForms.length * 0.4) + ((totalLeads % 10) * 0.2);
@@ -881,176 +1125,721 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                 conversionRateStr = finalConv.toFixed(1) + "%";
             }
             document.getElementById('stat-conversion-rate').innerText = conversionRateStr;
-            const tbody = document.getElementById('dashboard-table-body'); tbody.innerHTML = '';
+            
+            const tbody = document.getElementById('dashboard-table-body'); 
+            tbody.innerHTML = '';
+            
             if(savedForms.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-slate-500 font-medium">Belum ada form yang tersimpan. Ayo buat form pertama Anda!</td></tr>`; return;
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-slate-500 font-medium">Belum ada form yang tersimpan. Ayo buat form pertama Anda!</td></tr>`; 
+                return;
             }
+            
             savedForms.forEach(form => {
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
-                        <td class="px-6 py-4 font-bold text-slate-900">${form.title}</td><td class="px-6 py-4 text-slate-500 text-sm">${form.date}</td>
-                        <td class="px-6 py-4 text-center"><span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-bold inline-block">Aktif</span></td>
-                        <td class="px-6 py-4 text-center"><div class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold text-sm border border-blue-100"><i class="ph-fill ph-users"></i> ${form.leads || 0}</div></td>
-                        <td class="px-6 py-4 text-right"><button onclick="deleteForm('${form.id}')" class="text-rose-600 hover:text-white font-bold bg-rose-50 hover:bg-rose-500 px-3 py-1.5 rounded-lg transition text-xs">Hapus</button></td>
+                        <td class="px-6 py-4 font-bold text-slate-900">${form.title}</td>
+                        <td class="px-6 py-4 text-slate-500 text-sm">${form.date}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-bold inline-block">Aktif</span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-bold text-sm border border-blue-100">
+                                <i class="ph-fill ph-users"></i> ${form.leads || 0}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="deleteForm('${form.id}')" class="text-rose-600 hover:text-white font-bold bg-rose-50 hover:bg-rose-500 px-3 py-1.5 rounded-lg transition text-xs">Hapus</button>
+                        </td>
                     </tr>`;
             });
         }
 
         function saveFormToDashboard() {
-            const newForm = { id: 'frm_' + Date.now(), title: formConfig.title, date: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }), leads: Math.floor(Math.random() * 25) + 5 };
-            savedForms.unshift(newForm); localStorage.setItem('imersfow_forms', JSON.stringify(savedForms));
+            const newForm = { 
+                id: 'frm_' + Date.now(), 
+                title: formConfig.title, 
+                date: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }), 
+                leads: Math.floor(Math.random() * 25) + 5 
+            };
+            
+            savedForms.unshift(newForm); 
+            localStorage.setItem('imersfow_forms', JSON.stringify(savedForms));
             showToast('Form berhasil disimpan & dipublish!');
-            setTimeout(() => { switchTab('dashboard'); }, 1500);
+            
+            setTimeout(() => { 
+                switchTab('dashboard'); 
+            }, 1500);
         }
 
         function deleteForm(id) {
             if(confirm('Yakin ingin menghapus form ini?')) { 
-                savedForms = savedForms.filter(f => f.id !== id); localStorage.setItem('imersfow_forms', JSON.stringify(savedForms)); 
-                renderDashboard(); showToast('Form berhasil dihapus!'); 
+                savedForms = savedForms.filter(f => f.id !== id); 
+                localStorage.setItem('imersfow_forms', JSON.stringify(savedForms)); 
+                renderDashboard(); 
+                showToast('Form berhasil dihapus!'); 
             }
         }
 
         function loadGlobalSettings() {
             document.getElementById('global-sheet-url').value = globalSettings.sheetUrl || '';
+            
             const waRadios = document.getElementsByName('wa_gateway');
-            for(let i=0; i<waRadios.length; i++){ if(waRadios[i].value === globalSettings.waGateway) waRadios[i].checked = true; }
+            for(let i = 0; i < waRadios.length; i++) { 
+                if(waRadios[i].value === globalSettings.waGateway) {
+                    waRadios[i].checked = true; 
+                }
+            }
+            
             document.getElementById('api-provider').value = globalSettings.apiProvider || 'fonnte';
             document.getElementById('api-token').value = globalSettings.apiToken || '';
             document.getElementById('api-sender').value = globalSettings.apiSender || '';
+            
             toggleWaSettings(); 
         }
 
         function toggleWaSettings() {
             const isApi = document.querySelector('input[name="wa_gateway"]:checked').value === 'api';
             const apiBox = document.getElementById('api-settings-box');
-            if(isApi) apiBox.classList.remove('hidden'); else apiBox.classList.add('hidden');
+            
+            if(isApi) {
+                apiBox.classList.remove('hidden'); 
+            } else {
+                apiBox.classList.add('hidden');
+            }
         }
 
         function saveGlobalSettings() {
-            globalSettings.sheetUrl = document.getElementById('global-sheet-url').value; globalSettings.waGateway = document.querySelector('input[name="wa_gateway"]:checked').value;
-            globalSettings.apiProvider = document.getElementById('api-provider').value; globalSettings.apiToken = document.getElementById('api-token').value; globalSettings.apiSender = document.getElementById('api-sender').value;
+            globalSettings.sheetUrl = document.getElementById('global-sheet-url').value; 
+            globalSettings.waGateway = document.querySelector('input[name="wa_gateway"]:checked').value;
+            globalSettings.apiProvider = document.getElementById('api-provider').value; 
+            globalSettings.apiToken = document.getElementById('api-token').value; 
+            globalSettings.apiSender = document.getElementById('api-sender').value;
+            
             localStorage.setItem('imersfow_global', JSON.stringify(globalSettings));
+            
             if(globalSettings.sheetUrl && globalSettings.sheetUrl.startsWith('http')) {
                 showToast('Menyinkronkan pengaturan ke Google Sheets...');
-                fetch(globalSettings.sheetUrl, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: "save_config", waGateway: globalSettings.waGateway, apiProvider: globalSettings.apiProvider, apiToken: globalSettings.apiToken, apiSender: globalSettings.apiSender }) }).then(() => { setTimeout(() => showToast('Konfigurasi WA berhasil disinkronkan ke Database!'), 1000); });
-            } else { showToast('Pengaturan lokal disimpan. Wajib isi URL Web App agar aktif!'); }
+                
+                fetch(globalSettings.sheetUrl, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ 
+                        action: "save_config", 
+                        waGateway: globalSettings.waGateway, 
+                        apiProvider: globalSettings.apiProvider, 
+                        apiToken: globalSettings.apiToken, 
+                        apiSender: globalSettings.apiSender 
+                    }) 
+                }).then(() => { 
+                    setTimeout(() => {
+                        showToast('Konfigurasi WA berhasil disinkronkan ke Database!');
+                    }, 1000); 
+                });
+            } else { 
+                showToast('Pengaturan lokal disimpan. Wajib isi URL Web App agar aktif!'); 
+            }
         }
 
         function goToStep(step) {
-            currentStep = step; document.getElementById('progress-bar').style.width = ((step - 1) / 3) * 100 + '%';
+            currentStep = step; 
+            document.getElementById('progress-bar').style.width = ((step - 1) / 3) * 100 + '%';
+            
             document.querySelectorAll('.step-btn').forEach(btn => {
-                const s = parseInt(btn.getAttribute('data-step')); const circle = btn.querySelector('.step-circle');
-                if (s <= step) { circle.classList.add('bg-rose-500', 'text-white', 'border-rose-500'); circle.classList.remove('bg-white', 'text-slate-400', 'border-slate-300'); } 
-                else { circle.classList.remove('bg-rose-500', 'text-white', 'border-rose-500'); circle.classList.add('bg-white', 'text-slate-400', 'border-slate-300'); }
+                const s = parseInt(btn.getAttribute('data-step')); 
+                const circle = btn.querySelector('.step-circle');
+                
+                if (s <= step) { 
+                    circle.classList.add('bg-rose-500', 'text-white', 'border-rose-500'); 
+                    circle.classList.remove('bg-white', 'text-slate-400', 'border-slate-300'); 
+                } else { 
+                    circle.classList.remove('bg-rose-500', 'text-white', 'border-rose-500'); 
+                    circle.classList.add('bg-white', 'text-slate-400', 'border-slate-300'); 
+                }
             });
+            
             for (let i = 1; i <= 4; i++) {
                 const el = document.getElementById('step-' + i);
-                if (i === step) { el.style.transform = 'translateX(0)'; el.style.opacity = '1'; el.style.pointerEvents = 'auto'; el.style.zIndex = '10'; } 
-                else if (i < step) { el.style.transform = 'translateX(-100%)'; el.style.opacity = '0'; el.style.pointerEvents = 'none'; el.style.zIndex = '0'; } 
-                else { el.style.transform = 'translateX(100%)'; el.style.opacity = '0'; el.style.pointerEvents = 'none'; el.style.zIndex = '0'; }
+                if (i === step) { 
+                    el.style.transform = 'translateX(0)'; 
+                    el.style.opacity = '1'; 
+                    el.style.pointerEvents = 'auto'; 
+                    el.style.zIndex = '10'; 
+                } else if (i < step) { 
+                    el.style.transform = 'translateX(-100%)'; 
+                    el.style.opacity = '0'; 
+                    el.style.pointerEvents = 'none'; 
+                    el.style.zIndex = '0'; 
+                } else { 
+                    el.style.transform = 'translateX(100%)'; 
+                    el.style.opacity = '0'; 
+                    el.style.pointerEvents = 'none'; 
+                    el.style.zIndex = '0'; 
+                }
             }
-            if(step === 2) renderCanvas(); if(step === 3) renderPreview(); if(step === 4) generateCode();
+            
+            if(step === 2) renderCanvas(); 
+            if(step === 3) renderPreview(); 
+            if(step === 4) generateCode();
         }
 
         function toggleColorMode(target) {
-            const type = document.querySelector(`input[name="${target}_type"]:checked`).value; const container = document.getElementById(`${target}-color-inputs`);
-            if (type === 'solid') { container.innerHTML = `<div class="flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-xl"><input type="color" id="${target}-c1" value="${target==='header'?'#1e3a8a':'#2563eb'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer"><span class="text-xs font-bold text-slate-500">Pilih Warna</span></div>`; } 
-            else { container.innerHTML = `<div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl"><input type="color" id="${target}-c1" value="${target==='header'?'#0ea5e9':'#60a5fa'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer"><i class="ph-bold ph-arrow-right text-slate-400"></i><input type="color" id="${target}-c2" value="${target==='header'?'#1e3a8a':'#2563eb'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer"></div>`; }
+            const type = document.querySelector(`input[name="${target}_type"]:checked`).value; 
+            const container = document.getElementById(`${target}-color-inputs`);
+            
+            if (type === 'solid') { 
+                container.innerHTML = `
+                    <div class="flex items-center gap-3 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <input type="color" id="${target}-c1" value="${target==='header'?'#1e3a8a':'#2563eb'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer">
+                        <span class="text-xs font-bold text-slate-500">Pilih Warna</span>
+                    </div>`; 
+            } else { 
+                container.innerHTML = `
+                    <div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl">
+                        <input type="color" id="${target}-c1" value="${target==='header'?'#0ea5e9':'#60a5fa'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer">
+                        <i class="ph-bold ph-arrow-right text-slate-400"></i>
+                        <input type="color" id="${target}-c2" value="${target==='header'?'#1e3a8a':'#2563eb'}" oninput="buildColors('${target}')" class="w-10 h-10 p-0 border-0 rounded cursor-pointer">
+                    </div>`; 
+            }
             buildColors(target); 
         }
 
         function buildColors(target) {
-            const type = document.querySelector(`input[name="${target}_type"]:checked`).value; let finalColor = '';
-            if (type === 'solid') { finalColor = document.getElementById(`${target}-c1`).value; } else { finalColor = `linear-gradient(135deg, ${document.getElementById(`${target}-c1`).value}, ${document.getElementById(`${target}-c2`).value})`; }
-            if(target === 'header') formConfig.headerBg = finalColor; if(target === 'cta') formConfig.ctaBg = finalColor;
+            const type = document.querySelector(`input[name="${target}_type"]:checked`).value; 
+            let finalColor = '';
+            
+            if (type === 'solid') { 
+                finalColor = document.getElementById(`${target}-c1`).value; 
+            } else { 
+                finalColor = `linear-gradient(135deg, ${document.getElementById(`${target}-c1`).value}, ${document.getElementById(`${target}-c2`).value})`; 
+            }
+            
+            if(target === 'header') formConfig.headerBg = finalColor; 
+            if(target === 'cta') formConfig.ctaBg = finalColor;
         }
 
         function updateConfig() {
-            formConfig.title = document.getElementById('cfg-title').value; formConfig.waNumber = document.getElementById('cfg-wa').value;
-            formConfig.waIntro = document.getElementById('cfg-wa-intro').value; formConfig.waFooter = document.getElementById('cfg-wa-footer').value;
-            formConfig.btnText = document.getElementById('cfg-btn-text').value; formConfig.logoUrl = document.getElementById('cfg-logo').value;
+            formConfig.title = document.getElementById('cfg-title').value; 
+            formConfig.waNumber = document.getElementById('cfg-wa').value;
+            formConfig.waIntro = document.getElementById('cfg-wa-intro').value; 
+            formConfig.waFooter = document.getElementById('cfg-wa-footer').value;
+            formConfig.btnText = document.getElementById('cfg-btn-text').value; 
+            formConfig.logoUrl = document.getElementById('cfg-logo').value;
             formConfig.displayMode = document.querySelector('input[name="displayMode"]:checked').value;
             formConfig.trustBadge = document.getElementById('cfg-trust-toggle').checked;
-            formConfig.trustTitle = document.getElementById('cfg-trust-title').value; formConfig.trustDesc = document.getElementById('cfg-trust-desc').value;
+            formConfig.trustTitle = document.getElementById('cfg-trust-title').value; 
+            formConfig.trustDesc = document.getElementById('cfg-trust-desc').value;
+            
             const trustInputs = document.getElementById('trust-inputs');
-            if(formConfig.trustBadge) { trustInputs.style.opacity = '1'; trustInputs.style.pointerEvents = 'auto'; } else { trustInputs.style.opacity = '0.5'; trustInputs.style.pointerEvents = 'none'; }
+            if(formConfig.trustBadge) { 
+                trustInputs.style.opacity = '1'; 
+                trustInputs.style.pointerEvents = 'auto'; 
+            } else { 
+                trustInputs.style.opacity = '0.5'; 
+                trustInputs.style.pointerEvents = 'none'; 
+            }
         }
 
-        function generateId() { return 'f_' + Math.random().toString(36).substr(2, 6); }
-        function getFieldLabelText(type) { const dict = { 'text':'Teks Pendek', 'tel':'No. WhatsApp', 'email':'Alamat Email', 'number':'Angka/Qty', 'textarea':'Alamat Lengkap', 'select':'Pilih Dropdown', 'date':'Tanggal', 'time':'Waktu', 'radio':'Pilihan Tunggal', 'checkbox':'Pilihan Banyak' }; return dict[type] || 'Field Baru'; }
+        function generateId() { 
+            return 'f_' + Math.random().toString(36).substr(2, 6); 
+        }
+        
+        function getFieldLabelText(type) { 
+            const dict = { 
+                'text':'Teks Pendek', 'tel':'No. WhatsApp', 'email':'Alamat Email', 
+                'number':'Angka/Qty', 'textarea':'Alamat Lengkap', 'select':'Pilih Dropdown', 
+                'date':'Tanggal', 'time':'Waktu', 'radio':'Pilihan Tunggal', 'checkbox':'Pilihan Banyak' 
+            }; 
+            return dict[type] || 'Field Baru'; 
+        }
 
         function addField(type) {
-            let field = { id: generateId(), type: type, label: getFieldLabelText(type), required: false, placeholder: '' };
-            if(['select', 'radio', 'checkbox'].includes(type)) field.options = 'Opsi A, Opsi B, Opsi C';
-            formFields.push(field); renderCanvas();
-            setTimeout(() => { const wrap = document.getElementById('step-2').querySelector('.flex-1'); wrap.scrollTo({ top: wrap.scrollHeight, behavior: 'smooth' }); }, 100);
+            let field = { 
+                id: generateId(), 
+                type: type, 
+                label: getFieldLabelText(type), 
+                required: false, 
+                placeholder: '' 
+            };
+            
+            if(['select', 'radio', 'checkbox'].includes(type)) {
+                field.options = 'Opsi A, Opsi B, Opsi C';
+            }
+            
+            formFields.push(field); 
+            renderCanvas();
+            
+            setTimeout(() => { 
+                const wrap = document.getElementById('step-2').querySelector('.flex-1'); 
+                wrap.scrollTo({ top: wrap.scrollHeight, behavior: 'smooth' }); 
+            }, 100);
         }
 
-        function removeField(id) { formFields = formFields.filter(f => f.id !== id); renderCanvas(); }
-        function updateField(id, key, value) { const field = formFields.find(f => f.id === id); if(field) { if(key === 'required') field[key] = value === 'true'; else field[key] = value; } if(key === 'options') renderCanvas(); }
+        function removeField(id) { 
+            formFields = formFields.filter(f => f.id !== id); 
+            renderCanvas(); 
+        }
+        
+        function updateField(id, key, value) { 
+            const field = formFields.find(f => f.id === id); 
+            if(field) { 
+                if(key === 'required') {
+                    field[key] = value === 'true'; 
+                } else {
+                    field[key] = value; 
+                }
+            } 
+            if(key === 'options') {
+                renderCanvas(); 
+            }
+        }
 
         function renderCanvas() {
-            document.getElementById('canvas-header').style.background = formConfig.headerBg; document.getElementById('canvas-btn').style.background = formConfig.ctaBg;
-            document.getElementById('canvas-btn').innerText = formConfig.btnText; document.getElementById('canvas-title').innerText = formConfig.title;
-            const logoEl = document.getElementById('canvas-logo'); if(formConfig.logoUrl) { logoEl.src = formConfig.logoUrl; logoEl.style.display = 'block'; } else { logoEl.style.display = 'none'; }
-            const trustEl = document.getElementById('canvas-trust'); if(formConfig.trustBadge) { trustEl.style.display = 'flex'; document.getElementById('canvas-trust-title').innerText = formConfig.trustTitle; document.getElementById('canvas-trust-desc').innerText = formConfig.trustDesc; } else { trustEl.style.display = 'none'; }
-            const container = document.getElementById('canvas-fields'); container.innerHTML = '';
+            document.getElementById('canvas-header').style.background = formConfig.headerBg; 
+            document.getElementById('canvas-btn').style.background = formConfig.ctaBg;
+            document.getElementById('canvas-btn').innerText = formConfig.btnText; 
+            document.getElementById('canvas-title').innerText = formConfig.title;
+            
+            const logoEl = document.getElementById('canvas-logo'); 
+            if(formConfig.logoUrl) { 
+                logoEl.src = formConfig.logoUrl; 
+                logoEl.style.display = 'block'; 
+            } else { 
+                logoEl.style.display = 'none'; 
+            }
+            
+            const trustEl = document.getElementById('canvas-trust'); 
+            if(formConfig.trustBadge) { 
+                trustEl.style.display = 'flex'; 
+                document.getElementById('canvas-trust-title').innerText = formConfig.trustTitle; 
+                document.getElementById('canvas-trust-desc').innerText = formConfig.trustDesc; 
+            } else { 
+                trustEl.style.display = 'none'; 
+            }
+            
+            const container = document.getElementById('canvas-fields'); 
+            container.innerHTML = '';
             
             formFields.forEach((f) => {
-                const div = document.createElement('div'); div.className = 'group relative p-4 -mx-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200';
+                const div = document.createElement('div'); 
+                div.className = 'group relative p-4 -mx-4 rounded-xl hover:bg-slate-50 transition border border-transparent hover:border-slate-200';
+                
                 let inputHtml = '';
-                if(['text', 'tel', 'email', 'number', 'date', 'time'].includes(f.type)) { inputHtml = `<input type="${f.type}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none" placeholder="${f.placeholder}">`; } 
-                else if (f.type === 'textarea') { inputHtml = `<textarea class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none resize-none" rows="2" placeholder="${f.placeholder}"></textarea>`; } 
-                else if (f.type === 'select') { inputHtml = `<select class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none"><option>Pilih...</option></select>`; } 
-                else if (f.type === 'radio') { inputHtml = `<div class="mt-2 space-y-2 pointer-events-none">`; (f.options || '').split(',').forEach(o => { inputHtml += `<label class="flex items-center gap-2 text-sm text-slate-600"><input type="radio" class="accent-blue-500"> ${o.trim()}</label>`; }); inputHtml += `</div>`; } 
-                else if (f.type === 'checkbox') { inputHtml = `<div class="mt-2 space-y-2 pointer-events-none">`; (f.options || '').split(',').forEach(o => { inputHtml += `<label class="flex items-center gap-2 text-sm text-slate-600"><input type="checkbox" class="accent-blue-500 rounded"> ${o.trim()}</label>`; }); inputHtml += `</div>`; }
+                
+                if(['text', 'tel', 'email', 'number', 'date', 'time'].includes(f.type)) { 
+                    inputHtml = `<input type="${f.type}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none" placeholder="${f.placeholder}">`; 
+                } else if (f.type === 'textarea') { 
+                    inputHtml = `<textarea class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none resize-none" rows="2" placeholder="${f.placeholder}"></textarea>`; 
+                } else if (f.type === 'select') { 
+                    inputHtml = `<select class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm mt-2 pointer-events-none"><option>Pilih...</option></select>`; 
+                } else if (f.type === 'radio') { 
+                    inputHtml = `<div class="mt-2 space-y-2 pointer-events-none">`; 
+                    (f.options || '').split(',').forEach(o => { 
+                        inputHtml += `<label class="flex items-center gap-2 text-sm text-slate-600"><input type="radio" class="accent-blue-500"> ${o.trim()}</label>`; 
+                    }); 
+                    inputHtml += `</div>`; 
+                } else if (f.type === 'checkbox') { 
+                    inputHtml = `<div class="mt-2 space-y-2 pointer-events-none">`; 
+                    (f.options || '').split(',').forEach(o => { 
+                        inputHtml += `<label class="flex items-center gap-2 text-sm text-slate-600"><input type="checkbox" class="accent-blue-500 rounded"> ${o.trim()}</label>`; 
+                    }); 
+                    inputHtml += `</div>`; 
+                }
 
-                div.innerHTML = `<div class="flex justify-between items-center mb-1"><input type="text" value="${f.label}" class="font-bold text-sm text-slate-800 bg-transparent outline-none border-b border-transparent focus:border-blue-500 w-2/3" onchange="updateField('${f.id}', 'label', this.value)"><div class="opacity-0 group-hover:opacity-100 transition flex gap-2"><select class="text-xs border border-slate-300 rounded px-1.5 py-1 text-slate-600 bg-white" onchange="updateField('${f.id}', 'required', this.value)"><option value="false" ${!f.required ? 'selected' : ''}>Opsional</option><option value="true" ${f.required ? 'selected' : ''}>Wajib *</option></select><button onclick="removeField('${f.id}')" class="w-7 h-7 rounded bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition flex items-center justify-center"><i class="ph-bold ph-trash"></i></button></div></div>${['select', 'radio', 'checkbox'].includes(f.type) ? `<input type="text" value="${f.options}" class="w-full text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1.5 rounded outline-none border border-blue-100 mt-1 mb-2" onchange="updateField('${f.id}', 'options', this.value)" placeholder="Opsi A, Opsi B, Opsi C (Pisahkan dgn koma)">` : ''}${!['select', 'radio', 'checkbox'].includes(f.type) ? `<input type="text" value="${f.placeholder}" class="w-full text-xs text-slate-400 bg-transparent outline-none mt-1 mb-1 italic" onchange="updateField('${f.id}', 'placeholder', this.value)" placeholder="Ketik placeholder instruksi...">` : ''}${inputHtml}`;
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <input type="text" value="${f.label}" class="font-bold text-sm text-slate-800 bg-transparent outline-none border-b border-transparent focus:border-blue-500 w-2/3" onchange="updateField('${f.id}', 'label', this.value)">
+                        <div class="opacity-0 group-hover:opacity-100 transition flex gap-2">
+                            <select class="text-xs border border-slate-300 rounded px-1.5 py-1 text-slate-600 bg-white" onchange="updateField('${f.id}', 'required', this.value)">
+                                <option value="false" ${!f.required ? 'selected' : ''}>Opsional</option>
+                                <option value="true" ${f.required ? 'selected' : ''}>Wajib *</option>
+                            </select>
+                            <button onclick="removeField('${f.id}')" class="w-7 h-7 rounded bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition flex items-center justify-center">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    ${['select', 'radio', 'checkbox'].includes(f.type) ? `
+                        <input type="text" value="${f.options}" class="w-full text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1.5 rounded outline-none border border-blue-100 mt-1 mb-2" onchange="updateField('${f.id}', 'options', this.value)" placeholder="Opsi A, Opsi B, Opsi C (Pisahkan dgn koma)">
+                    ` : ''}
+                    ${!['select', 'radio', 'checkbox'].includes(f.type) ? `
+                        <input type="text" value="${f.placeholder}" class="w-full text-xs text-slate-400 bg-transparent outline-none mt-1 mb-1 italic" onchange="updateField('${f.id}', 'placeholder', this.value)" placeholder="Ketik placeholder instruksi...">
+                    ` : ''}
+                    ${inputHtml}
+                `;
                 container.appendChild(div);
             });
         }
 
         function generateCSS() {
-            return `<style>.im-wrapper { font-family: 'Inter', sans-serif; background: #fff; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); overflow: hidden; max-width: 450px; margin: 0 auto; border: 1px solid #e2e8f0; width: 100%; box-sizing: border-box; } .im-header { padding: 24px; text-align: center; color: white; transition: background 0.3s ease; } .im-logo { max-height: 48px; margin: 0 auto 12px auto; display: block; object-fit: contain; } .im-title { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.3; } .im-body { padding: 24px; } .im-group { margin-bottom: 16px; } .im-label { display: block; font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 6px; } .im-input { width: 100%; padding: 12px 16px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; transition: all 0.2s; color: #0f172a; } .im-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); background: #fff; } .im-radio-group, .im-checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; } .im-radio-label, .im-checkbox-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #334155; cursor: pointer; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; transition: background 0.2s; } .im-radio-label:hover, .im-checkbox-label:hover { background: #f1f5f9; } .im-radio-label input, .im-checkbox-label input { accent-color: #3b82f6; width: 16px; height: 16px; cursor: pointer; } .im-footer { margin-top: 24px; } .im-trust { display: flex; gap: 12px; padding: 12px 16px; background: #eff6ff; border: 1px solid #dbeafe; border-radius: 12px; margin-bottom: 16px; align-items: flex-start; } .im-trust-title { font-size: 13px; font-weight: 700; color: #1e3a8a; line-height: 1.2; } .im-trust-desc { font-size: 11px; color: #64748b; margin-top: 4px; line-height: 1.4; } .im-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); } .im-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); } .im-total-box { display: none; justify-content: space-between; align-items: center; padding: 16px; background: #f1f5f9; border-radius: 12px; margin-bottom: 16px; border: 2px dashed #cbd5e1; } .im-total-label { font-size: 14px; font-weight: 700; color: #475569; } .im-total-value { font-size: 18px; font-weight: 800; color: #0f172a; }</style>`;
+            return `
+<style>
+.im-wrapper { 
+    font-family: 'Inter', sans-serif; 
+    background: #fff; 
+    border-radius: 24px; 
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); 
+    overflow: hidden; 
+    max-width: 450px; 
+    margin: 0 auto; 
+    border: 1px solid #e2e8f0; 
+    width: 100%; 
+    box-sizing: border-box; 
+} 
+.im-header { 
+    padding: 24px; 
+    text-align: center; 
+    color: white; 
+    transition: background 0.3s ease; 
+} 
+.im-logo { 
+    max-height: 48px; 
+    margin: 0 auto 12px auto; 
+    display: block; 
+    object-fit: contain; 
+} 
+.im-title { 
+    margin: 0; 
+    font-size: 20px; 
+    font-weight: 700; 
+    line-height: 1.3; 
+} 
+.im-body { 
+    padding: 24px; 
+} 
+.im-group { 
+    margin-bottom: 16px; 
+} 
+.im-label { 
+    display: block; 
+    font-size: 13px; 
+    font-weight: 700; 
+    color: #475569; 
+    margin-bottom: 6px; 
+} 
+.im-input { 
+    width: 100%; 
+    padding: 12px 16px; 
+    background: #f8fafc; 
+    border: 1px solid #cbd5e1; 
+    border-radius: 12px; 
+    font-size: 14px; 
+    box-sizing: border-box; 
+    transition: all 0.2s; 
+    color: #0f172a; 
+} 
+.im-input:focus { 
+    outline: none; 
+    border-color: #3b82f6; 
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1); 
+    background: #fff; 
+} 
+.im-radio-group, .im-checkbox-group { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    margin-top: 8px; 
+} 
+.im-radio-label, .im-checkbox-label { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-size: 14px; 
+    color: #334155; 
+    cursor: pointer; 
+    padding: 8px 12px; 
+    background: #f8fafc; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 10px; 
+    transition: background 0.2s; 
+} 
+.im-radio-label:hover, .im-checkbox-label:hover { 
+    background: #f1f5f9; 
+} 
+.im-radio-label input, .im-checkbox-label input { 
+    accent-color: #3b82f6; 
+    width: 16px; 
+    height: 16px; 
+    cursor: pointer; 
+} 
+.im-footer { 
+    margin-top: 24px; 
+} 
+.im-trust { 
+    display: flex; 
+    gap: 12px; 
+    padding: 12px 16px; 
+    background: #eff6ff; 
+    border: 1px solid #dbeafe; 
+    border-radius: 12px; 
+    margin-bottom: 16px; 
+    align-items: flex-start; 
+} 
+.im-trust-title { 
+    font-size: 13px; 
+    font-weight: 700; 
+    color: #1e3a8a; 
+    line-height: 1.2; 
+} 
+.im-trust-desc { 
+    font-size: 11px; 
+    color: #64748b; 
+    margin-top: 4px; 
+    line-height: 1.4; 
+} 
+.im-btn { 
+    width: 100%; 
+    padding: 14px; 
+    border: none; 
+    border-radius: 12px; 
+    color: white; 
+    font-weight: 700; 
+    font-size: 15px; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+} 
+.im-btn:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+} 
+.im-total-box { 
+    display: none; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 16px; 
+    background: #f1f5f9; 
+    border-radius: 12px; 
+    margin-bottom: 16px; 
+    border: 2px dashed #cbd5e1; 
+} 
+.im-total-label { 
+    font-size: 14px; 
+    font-weight: 700; 
+    color: #475569; 
+} 
+.im-total-value { 
+    font-size: 18px; 
+    font-weight: 800; 
+    color: #0f172a; 
+}
+</style>`;
         }
 
         function generateFormUI(isPreview = false) {
             let fieldsHtml = '';
+            
             formFields.forEach(f => {
-                let reqStar = f.required ? '<span style="color:#e11d48">*</span>' : ''; let reqAttr = f.required ? 'required' : '';
-                fieldsHtml += `<div class="im-group"><label class="im-label">${f.label} ${reqStar}</label>`;
-                if(['text', 'tel', 'email', 'number', 'date', 'time'].includes(f.type)) { fieldsHtml += `<input type="${f.type}" name="${f.label}" class="im-input" placeholder="${f.placeholder}" ${reqAttr}>`; } 
-                else if(f.type === 'textarea') { fieldsHtml += `<textarea name="${f.label}" class="im-input" placeholder="${f.placeholder}" rows="3" ${reqAttr}></textarea>`; } 
-                else if(f.type === 'select') { fieldsHtml += `<select name="${f.label}" class="im-input" ${reqAttr}><option value="">Pilih...</option>`; (f.options || '').split(',').forEach(opt => { fieldsHtml += `<option value="${opt.trim()}">${opt.trim()}</option>`; }); fieldsHtml += `</select>`; } 
-                else if(f.type === 'radio') { fieldsHtml += `<div class="im-radio-group">`; (f.options || '').split(',').forEach(opt => { let val = opt.trim(); fieldsHtml += `<label class="im-radio-label"><input type="radio" name="${f.label}" value="${val}" ${reqAttr}> ${val}</label>`; }); fieldsHtml += `</div>`; } 
-                else if(f.type === 'checkbox') { fieldsHtml += `<div class="im-checkbox-group">`; (f.options || '').split(',').forEach(opt => { let val = opt.trim(); fieldsHtml += `<label class="im-checkbox-label"><input type="checkbox" name="${f.label}" value="${val}"> ${val}</label>`; }); fieldsHtml += `</div>`; }
-                fieldsHtml += `</div>`;
+                let reqStar = f.required ? '<span style="color:#e11d48">*</span>' : ''; 
+                let reqAttr = f.required ? 'required' : '';
+                
+                fieldsHtml += `<div class="im-group">\n`;
+                fieldsHtml += `    <label class="im-label">${f.label} ${reqStar}</label>\n`;
+                
+                if(['text', 'tel', 'email', 'number', 'date', 'time'].includes(f.type)) { 
+                    fieldsHtml += `    <input type="${f.type}" name="${f.label}" class="im-input" placeholder="${f.placeholder}" ${reqAttr}>\n`; 
+                } 
+                else if(f.type === 'textarea') { 
+                    fieldsHtml += `    <textarea name="${f.label}" class="im-input" placeholder="${f.placeholder}" rows="3" ${reqAttr}></textarea>\n`; 
+                } 
+                else if(f.type === 'select') { 
+                    fieldsHtml += `    <select name="${f.label}" class="im-input" ${reqAttr}>\n`;
+                    fieldsHtml += `        <option value="">Pilih...</option>\n`;
+                    (f.options || '').split(',').forEach(opt => { 
+                        fieldsHtml += `        <option value="${opt.trim()}">${opt.trim()}</option>\n`; 
+                    }); 
+                    fieldsHtml += `    </select>\n`; 
+                } 
+                else if(f.type === 'radio') { 
+                    fieldsHtml += `    <div class="im-radio-group">\n`; 
+                    (f.options || '').split(',').forEach(opt => { 
+                        let val = opt.trim(); 
+                        fieldsHtml += `        <label class="im-radio-label"><input type="radio" name="${f.label}" value="${val}" ${reqAttr}> ${val}</label>\n`; 
+                    }); 
+                    fieldsHtml += `    </div>\n`; 
+                } 
+                else if(f.type === 'checkbox') { 
+                    fieldsHtml += `    <div class="im-checkbox-group">\n`; 
+                    (f.options || '').split(',').forEach(opt => { 
+                        let val = opt.trim(); 
+                        fieldsHtml += `        <label class="im-checkbox-label"><input type="checkbox" name="${f.label}" value="${val}"> ${val}</label>\n`; 
+                    }); 
+                    fieldsHtml += `    </div>\n`; 
+                }
+                
+                fieldsHtml += `</div>\n`;
             });
-            const totalHtml = `<div id="im-total-box" class="im-total-box"><span class="im-total-label">Total Pembayaran:</span><span id="im-total-value" class="im-total-value">Rp 0</span></div>`;
-            const trustHtml = formConfig.trustBadge ? `<div class="im-trust"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" style="color:#3b82f6; flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg><div><div class="im-trust-title">${formConfig.trustTitle}</div><div class="im-trust-desc">${formConfig.trustDesc}</div></div></div>` : '';
-            const logoHtml = formConfig.logoUrl ? `<img src="${formConfig.logoUrl}" class="im-logo" alt="Logo">` : '';
+            
+            const totalHtml = `
+                <div id="im-total-box" class="im-total-box">
+                    <span class="im-total-label">Total Pembayaran:</span>
+                    <span id="im-total-value" class="im-total-value">Rp 0</span>
+                </div>
+            `;
+            
+            const trustHtml = formConfig.trustBadge ? `
+                <div class="im-trust">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" style="color:#3b82f6; flex-shrink:0">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                    <div>
+                        <div class="im-trust-title">${formConfig.trustTitle}</div>
+                        <div class="im-trust-desc">${formConfig.trustDesc}</div>
+                    </div>
+                </div>
+            ` : '';
+            
+            const logoHtml = formConfig.logoUrl ? `<img src="${formConfig.logoUrl}" class="im-logo" alt="Logo">\n` : '';
             const submitAction = isPreview ? 'type="button" onclick="showToast(\'Ini Simulasi. Form asli akan memproses data ke Web App.\')"' : 'type="submit"';
-            return `<div class="im-wrapper"><div class="im-header" style="background: ${formConfig.headerBg}">${logoHtml}<h2 class="im-title">${formConfig.title}</h2></div><form id="im-form" class="im-body" onsubmit="return false;">${fieldsHtml}<div class="im-footer">${totalHtml}${trustHtml}<button id="im-submit-btn" ${submitAction} class="im-btn" style="background: ${formConfig.ctaBg}">${formConfig.btnText}</button></div></form></div>`;
+            
+            return `
+<div class="im-wrapper">
+    <div class="im-header" style="background: ${formConfig.headerBg}">
+        ${logoHtml}
+        <h2 class="im-title">${formConfig.title}</h2>
+    </div>
+    <form id="im-form" class="im-body" onsubmit="return false;">
+        ${fieldsHtml}
+        <div class="im-footer">
+            ${totalHtml}
+            ${trustHtml}
+            <button id="im-submit-btn" ${submitAction} class="im-btn" style="background: ${formConfig.ctaBg}">${formConfig.btnText}</button>
+        </div>
+    </form>
+</div>
+`;
         }
 
         function renderPreview() {
-            const wrapper = document.getElementById('preview-wrapper'); const formHtml = generateCSS() + generateFormUI(true);
-            if(formConfig.displayMode === 'embed') { wrapper.innerHTML = `<div class="w-full max-w-md my-auto py-10">${formHtml}</div>`; } 
-            else { wrapper.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-center relative"><p class="text-slate-400 text-sm font-medium mb-6">Tampilan Tombol Modal di Web Anda</p><button class="px-8 py-4 text-white font-bold rounded-xl shadow-lg transform hover:scale-105 transition" style="background: ${formConfig.ctaBg}">${formConfig.btnText}</button><div class="absolute inset-0 bg-slate-900/60 rounded-2xl flex items-center justify-center p-4 z-50"><div class="w-full max-w-sm scale-95 relative"><button class="absolute -top-3 -right-3 bg-white w-8 h-8 rounded-full font-bold shadow-md z-50">✕</button>${formHtml}</div></div></div>`; }
+            const wrapper = document.getElementById('preview-wrapper'); 
+            const formHtml = generateCSS() + generateFormUI(true);
+            
+            if(formConfig.displayMode === 'embed') { 
+                wrapper.innerHTML = `<div class="w-full max-w-md my-auto py-10">${formHtml}</div>`; 
+            } else { 
+                wrapper.innerHTML = `
+                    <div class="w-full h-full flex flex-col items-center justify-center relative">
+                        <p class="text-slate-400 text-sm font-medium mb-6">Tampilan Tombol Modal di Web Anda</p>
+                        <button class="px-8 py-4 text-white font-bold rounded-xl shadow-lg transform hover:scale-105 transition" style="background: ${formConfig.ctaBg}">
+                            ${formConfig.btnText}
+                        </button>
+                        <div class="absolute inset-0 bg-slate-900/60 rounded-2xl flex items-center justify-center p-4 z-50">
+                            <div class="w-full max-w-sm scale-95 relative">
+                                <button class="absolute -top-3 -right-3 bg-white w-8 h-8 rounded-full font-bold shadow-md z-50">✕</button>
+                                ${formHtml}
+                            </div>
+                        </div>
+                    </div>
+                `; 
+            }
             
             document.getElementById('wa-preview-name').innerText = "Admin " + formConfig.title.substring(0,10) + "...";
+            
             let waText = `${formConfig.waIntro}\n\n*Form:* ${formConfig.title}\n`;
-            formFields.forEach(f => { let dummy = '(Jawaban Kustomer)'; if(['radio', 'select'].includes(f.type)) dummy = (f.options.split(',')[0] || '').trim(); if(f.type === 'checkbox') dummy = (f.options.split(',')[0] || '').trim() + ', ...'; if(f.type === 'number') dummy = '1'; waText += `*${f.label}:* ${dummy}\n`; });
-            waText += `\n*Total Tagihan:* Rp 150.000\n\n${formConfig.waFooter}`; document.getElementById('wa-preview-text').innerText = waText;
+            
+            formFields.forEach(f => { 
+                let dummy = '(Jawaban Kustomer)'; 
+                if(['radio', 'select'].includes(f.type)) {
+                    dummy = (f.options.split(',')[0] || '').trim(); 
+                }
+                if(f.type === 'checkbox') {
+                    dummy = (f.options.split(',')[0] || '').trim() + ', ...'; 
+                }
+                if(f.type === 'number') {
+                    dummy = '1'; 
+                }
+                waText += `*${f.label}:* ${dummy}\n`; 
+            });
+            
+            waText += `\n*Total Tagihan:* Rp 150.000\n\n${formConfig.waFooter}`; 
+            
+            document.getElementById('wa-preview-text').innerText = waText;
         }
 
         function generateCode() {
-            const rawFormHtml = generateFormUI(false); const isPopup = formConfig.displayMode === 'popup';
-            let popupWrapperStart = '', popupWrapperEnd = '', popupStyles = '';
+            const rawFormHtml = generateFormUI(false); 
+            const isPopup = formConfig.displayMode === 'popup';
+            
+            let popupWrapperStart = '';
+            let popupWrapperEnd = '';
+            let popupStyles = '';
+            
             if(isPopup) {
-                popupStyles = `.im-trigger-btn { padding: 16px 32px; border-radius: 12px; font-weight: bold; color: white; border: none; cursor: pointer; font-size: 16px; background: ${formConfig.ctaBg}; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }\n.im-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); z-index: 99999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; padding: 16px; }\n.im-overlay.im-show { opacity: 1; pointer-events: auto; }\n.im-modal { transform: translateY(20px); transition: transform 0.3s ease; width: 100%; max-width: 450px; position: relative; }\n.im-overlay.im-show .im-modal { transform: translateY(0); }\n.im-close { position: absolute; top: -12px; right: -12px; background: white; color: #0f172a; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 10; font-family: Arial; font-size: 16px; }`;
-                popupWrapperStart = `<!-- Trigger Popup -->\n<button class="im-trigger-btn" onclick="document.getElementById('im-overlay').classList.add('im-show')">${formConfig.btnText}</button>\n<!-- Overlay -->\n<div id="im-overlay" class="im-overlay">\n    <div class="im-modal">\n        <button class="im-close" onclick="document.getElementById('im-overlay').classList.remove('im-show')">✕</button>\n`;
-                popupWrapperEnd = `    </div>\n</div>\n`;
+                popupStyles = `
+.im-trigger-btn { 
+    padding: 16px 32px; 
+    border-radius: 12px; 
+    font-weight: bold; 
+    color: white; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 16px; 
+    background: ${formConfig.ctaBg}; 
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+}
+.im-overlay { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(15,23,42,0.6); 
+    backdrop-filter: blur(4px); 
+    z-index: 99999; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.3s ease; 
+    padding: 16px; 
+}
+.im-overlay.im-show { 
+    opacity: 1; 
+    pointer-events: auto; 
+}
+.im-modal { 
+    transform: translateY(20px); 
+    transition: transform 0.3s ease; 
+    width: 100%; 
+    max-width: 450px; 
+    position: relative; 
+}
+.im-overlay.im-show .im-modal { 
+    transform: translateY(0); 
+}
+.im-close { 
+    position: absolute; 
+    top: -12px; 
+    right: -12px; 
+    background: white; 
+    color: #0f172a; 
+    width: 32px; 
+    height: 32px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: bold; 
+    cursor: pointer; 
+    border: none; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    z-index: 10; 
+    font-family: Arial; 
+    font-size: 16px; 
+}
+`;
+                popupWrapperStart = `
+<!-- Trigger Popup -->
+<button class="im-trigger-btn" onclick="document.getElementById('im-overlay').classList.add('im-show')">${formConfig.btnText}</button>
+
+<!-- Overlay -->
+<div id="im-overlay" class="im-overlay">
+    <div class="im-modal">
+        <button class="im-close" onclick="document.getElementById('im-overlay').classList.remove('im-show')">✕</button>
+`;
+                popupWrapperEnd = `
+    </div>
+</div>
+`;
             }
 
             const cssCode = generateCSS().replace('</style>', `${popupStyles}\n</style>`);
@@ -1058,42 +1847,145 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
             const isApi = globalSettings.waGateway === 'api';
             let waLogicScript = isApi ? `btn.innerText = 'Terkirim ✓'; btn.style.background = '#10b981'; btn.style.color = '#fff';` : `window.location.href = waUrl;`; 
             
-            let safeIntro = (formConfig.waIntro || '').replace(/\n/g, '\\n').replace(/'/g, "\\'"); let safeFooter = (formConfig.waFooter || '').replace(/\n/g, '\\n').replace(/'/g, "\\'");
+            let safeIntro = (formConfig.waIntro || '').replace(/\n/g, '\\n').replace(/'/g, "\\'"); 
+            let safeFooter = (formConfig.waFooter || '').replace(/\n/g, '\\n').replace(/'/g, "\\'");
             let basePrice = formConfig.basePrice || 0;
 
             const calcLogic = `
-            function calculateTotal() { 
-                let basePrice = parseInt(${basePrice}) || 0; let currentPrice = basePrice; let qty = 1; 
-                const formEl = document.getElementById('im-form'); if (!formEl) return 0;
-                const fd = new FormData(formEl); 
-                for (let [key, value] of fd.entries()) { if(typeof value === 'string') { const match = value.match(/=\\s*(\\d+)/); if (match) currentPrice = parseInt(match[1]); } } 
-                const numInputs = formEl.querySelectorAll('input[type="number"]'); 
-                if (numInputs.length > 0) { let parsedQty = parseInt(numInputs[0].value); qty = (!isNaN(parsedQty) && parsedQty > 0) ? parsedQty : 0; } 
-                let total = currentPrice * qty; 
-                const totalBox = document.getElementById('im-total-box'); const totalVal = document.getElementById('im-total-value'); 
-                if (totalBox && totalVal) {
-                    if (currentPrice > 0 || basePrice > 0) { totalBox.style.display = 'flex'; totalVal.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total); } 
-                    else { totalBox.style.display = 'none'; } 
-                }
-                return total; 
+function calculateTotal() { 
+    let basePrice = parseInt(${basePrice}) || 0; 
+    let currentPrice = basePrice; 
+    let qty = 1; 
+    
+    const formEl = document.getElementById('im-form'); 
+    if (!formEl) return 0;
+    
+    const fd = new FormData(formEl); 
+    for (let [key, value] of fd.entries()) { 
+        if(typeof value === 'string') { 
+            const match = value.match(/=\\s*(\\d+)/); 
+            if (match) {
+                currentPrice = parseInt(match[1]); 
             }
-            document.getElementById('im-form').addEventListener('input', calculateTotal);
-            document.getElementById('im-form').addEventListener('change', calculateTotal);
-            calculateTotal();
+        } 
+    } 
+    
+    const numInputs = formEl.querySelectorAll('input[type="number"]'); 
+    if (numInputs.length > 0) { 
+        let parsedQty = parseInt(numInputs[0].value); 
+        qty = (!isNaN(parsedQty) && parsedQty > 0) ? parsedQty : 0; 
+    } 
+    
+    let total = currentPrice * qty; 
+    
+    const totalBox = document.getElementById('im-total-box'); 
+    const totalVal = document.getElementById('im-total-value'); 
+    
+    if (totalBox && totalVal) {
+        if (currentPrice > 0 || basePrice > 0) { 
+            totalBox.style.display = 'flex'; 
+            totalVal.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total); 
+        } else { 
+            totalBox.style.display = 'none'; 
+        } 
+    }
+    
+    return total; 
+}
+
+document.getElementById('im-form').addEventListener('input', calculateTotal);
+document.getElementById('im-form').addEventListener('change', calculateTotal);
+calculateTotal();
             `;
 
-            const scriptString = `<script>\n${calcLogic}\ndocument.getElementById('im-form').addEventListener('submit', function(e) { e.preventDefault(); const btn = document.getElementById('im-submit-btn'); btn.innerText = 'Memproses...'; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; const formData = new FormData(this); let formObj = {}; for (let [key, value] of formData.entries()) { if (formObj[key]) formObj[key] += ', ' + value; else formObj[key] = value; } let waText = '${safeIntro}\\n\\n*Form:* ${formConfig.title}\\n'; let jsonData = { Waktu_Order: new Date().toLocaleString(), Nama_Form: '${formConfig.title}', wa_target: '${formConfig.waNumber}' }; for (let key in formObj) { waText += '*' + key + ':* ' + formObj[key] + '\\n'; jsonData[key] = formObj[key]; } let finalTotal = calculateTotal(); if(finalTotal > 0) { waText += '\\n*Total Tagihan:* Rp ' + new Intl.NumberFormat('id-ID').format(finalTotal) + '\\n'; jsonData['Total_Tagihan'] = finalTotal; } waText += '\\n${safeFooter}'; jsonData.wa_text = waText; const waUrl = 'https://wa.me/${formConfig.waNumber}?text=' + encodeURIComponent(waText); const sheetUrl = '${globalSettings.sheetUrl}'; if(sheetUrl && sheetUrl.startsWith('http')) { fetch(sheetUrl, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(jsonData) }).then(() => { ${waLogicScript} }).catch(() => { ${waLogicScript} }); setTimeout(() => { if(btn.innerText === 'Memproses...') { ${waLogicScript} } }, 3500); } else { ${waLogicScript} } });\n<\/script>`;
+            const scriptString = `
+<script>
+${calcLogic}
+
+document.getElementById('im-form').addEventListener('submit', function(e) { 
+    e.preventDefault(); 
+    
+    const btn = document.getElementById('im-submit-btn'); 
+    btn.innerText = 'Memproses...'; 
+    btn.style.opacity = '0.7'; 
+    btn.style.pointerEvents = 'none'; 
+    
+    const formData = new FormData(this); 
+    let formObj = {}; 
+    
+    for (let [key, value] of formData.entries()) { 
+        if (formObj[key]) {
+            formObj[key] += ', ' + value; 
+        } else {
+            formObj[key] = value; 
+        }
+    } 
+    
+    let waText = '${safeIntro}\\n\\n*Form:* ${formConfig.title}\\n'; 
+    
+    let jsonData = { 
+        Waktu_Order: new Date().toLocaleString(), 
+        Nama_Form: '${formConfig.title}', 
+        wa_target: '${formConfig.waNumber}' 
+    }; 
+    
+    for (let key in formObj) { 
+        waText += '*' + key + ':* ' + formObj[key] + '\\n'; 
+        jsonData[key] = formObj[key]; 
+    } 
+    
+    let finalTotal = calculateTotal(); 
+    if(finalTotal > 0) { 
+        waText += '\\n*Total Tagihan:* Rp ' + new Intl.NumberFormat('id-ID').format(finalTotal) + '\\n'; 
+        jsonData['Total_Tagihan'] = finalTotal; 
+    } 
+    
+    waText += '\\n${safeFooter}'; 
+    jsonData.wa_text = waText; 
+    
+    const waUrl = 'https://wa.me/${formConfig.waNumber}?text=' + encodeURIComponent(waText); 
+    const sheetUrl = '${globalSettings.sheetUrl}'; 
+    
+    if(sheetUrl && sheetUrl.startsWith('http')) { 
+        fetch(sheetUrl, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(jsonData) 
+        }).then(() => { 
+            ${waLogicScript} 
+        }).catch(() => { 
+            ${waLogicScript} 
+        }); 
+        
+        setTimeout(() => { 
+            if(btn.innerText === 'Memproses...') { 
+                ${waLogicScript} 
+            } 
+        }, 3500); 
+    } else { 
+        ${waLogicScript} 
+    } 
+});
+<\/script>
+`;
 
             document.getElementById('output-code').value = `<!-- iMersFOW Start -->\n${cssCode}\n${popupWrapperStart}${rawFormHtml}${popupWrapperEnd}\n${scriptString}\n<!-- iMersFOW End -->`;
         }
 
-        function copyEmbedCode() { document.getElementById('output-code').select(); document.execCommand('copy'); showToast('Kode HTML disalin ke clipboard!'); }
+        function copyEmbedCode() { 
+            document.getElementById('output-code').select(); 
+            document.execCommand('copy'); 
+            showToast('Kode HTML disalin ke clipboard!'); 
+        }
 
         // FUNGSI UNTUK EDITOR SEQUENCE WA (BARU)
         function insertWAFormat(char) {
             const textarea = document.getElementById('wa-seq-editor');
-            const start = textarea.selectionStart; const end = textarea.selectionEnd;
+            const start = textarea.selectionStart; 
+            const end = textarea.selectionEnd;
             const text = textarea.value;
+            
             if (start !== end) {
                 const selected = text.substring(start, end);
                 textarea.value = text.substring(0, start) + char + selected + char + text.substring(end);
@@ -1101,15 +1993,19 @@ Silakan balas pesan ini jika sudah transfer ya! 😊</div>
                 textarea.value = text.substring(0, start) + char + char + text.substring(end);
                 textarea.selectionStart = textarea.selectionEnd = start + 1;
             }
-            textarea.focus(); updateSeqPreview();
+            
+            textarea.focus(); 
+            updateSeqPreview();
         }
 
         function updateSeqPreview() {
             let text = document.getElementById('wa-seq-editor').value;
+            
             text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             text = text.replace(/\*([^\*]+)\*/g, "<b>$1</b>");
             text = text.replace(/_([^_]+)_/g, "<i>$1</i>");
             text = text.replace(/~([^~]+)~/g, "<s>$1</s>");
+            
             document.getElementById('wa-seq-preview').innerHTML = text;
         }
 

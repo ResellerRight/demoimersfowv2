@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- PANGGIL DATABASE TEMPLATE DARI FILE EKSTERNAL (JALAN MULUS DI GITHUB/HOSTING) -->
+    <!-- PANGGIL DATABASE TEMPLATE DARI FILE EKSTERNAL -->
     <script src="templates.js"></script>
     
     <style>
@@ -716,17 +716,24 @@
 
         // PENANGANAN TEMPLATE EKSTERNAL (BERSIH DARI HARDCODE)
         let availableTemplates = {};
-        if (typeof formTemplates !== 'undefined') {
-            availableTemplates = formTemplates;
+        if (typeof dbTemplates !== 'undefined') {
+            availableTemplates = dbTemplates;
         } 
-        // Tidak perlu console.error di sini agar tidak memicu pesan error merah di sistem Preview/Sandbox.
-        // Peringatan kegagalan memuat file templates.js sudah ditangani langsung di dalam UI Modal dengan elemen visual.
 
         // --- FUNGSI MODAL TEMPLATE ---
         function renderTemplateCards() {
             const grid = document.getElementById('template-grid');
-            // Biarkan card Blank tetap ada, kita tambahkan card template setelahnya
-            let html = grid.innerHTML; 
+            
+            // Kita reset isinya dulu, lalu tambahkan card Blank secara manual di sini
+            let html = `
+                <div onclick="useTemplate('blank')" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition group min-h-[220px]">
+                    <div class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:text-blue-500 transition">
+                        <i class="ph-bold ph-plus text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-lg">Mulai dari Nol</h3>
+                    <p class="text-xs text-slate-500 mt-2">Buat form kosong sesuai imajinasi Anda.</p>
+                </div>
+            `; 
             
             // Kalau misal templates.js bener-bener kosong/error karena sandbox
             if(Object.keys(availableTemplates).length === 0) {
@@ -738,6 +745,7 @@
                  return;
             }
 
+            // Looping dan nambahkan card dari availableTemplates (yang asalnya dari dbTemplates)
             for (const key in availableTemplates) {
                 const tpl = availableTemplates[key];
                 html += `

@@ -314,10 +314,9 @@
                             
                             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Form Target</label>
-                                <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-emerald-500">
-                                    <option>-- Pilih Form yang Ingin Diatur --</option>
-                                    <option>Order Kaos Premium</option>
-                                    <option>Pendaftaran Webinar Bisnis</option>
+                                <!-- ID ditambahkan untuk logic Skenario B -->
+                                <select id="seq-form-target" onchange="renderSequenceVariables()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-emerald-500">
+                                    <option value="">-- Pilih Form yang Ingin Diatur --</option>
                                 </select>
                             </div>
 
@@ -357,11 +356,10 @@
                                         <button onclick="insertFormat('_')" class="w-8 h-8 rounded hover:bg-slate-100 italic font-serif flex items-center justify-center text-slate-700" title="Miring (Italic)">I</button>
                                         <button onclick="insertFormat('~')" class="w-8 h-8 rounded hover:bg-slate-100 line-through flex items-center justify-center text-slate-700" title="Coret (Strikethrough)">S</button>
                                     </div>
-                                    <div class="flex items-center gap-2">
+                                    <!-- ID Container Variable Skenario B ditambahkan di sini -->
+                                    <div class="flex items-center gap-2 flex-wrap" id="seq-variable-container">
                                         <span class="text-[10px] font-bold text-slate-400 uppercase">Variabel:</span>
-                                        <button onclick="insertVar('[Nama_Pembeli]')" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold px-2.5 py-1.5 rounded-lg border border-blue-100 transition">[Nama]</button>
-                                        <button onclick="insertVar('[Total_Tagihan]')" class="text-xs bg-emerald-50 text-emerald-600 hover:bg-emerald-100 font-bold px-2.5 py-1.5 rounded-lg border border-emerald-100 transition">[Tagihan]</button>
-                                        <button onclick="insertVar('[Pilihan_Varian]')" class="text-xs bg-amber-50 text-amber-600 hover:bg-amber-100 font-bold px-2.5 py-1.5 rounded-lg border border-amber-100 transition">[Produk]</button>
+                                        <span class="text-xs text-slate-400 italic">Pilih form target terlebih dahulu</span>
                                     </div>
                                 </div>
                                 
@@ -615,9 +613,9 @@
                                         <input type="text" id="cfg-title" value="Form Order Baru" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium" oninput="updateConfig()">
                                     </div>
                                     <div class="space-y-2">
-                                        <label class="text-sm font-bold text-slate-700">Nomor WhatsApp Tujuan (CS) / Rotator</label>
-                                        <input type="text" id="cfg-wa" value="6281234567890" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
-                                        <p class="text-[11px] text-slate-500 mt-1">Bisa isi lebih dari 1 nomor pisahkan dengan koma untuk Multi-CS (Misal: 6281.., 6282..)</p>
+                                        <label class="text-sm font-bold text-slate-700">Nomor WhatsApp Tujuan (Multi-CS)</label>
+                                        <input type="text" id="cfg-wa" value="6281234567890" placeholder="6281.., 6282.." class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
+                                        <p class="text-[11px] text-slate-500 mt-1">Isi lebih dari 1 nomor dipisah koma untuk fitur <b>Rotator</b> (Khusus mode wa.me).</p>
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-sm font-bold text-slate-700">Teks Tombol CTA</label>
@@ -1044,17 +1042,118 @@
         }
 
         // =========================================================================
-        // STATE & LOGIC UNTUK MENU SEQUENCE WA (INTERAKTIF 100%)
+        // STATE APLIKASI BUILDER UTAMA
+        // =========================================================================
+        let currentStep = 1; // Ditambahkan kembali agar fungsi goToStep dan updateConfig tidak error
+        let savedForms = JSON.parse(localStorage.getItem('imersfow_forms')) || [];
+        let currentCategoryFilter = 'Semua';
+        
+        let globalSettings = JSON.parse(localStorage.getItem('imersfow_global')) || {
+            sheetUrl: '', 
+            waGateway: 'wa_me', 
+            apiProvider: 'fonnte', 
+            apiToken: '', 
+            apiSender: ''
+        };
+        
+        let defaultFormConfig = {
+            title: 'Form Baru', 
+            waNumber: '6281234567890', 
+            waIntro: 'Halo Admin, ini data saya:', 
+            waFooter: 'Terima kasih.',
+            btnText: 'Kirim Data', 
+            headerBg: '#1e3a8a', 
+            ctaBg: '#2563eb',
+            titleColorType: 'solid',
+            titleColor1: '#ffffff',
+            titleColor2: '#fef08a',
+            ctaTextColorType: 'solid',
+            ctaTextColor1: '#ffffff',
+            ctaTextColor2: '#fef08a',
+            logoUrl: '', 
+            displayMode: 'embed', 
+            trustBadge: true, 
+            trustTitle: 'Aman & Terpercaya', 
+            trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.',
+            enablePixel: false,
+            fbPixel: '',
+            tiktokPixel: '',
+            googlePixel: ''
+        };
+        
+        let defaultFormFields = [
+            { id: 'f1', type: 'text', label: 'Nama Lengkap', required: true, placeholder: 'Sesuai KTP' },
+            { id: 'f2', type: 'tel', label: 'Nomor WhatsApp', required: true, placeholder: '08xx' }
+        ];
+
+        let formConfig = JSON.parse(JSON.stringify(defaultFormConfig)); 
+        let formFields = [];
+        let availableTemplates = {};
+
+        // =========================================================================
+        // STATE & LOGIC UNTUK MENU SEQUENCE WA (SKENARIO B - DINAMIS)
         // =========================================================================
         let sequencesData = [
             { 
                 id: Date.now(), 
                 timeVal: 10, 
                 timeUnit: 'Menit', 
-                msg: 'Halo [Nama_Pembeli],\nTerima kasih sudah order produk kami.\n\nTotal tagihan Anda adalah: *[Total_Tagihan]*\n\nSilakan balas pesan ini jika sudah transfer ya! 😊' 
+                msg: 'Halo [Nama Lengkap],\nTerima kasih sudah order.\n\nSilakan balas pesan ini jika sudah transfer ya! 😊' 
             }
         ];
         let activeSeqId = sequencesData[0].id;
+
+        function renderSequenceViews() {
+            const selectTarget = document.getElementById('seq-form-target');
+            if (!selectTarget) return;
+
+            const currentSelection = selectTarget.value;
+
+            selectTarget.innerHTML = '<option value="">-- Pilih Form yang Ingin Diatur --</option>';
+            savedForms.forEach(f => {
+                selectTarget.innerHTML += `<option value="${f.id}">${f.title}</option>`;
+            });
+
+            if (currentSelection && savedForms.find(f => f.id === currentSelection)) {
+                selectTarget.value = currentSelection;
+            } else if (savedForms.length > 0) {
+                selectTarget.value = savedForms[0].id;
+            }
+
+            renderSequenceVariables();
+        }
+
+        function renderSequenceVariables() {
+            const formId = document.getElementById('seq-form-target').value;
+            const container = document.getElementById('seq-variable-container');
+            
+            let html = `<span class="text-[10px] font-bold text-slate-400 uppercase">Variabel:</span>`;
+            
+            if (!formId) {
+                container.innerHTML = html + `<span class="text-xs text-slate-400 italic">Pilih form target terlebih dahulu</span>`;
+                return;
+            }
+
+            const form = savedForms.find(f => f.id === formId);
+            if (!form || !form.fields) {
+                container.innerHTML = html + `<span class="text-xs text-slate-400 italic">Form tidak memiliki data field yang valid</span>`;
+                return;
+            }
+
+            // Generate buttons dynamically based on saved fields
+            const colors = ['blue', 'emerald', 'amber', 'purple', 'rose', 'teal'];
+            form.fields.forEach((f, idx) => {
+                const c = colors[idx % colors.length];
+                html += `<button onclick="insertVar('[${f.label}]')" class="text-xs bg-${c}-50 text-${c}-600 hover:bg-${c}-100 font-bold px-2.5 py-1.5 rounded-lg border border-${c}-100 transition max-w-[150px] truncate" title="[${f.label}]">[${f.label}]</button>`;
+            });
+
+            if (form.hasCalc) {
+                html += `<button onclick="insertVar('[Total_Tagihan]')" class="text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold px-2.5 py-1.5 rounded-lg border border-slate-300 transition shadow-sm">[Total_Tagihan]</button>`;
+            }
+
+            container.innerHTML = html;
+            updateSeqPreview();
+        }
 
         function renderTimeline() {
             const container = document.getElementById('sequence-timeline');
@@ -1099,7 +1198,7 @@
                 id: Date.now(),
                 timeVal: 1,
                 timeUnit: 'Hari',
-                msg: 'Halo [Nama_Pembeli], ini pesan follow-up otomatis...'
+                msg: 'Halo, ini pesan follow-up otomatis...'
             };
             sequencesData.push(newSeq);
             selectSequence(newSeq.id);
@@ -1175,61 +1274,12 @@
             text = text.replace(/_([^_]+)_/g, "<i>$1</i>");
             text = text.replace(/~([^~]+)~/g, "<s>$1</s>");
             
-            text = text.replace(/\[Nama_Pembeli\]/g, '<span class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-bold">Kustomer Budi</span>');
-            text = text.replace(/\[Total_Tagihan\]/g, '<span class="bg-emerald-100 text-emerald-800 px-1 rounded text-xs font-bold">Rp 150.000</span>');
-            text = text.replace(/\[Pilihan_Varian\]/g, '<span class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-bold">Paket Ultimate</span>');
+            // SMART DETECTOR: Menangkap dan menyoroti semua parameter di dalam kurung siku secara dinamis
+            text = text.replace(/\[(.*?)\]/g, '<span class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-bold whitespace-nowrap overflow-hidden inline-block align-bottom max-w-[150px] text-ellipsis">Data $1</span>');
             
             document.getElementById('seq-preview-bubble').innerHTML = text;
         }
 
-        // =========================================================================
-        // STATE APLIKASI BUILDER UTAMA
-        // =========================================================================
-        let currentStep = 1;
-        let savedForms = JSON.parse(localStorage.getItem('imersfow_forms')) || [];
-        let currentCategoryFilter = 'Semua';
-        
-        let globalSettings = JSON.parse(localStorage.getItem('imersfow_global')) || {
-            sheetUrl: '', 
-            waGateway: 'wa_me', 
-            apiProvider: 'fonnte', 
-            apiToken: '', 
-            apiSender: ''
-        };
-        
-        let defaultFormConfig = {
-            title: 'Form Baru', 
-            waNumber: '6281234567890', 
-            waIntro: 'Halo Admin, ini data saya:', 
-            waFooter: 'Terima kasih.',
-            btnText: 'Kirim Data', 
-            headerBg: '#1e3a8a', 
-            ctaBg: '#2563eb',
-            titleColorType: 'solid',
-            titleColor1: '#ffffff',
-            titleColor2: '#fef08a',
-            ctaTextColorType: 'solid',
-            ctaTextColor1: '#ffffff',
-            ctaTextColor2: '#fef08a',
-            logoUrl: '', 
-            displayMode: 'embed', 
-            trustBadge: true, 
-            trustTitle: 'Aman & Terpercaya', 
-            trustDesc: 'Informasi yang Anda berikan hanya digunakan untuk kebutuhan internal.',
-            enablePixel: false,
-            fbPixel: '',
-            tiktokPixel: '',
-            googlePixel: ''
-        };
-        
-        let defaultFormFields = [
-            { id: 'f1', type: 'text', label: 'Nama Lengkap', required: true, placeholder: 'Sesuai KTP' },
-            { id: 'f2', type: 'tel', label: 'Nomor WhatsApp', required: true, placeholder: '08xx' }
-        ];
-
-        let formConfig = JSON.parse(JSON.stringify(defaultFormConfig)); 
-        let formFields = [];
-        let availableTemplates = {};
 
         // COLOR HELPERS
         function getThemeColor() {
@@ -1458,6 +1508,7 @@
                 loadGlobalSettings();
             }
             if(viewId === 'sequence') {
+                renderSequenceViews(); // Initialize dropdown form options
                 renderTimeline();
                 updateSeqPreview();
             }
@@ -1519,11 +1570,15 @@
         }
 
         function saveFormToDashboard() {
+            let hasCalculation = formFields.some(f => /=\s*(\d+)/.test(f.options));
+            
             const newForm = { 
                 id: 'frm_' + Date.now(), 
                 title: formConfig.title, 
                 date: new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }), 
-                leads: Math.floor(Math.random() * 25) + 5 
+                leads: Math.floor(Math.random() * 25) + 5,
+                fields: JSON.parse(JSON.stringify(formFields)), // Menyimpan struktur form untuk dibaca oleh Menu Sequence (Skenario B)
+                hasCalc: hasCalculation
             };
             
             savedForms.unshift(newForm); 

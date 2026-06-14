@@ -622,11 +622,6 @@
                                         <label class="text-sm font-bold text-slate-700">Teks Tombol CTA</label>
                                         <input type="text" id="cfg-btn-text" value="Kirim Sekarang" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium" oninput="updateConfig()">
                                     </div>
-                                    <div class="space-y-2 col-span-1 md:col-span-2">
-                                        <label class="text-sm font-bold text-slate-700">Harga Dasar Produk (Rp) - <span class="text-slate-400 font-normal">Opsional</span></label>
-                                        <input type="number" id="cfg-base-price" value="0" placeholder="Contoh: 150000" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
-                                        <p class="text-[11px] text-slate-500 mt-1">Isi jika form ini menjual produk. Biarkan 0 jika form gratis. Harga ini akan tertimpa otomatis jika kustomer memilih opsi bertanda <b>= Angka</b> di form varian.</p>
-                                    </div>
                                 </div>
 
                                 <div class="p-5 bg-emerald-50 border border-emerald-100 rounded-2xl shadow-sm">
@@ -1177,7 +1172,6 @@
             waIntro: 'Halo Admin, ini data saya:', 
             waFooter: 'Terima kasih.',
             btnText: 'Kirim Data', 
-            basePrice: 0, 
             headerBg: '#1e3a8a', 
             ctaBg: '#2563eb',
             titleColorType: 'solid',
@@ -1363,7 +1357,6 @@
             document.getElementById('cfg-wa-intro').value = formConfig.waIntro; 
             document.getElementById('cfg-wa-footer').value = formConfig.waFooter;
             document.getElementById('cfg-btn-text').value = formConfig.btnText; 
-            document.getElementById('cfg-base-price').value = formConfig.basePrice || 0;
             document.getElementById('cfg-logo').value = formConfig.logoUrl;
             
             document.querySelector(`input[name="displayMode"][value="${formConfig.displayMode}"]`).checked = true;
@@ -1677,7 +1670,6 @@
             formConfig.waIntro = document.getElementById('cfg-wa-intro').value; 
             formConfig.waFooter = document.getElementById('cfg-wa-footer').value;
             formConfig.btnText = document.getElementById('cfg-btn-text').value; 
-            formConfig.basePrice = document.getElementById('cfg-base-price').value || 0;
             formConfig.logoUrl = document.getElementById('cfg-logo').value;
             formConfig.displayMode = document.querySelector('input[name="displayMode"]:checked').value;
             formConfig.trustBadge = document.getElementById('cfg-trust-toggle').checked;
@@ -1813,7 +1805,7 @@
             }
 
             const totalBoxEl = document.getElementById('canvas-total-box'); 
-            let isTotalVisible = parseInt(formConfig.basePrice) > 0;
+            let isTotalVisible = false;
             
             formFields.forEach(f => { 
                 if(['select', 'radio', 'checkbox'].includes(f.type) && /=\s*(\d+)/.test(f.options)) {
@@ -1824,7 +1816,7 @@
             if(isTotalVisible) { 
                 totalBoxEl.style.display = 'flex'; 
                 document.getElementById('canvas-total-value').style.color = themeHex; 
-                let previewVal = parseInt(formConfig.basePrice) > 0 ? formConfig.basePrice : 0; 
+                let previewVal = 0; 
                 document.getElementById('canvas-total-value').innerText = 'Rp ' + parseInt(previewVal).toLocaleString('id-ID'); 
             } else { 
                 totalBoxEl.style.display = 'none'; 
@@ -2170,7 +2162,7 @@
             document.getElementById('wa-preview-name').innerText = "Admin " + formConfig.title.substring(0,10) + "..."; 
             let waText = `${formConfig.waIntro}\n\n*Form:* ${formConfig.title}\n`;
             
-            let isCalculationActive = formConfig.basePrice > 0;
+            let isCalculationActive = false;
             
             formFields.forEach(f => { 
                 let dummy = '(Jawaban Kustomer)'; 
@@ -2295,8 +2287,7 @@
             
             let calcLogic = `
 function calculateTotal() { 
-    let basePrice = parseInt('${formConfig.basePrice}') || 0; 
-    let currentPrice = basePrice; 
+    let currentPrice = 0; 
     let qty = 1; 
     
     const formEl = document.getElementById('im-form');
@@ -2326,7 +2317,7 @@ function calculateTotal() {
     const totalVal = document.getElementById('im-total-value'); 
     
     if (totalBox && totalVal) {
-        if (currentPrice > 0 || basePrice > 0) { 
+        if (currentPrice > 0) { 
             totalBox.style.display = 'flex'; 
             totalVal.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total); 
         } else { 

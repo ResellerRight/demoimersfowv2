@@ -56,7 +56,7 @@
 
         .wa-bg {
             background-color: #efeae2;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d0c9c0' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d0c9c0' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         
         /* Modal Template Styles */
@@ -85,6 +85,7 @@
 </head>
 <body class="antialiased h-screen flex flex-col">
 
+    <!-- VIEW: LOGIN PAGE -->
     <div id="view-login" class="fixed inset-0 z-[9999] bg-slate-900 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50"></div>
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 relative z-10 border border-slate-700">
@@ -154,17 +155,17 @@
         <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden opacity-0 backdrop-blur-sm"></div>
 
         <!-- SIDEBAR -->
-        <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl md:shadow-none">
+        <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-64 flex-shrink-0 bg-slate-900 text-slate-300 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl md:shadow-none border-r border-slate-800">
             
             <!-- Branding -->
-            <div class="h-20 flex items-center px-6 border-b border-slate-800">
+            <div class="h-16 lg:h-20 flex items-center px-6 border-b border-slate-800">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg">
-                        <i class="ph-fill ph-paper-plane-tilt text-2xl"></i>
+                    <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg">
+                        <i class="ph-fill ph-paper-plane-tilt text-xl lg:text-2xl"></i>
                     </div>
                     <div>
-                        <h2 class="font-bold text-xl tracking-tight text-white leading-tight">iMers<span class="text-rose-500">FOW</span></h2>
-                        <p class="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Pro Edition</p>
+                        <h2 class="font-bold text-lg lg:text-xl tracking-tight text-white leading-tight">iMers<span class="text-rose-500">FOW</span></h2>
+                        <p class="text-[9px] lg:text-[10px] text-slate-500 font-bold tracking-widest uppercase">Pro Edition</p>
                     </div>
                 </div>
                 <!-- Close btn mobile -->
@@ -232,7 +233,7 @@
 
         <!-- MAIN CONTENT AREA -->
         <main id="main-container" class="flex-1 overflow-y-auto overflow-x-hidden pt-16 md:pt-0 relative custom-scrollbar bg-slate-50/50">
-            <div class="w-full h-full p-4 sm:p-6 lg:p-8">
+            <div class="w-full min-h-full p-4 sm:p-6 lg:p-8">
                 
                 <!-- VIEW: DASHBOARD -->
                 <div id="view-dashboard" class="hidden animate-fade-in space-y-6 max-w-6xl mx-auto pb-10">
@@ -241,7 +242,7 @@
                             <h1 class="text-2xl font-bold text-slate-900">Selamat Datang, <span id="welcome-name" class="text-rose-600">Master</span>!</h1>
                             <p class="text-slate-500 text-sm mt-1">Ringkasan performa seluruh form Anda.</p>
                         </div>
-                        <button onclick="openTemplateModal()" class="bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-md hover:shadow-lg flex items-center gap-2">
+                        <button onclick="openTemplateModal()" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-md flex items-center gap-2">
                             <i class="ph-bold ph-plus"></i> Buat Form Baru
                         </button>
                     </div>
@@ -301,21 +302,22 @@
                 <!-- ========================================== -->
                 <!-- VIEW: SEQUENCE WA (INTERAKTIF 100%)        -->
                 <!-- ========================================== -->
-                <div id="view-sequence" class="hidden animate-fade-in max-w-6xl mx-auto pb-10 flex flex-col">
-                    <div class="mb-6 border-b border-slate-200 pb-4 flex justify-between items-end">
-                        <div>
-                            <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                                <i class="ph-fill ph-paper-plane-right text-emerald-500"></i> Auto Follow-Up (Sequence)
-                            </h1>
-                            <p class="text-slate-500 text-sm mt-1">Buat pesan berantai otomatis yang terkirim di latar belakang via API Fonnte/WAPlus.</p>
-                        </div>
+                <div id="view-sequence" class="hidden animate-fade-in max-w-6xl mx-auto pb-10 flex flex-col min-h-full">
+                    <div class="mb-6 border-b border-slate-200 pb-4">
+                        <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="ph-fill ph-paper-plane-right text-emerald-500"></i> Auto Follow-Up (Sequence)
+                        </h1>
+                        <p class="text-slate-500 text-sm mt-1">Buat pesan berantai otomatis yang terkirim di latar belakang via API Fonnte/WAPlus.</p>
                     </div>
 
-                    <div class="flex flex-col lg:flex-row gap-6 flex-1 min-h-[600px]">
+                    <!-- Layout Editor Split -->
+                    <div class="flex flex-col lg:flex-row gap-6 flex-1 items-start">
                         
                         <!-- Panel Kiri: Pengaturan & Editor -->
-                        <div class="flex-1 flex flex-col gap-4">
-                            <!-- Select Form -->
+                        <!-- flex-1 min-w-0 ensures it takes up remaining space but can shrink if needed -->
+                        <div class="flex-1 w-full min-w-0 flex flex-col gap-5">
+                            
+                            <!-- Select Form Target -->
                             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Form Target</label>
                                 <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-emerald-500">
@@ -337,7 +339,7 @@
                             </div>
 
                             <!-- Editor Area (Interactive) -->
-                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col flex-1 overflow-hidden">
+                            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
                                 
                                 <!-- Delay Configuration -->
                                 <div class="p-4 border-b border-slate-100 bg-emerald-50/30 flex flex-col sm:flex-row gap-4 items-start sm:items-end justify-between">
@@ -374,25 +376,26 @@
                                     </div>
                                 </div>
                                 
-                                <textarea id="seq-editor" oninput="updateSequenceData()" class="w-full flex-1 p-5 outline-none resize-none custom-scrollbar text-sm leading-relaxed" placeholder="Ketik pesan follow-up di sini... Gunakan variabel untuk menyapa nama kustomer secara otomatis."></textarea>
+                                <textarea id="seq-editor" oninput="updateSequenceData()" class="w-full p-5 outline-none resize-none custom-scrollbar text-sm leading-relaxed min-h-[200px]" placeholder="Ketik pesan follow-up di sini... Gunakan variabel untuk menyapa nama kustomer secara otomatis."></textarea>
                                 
-                                <div class="p-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                                <div class="p-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between flex-wrap gap-3">
                                     <button class="w-9 h-9 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-500 transition">
                                         <i class="ph-fill ph-smiley text-2xl"></i>
                                     </button>
                                     <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition">
-                                        <input type="checkbox" class="accent-rose-500 w-4 h-4">
+                                        <input type="checkbox" class="accent-emerald-500 w-4 h-4">
                                         <span class="text-xs font-bold text-slate-600">Berhenti otomatis jika Lunas</span>
                                     </label>
                                 </div>
-                                <button class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition flex items-center justify-center gap-2">
+                                <button class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition flex items-center justify-center gap-2 text-base">
                                     <i class="ph-bold ph-floppy-disk text-lg"></i> Simpan Pesan Ini
                                 </button>
                             </div>
                         </div>
 
                         <!-- Panel Kanan: Live Preview WA -->
-                        <div class="w-full lg:w-[380px] bg-slate-100 rounded-2xl border border-slate-200 flex flex-col items-center p-6 lg:p-8 shadow-inner overflow-hidden relative">
+                        <!-- CRITICAL FIX: Added flex-shrink-0 and explicit w-[380px] to prevent squishing -->
+                        <div class="w-full lg:w-[380px] flex-shrink-0 bg-slate-100 rounded-3xl border border-slate-200 flex flex-col items-center p-6 lg:p-8 shadow-inner overflow-hidden relative sticky top-6">
                             <div class="flex items-center justify-center gap-2 mb-6 w-full">
                                 <span class="h-px flex-1 bg-slate-300"></span>
                                 <h3 class="font-bold text-emerald-600 tracking-widest text-xs uppercase flex items-center gap-1">
@@ -402,11 +405,14 @@
                             </div>
 
                             <!-- Phone Frame -->
-                            <div class="w-full max-w-[320px] bg-white rounded-[32px] shadow-2xl border-[8px] border-slate-800 overflow-hidden flex flex-col h-[550px] relative">
+                            <!-- CRITICAL FIX: Set fixed w-[320px] inside the container -->
+                            <div class="w-[320px] bg-white rounded-[32px] shadow-2xl border-[8px] border-slate-800 overflow-hidden flex flex-col h-[550px] relative">
                                 <div class="absolute top-0 inset-x-0 h-5 bg-slate-800 rounded-b-xl w-32 mx-auto z-20"></div>
                                 <div class="bg-[#075e54] text-white p-3 pt-7 flex items-center gap-3 relative z-10 shadow-md">
                                     <i class="ph-bold ph-arrow-left text-xl"></i>
-                                    <div class="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden"><i class="ph-fill ph-user text-xl mt-1.5"></i></div>
+                                    <div class="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center text-slate-500 overflow-hidden">
+                                        <i class="ph-fill ph-user text-xl mt-1.5"></i>
+                                    </div>
                                     <div class="leading-tight flex-1">
                                         <div class="text-sm font-bold truncate">Kustomer Anda</div>
                                         <div class="text-[10px] opacity-80">online</div>
@@ -630,7 +636,6 @@
                                         <label class="text-sm font-bold text-slate-700">Teks Tombol CTA</label>
                                         <input type="text" id="cfg-btn-text" value="Kirim Sekarang" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium" oninput="updateConfig()">
                                     </div>
-                                    <!-- FIELD BARU: HARGA DASAR -->
                                     <div class="space-y-2 col-span-1 md:col-span-2">
                                         <label class="text-sm font-bold text-slate-700">Harga Dasar Produk (Rp) - <span class="text-slate-400 font-normal">Opsional</span></label>
                                         <input type="number" id="cfg-base-price" value="0" placeholder="Contoh: 150000" class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm" oninput="updateConfig()">
@@ -787,13 +792,12 @@
                                         </div>
                                         <div id="canvas-fields" class="p-6 space-y-4 min-h-[250px] bg-white"></div>
                                         <div class="p-6 pt-0 bg-white">
-                                            <!-- Box Tagihan -->
                                             <div id="canvas-total-box" class="p-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-between mb-4 transition-all" style="display: none;">
                                                 <span class="text-sm font-bold text-slate-500">Total Tagihan:</span>
                                                 <span class="text-lg font-extrabold text-slate-800" id="canvas-total-value">Rp 0</span>
                                             </div>
 
-                                            <div id="canvas-trust" class="bg-blue-50/70 p-4 rounded-xl border border-blue-100 flex items-start gap-3 mb-4">
+                                            <div id="canvas-trust" class="bg-blue-50/70 p-4 rounded-xl border flex items-start gap-3 mb-4">
                                                 <i id="canvas-trust-icon" class="ph-fill ph-shield-check text-blue-500 text-xl mt-0.5"></i>
                                                 <div>
                                                     <h4 id="canvas-trust-title" class="text-sm font-bold text-slate-800">Aman</h4>
@@ -1129,8 +1133,9 @@
             document.getElementById('seq-preview-bubble').innerHTML = text;
         }
 
-
+        // =========================================================================
         // STATE APLIKASI BUILDER UTAMA
+        // =========================================================================
         let savedForms = JSON.parse(localStorage.getItem('imersfow_forms')) || [];
         let currentCategoryFilter = 'Semua';
         
@@ -1371,7 +1376,7 @@
                 loadGlobalSettings();
             }
             if(viewId === 'sequence') {
-                renderTimeline(); // Initialize timeline when tab is opened
+                renderTimeline();
                 updateSeqPreview();
             }
         }

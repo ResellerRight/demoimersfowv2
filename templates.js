@@ -334,7 +334,7 @@ const dbTemplates = {
             label: 'Alamat Lengkap Pengiriman',
             required: true,
             placeholder: 'Nama Jalan, RT/RW, Kelurahan, Kecamatan, Kota/Kabupaten, Provinsi, Kode Pos'
-        }
-    ]
+       ]
+    },
 
 };

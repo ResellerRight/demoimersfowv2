@@ -249,7 +249,7 @@ const dbTemplates = {
             // Ekstra juga bisa dihitung otomatis dengan metode yang sama
             { id: 'f_6', type: 'checkbox', label: 'Ekstra (Opsional)', required: false, placeholder: '', options: 'Bubble Wrap Ekstra = 5000, Box Kado Ribbon = 15000' }
         ]
-    }
+    },
 
     // =========================================
 // TEMPLATE: MOISTURIZER PREMIUM
